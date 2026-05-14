@@ -15,7 +15,8 @@
     "db:migrate": "pnpm --filter @kyujin/db db:migrate",
     "db:studio": "pnpm --filter @kyujin/db db:studio",
     "web": "pnpm --filter @kyujin/web",
-    "mobile": "pnpm --filter @kyujin/mobile"
+    "ios:gen": "cd apps/ios && xcodegen",
+    "ios:open": "cd apps/ios && xcodegen && open Kyujin.xcodeproj"
   },
   "devDependencies": {
     "turbo": "^2.3.3",

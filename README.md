@@ -11,10 +11,10 @@ See [PLANNING.md](./PLANNING.md) for the full product brief.
 ```
 apps/
   web/        Next.js 15 (App Router) — dashboard, auth, Gmail OAuth, cron
-  mobile/     Expo (placeholder)
+  ios/        Native SwiftUI iOS app (no Expo, no React Native)
 packages/
   db/         Drizzle ORM schema + Postgres client
-  shared/     Gmail client, classifier, prompts, types
+  shared/     Gmail client, classifier, prompts, types (web only)
 ```
 
 ## Stack
@@ -22,13 +22,14 @@ packages/
 | Concern | Choice |
 |---|---|
 | Web framework | Next.js 15 (App Router, RSC) |
-| Auth | Auth.js v5 (Google + optional Apple) |
-| Database | Postgres (Supabase/Neon) + Drizzle ORM |
+| Web auth | Auth.js v5 (Google + optional Apple) |
+| Database | Postgres (Supabase / Neon) + Drizzle ORM |
 | Gmail | `googleapis` SDK, separate OAuth grant for `gmail.readonly` |
 | Classification | Hybrid: sender allowlist → subject regex → template cache → AI Gateway (Gemini Flash-Lite) |
 | Ingestion | Vercel Cron (every 5 min, 50-message batches) + Gmail Pub/Sub watch |
-| UI | shadcn/ui + Tailwind + recharts |
-| Mobile | Expo (placeholder) |
+| Web UI | shadcn/ui + Tailwind + recharts |
+| iOS | SwiftUI, iOS 17+, Sign in with Apple, Swift Charts, scaffolded via xcodegen |
+| iOS ↔ backend | JSON API + Bearer tokens (Apple ID token exchange — backend TODO) |
 
 ## Local setup
 
@@ -81,10 +82,22 @@ vercel deploy --prod        # after sanity checking
 
 Crons are configured in [vercel.ts](./vercel.ts) and provisioned automatically on first deploy.
 
+## iOS app
+
+See [apps/ios/README.md](./apps/ios/README.md) for the full setup. Quick start:
+
+```bash
+brew install xcodegen
+pnpm ios:open                # generates Kyujin.xcodeproj and opens Xcode
+```
+
+The iOS app uses Sign in with Apple natively and talks to the web backend over JSON.
+**The backend endpoints it needs (`/api/auth/ios-apple`, `/api/applications`, `/api/stats`, Bearer-token auth) are not yet implemented** — see `apps/ios/README.md` TODOs section.
+
 ## Out of scope for v0
 
 - Outlook / Microsoft Graph
-- Push notifications + full iOS UI (mobile app is a placeholder)
+- Android (intentionally — iOS-only)
 - Google CASA verification (required only before opening to public users)
 - Pricing/billing
 

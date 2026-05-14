@@ -43,10 +43,12 @@ The honest business challenge: Simplify is free and well-funded. Differentiation
 
 1. **Web app first** (Next.js) with Gmail OAuth + classification + dashboard — 2–3 weeks
 2. Get 20 friends / r/jobs users on it, see if classification holds up across real inboxes
-3. **Then** wrap with Expo for iOS — 3–4 more weeks
-4. **Then** push notifications and polish — 2 weeks
+3. **Then** build native SwiftUI iOS client (no Expo, no Android) — 4–6 more weeks
+4. **Then** push notifications via APNs and polish — 2 weeks
 
-**Total:** ~2 months part-time to something shippable to TestFlight.
+**Total:** ~2.5 months part-time to something shippable to TestFlight.
+
+**Stack decision:** Mobile is native Swift/SwiftUI, not Expo/React Native. Trade-off accepted: no Android, must duplicate type definitions and API client in Swift, in exchange for native iOS feel and direct access to Sign in with Apple, Live Activities, Widgets, and Lock Screen integration.
 
 ---
 
