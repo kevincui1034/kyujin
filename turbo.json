@@ -1,0 +1,42 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": [
+        "AUTH_SECRET",
+        "AUTH_GOOGLE_ID",
+        "AUTH_GOOGLE_SECRET",
+        "AUTH_APPLE_ID",
+        "AUTH_APPLE_SECRET",
+        "AUTH_URL",
+        "DATABASE_URL",
+        "GMAIL_CLIENT_ID",
+        "GMAIL_CLIENT_SECRET",
+        "GMAIL_REDIRECT_URI",
+        "GMAIL_PUBSUB_TOPIC",
+        "AI_GATEWAY_API_KEY",
+        "CRON_SECRET"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "db:push": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
+    }
+  }
+}

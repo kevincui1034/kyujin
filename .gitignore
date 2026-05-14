@@ -1,0 +1,40 @@
+# dependencies
+node_modules
+.pnpm-store
+
+# next.js
+.next
+out
+
+# expo
+.expo
+*.tgz
+ios/Pods
+android/.gradle
+android/build
+
+# turbo
+.turbo
+
+# typescript
+*.tsbuildinfo
+
+# env
+.env
+.env*.local
+.vercel
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# editors
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json

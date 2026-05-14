@@ -1,0 +1,27 @@
+{
+  "name": "@kyujin/shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./classifier": "./src/classifier.ts",
+    "./gmail": "./src/gmail.ts",
+    "./prompts": "./src/prompts.ts",
+    "./types": "./src/types.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@kyujin/db": "workspace:*",
+    "ai": "^6.0.0",
+    "drizzle-orm": "^0.38.3",
+    "googleapis": "^144.0.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  }
+}
