@@ -1,4 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "ignoreCommand": "npx turbo-ignore @kyujin/web"
+  "ignoreCommand": "npx turbo-ignore @kyujin/web",
+  "crons": [
+    {
+      "path": "/api/cron/process-batch",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/cron/refresh-watches",
+      "schedule": "0 12 * * *"
+    }
+  ]
 }

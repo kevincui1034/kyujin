@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { getGmailConnection } from '@/lib/data';
 import { DisconnectGmailButton } from './disconnect-button';
 import { BackfillButton } from './backfill-button';
+import { StartWatchButton } from './start-watch-button';
 
 export default async function SettingsPage({
   searchParams,
@@ -48,8 +49,9 @@ export default async function SettingsPage({
               <div className="text-sm">
                 Connected as <span className="font-medium">{connection.emailAddress}</span>
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 <BackfillButton />
+                <StartWatchButton />
                 <DisconnectGmailButton />
               </div>
             </>
