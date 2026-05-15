@@ -1,4 +1,7 @@
 import NextAuth, { type DefaultSession } from 'next-auth';
+// Side-effect import so TS can resolve the submodule before the
+// `declare module 'next-auth/jwt'` augmentation below.
+import 'next-auth/jwt';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@kyujin/db/client';
 import { accounts, sessions, users, verificationTokens } from '@kyujin/db/schema';

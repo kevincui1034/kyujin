@@ -12,6 +12,7 @@
         "AUTH_APPLE_ID",
         "AUTH_APPLE_SECRET",
         "AUTH_URL",
+        "AUTH_TRUST_HOST",
         "DATABASE_URL",
         "GMAIL_CLIENT_ID",
         "GMAIL_CLIENT_SECRET",
