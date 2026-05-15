@@ -25,15 +25,11 @@ function createDb(): DrizzleDb {
   return drizzle(client, { schema, logger: process.env.DB_DEBUG === '1' });
 }
 
-// Lazy proxy — defers the `DATABASE_URL` check and Postgres connection until
-// the first DB call. Importing this module during `next build` or in a route
-// that never touches the DB doesn't pay the cost or hit the env-var check.
-export const db: DrizzleDb = new Proxy({} as DrizzleDb, {
-  get(_target, prop, receiver) {
-    if (!globalForDb.db) globalForDb.db = createDb();
-    return Reflect.get(globalForDb.db, prop, receiver);
-  },
-});
+// Eager init. A lazy Proxy here breaks `instanceof PgDatabase` checks inside
+// Auth.js's Drizzle adapter (dialect detection), so we accept that importing
+// this module requires `DATABASE_URL` to be set.
+export const db: DrizzleDb = globalForDb.db ?? createDb();
+if (!globalForDb.db) globalForDb.db = db;
 
 export { schema };
 export type Database = DrizzleDb;
