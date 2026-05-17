@@ -17,6 +17,6 @@ export async function GET(req: NextRequest) {
   }
   const statusParam = req.nextUrl.searchParams.get('status');
   const status = isStatus(statusParam) ? statusParam : undefined;
-  const applications = await listApplications(userId, status);
+  const applications = await listApplications(userId, { status });
   return NextResponse.json({ applications });
 }

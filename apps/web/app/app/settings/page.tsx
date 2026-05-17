@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import { auth } from '@/auth';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { getGmailConnection } from '@/lib/data';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getUserProfile, listGmailConnections } from '@/lib/data';
+import { NON_PREMIUM_INBOX_LIMIT, PREMIUM_INBOX_LIMIT, inboxLimitForPlan } from '@/lib/plan';
 import { DisconnectGmailButton } from './disconnect-button';
 import { BackfillButton } from './backfill-button';
 import { StartWatchButton } from './start-watch-button';
+import { DevCronCard } from './dev-cron-card';
 
 export default async function SettingsPage({
   searchParams,
@@ -15,62 +18,110 @@ export default async function SettingsPage({
   const session = await auth();
   const userId = session!.user.id;
   const params = await searchParams;
-  const connection = await getGmailConnection(userId);
+  const [connections, profile] = await Promise.all([
+    listGmailConnections(userId),
+    getUserProfile(userId),
+  ]);
+  const isPremium = profile?.plan === 'premium';
+  const inboxLimit = inboxLimitForPlan(profile?.plan);
+  const canAddInbox = connections.length < inboxLimit;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Settings</h1>
-
       {params.gmail === 'connected' && (
-        <Card className="border-emerald-500/30 bg-emerald-500/5">
-          <CardContent className="py-4 text-sm">
+        <Alert variant="success">
+          <AlertDescription>
             Gmail connected. The 90-day backfill will run on the next cron tick (every 5 minutes).
-          </CardContent>
-        </Card>
+          </AlertDescription>
+        </Alert>
       )}
-      {params.gmail_error && (
-        <Card className="border-destructive/30 bg-destructive/5">
-          <CardContent className="py-4 text-sm">
-            Gmail connect failed: {params.gmail_error}
-          </CardContent>
-        </Card>
+      {params.gmail_error === 'premium_required' && (
+        <Alert variant="warning">
+          <AlertDescription>
+            Multi-inbox is Premium-only. Standard supports {NON_PREMIUM_INBOX_LIMIT} Gmail inbox;
+            Premium supports up to {PREMIUM_INBOX_LIMIT}.
+          </AlertDescription>
+        </Alert>
       )}
+      {params.gmail_error === 'inbox_limit_reached' && (
+        <Alert variant="warning">
+          <AlertDescription>
+            You've reached the {PREMIUM_INBOX_LIMIT}-inbox limit. Remove an existing connection to
+            add a different one.
+          </AlertDescription>
+        </Alert>
+      )}
+      {params.gmail_error &&
+        params.gmail_error !== 'premium_required' &&
+        params.gmail_error !== 'inbox_limit_reached' && (
+          <Alert variant="destructive">
+            <AlertDescription>Gmail connect failed: {params.gmail_error}</AlertDescription>
+          </Alert>
+        )}
 
       <Card>
         <CardHeader>
-          <CardTitle>Gmail</CardTitle>
+          <CardTitle>Gmail inboxes</CardTitle>
           <CardDescription>
-            Kyujin reads job-application emails only — and never sends mail on your behalf.
+            Yume reads job-application emails only — and never sends mail on your behalf.
+            {isPremium
+              ? ` Premium supports up to ${PREMIUM_INBOX_LIMIT} inboxes (${connections.length}/${PREMIUM_INBOX_LIMIT} used).`
+              : ` Single inbox — multi-inbox is Premium-only (${connections.length}/${NON_PREMIUM_INBOX_LIMIT}).`}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {connection ? (
-            <>
-              <div className="text-sm">
-                Connected as <span className="font-medium">{connection.emailAddress}</span>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <BackfillButton />
-                <StartWatchButton />
-                <DisconnectGmailButton />
-              </div>
-            </>
-          ) : (
+          {connections.length === 0 ? (
             <Button asChild>
               <Link href="/api/gmail/connect">Connect Gmail</Link>
             </Button>
+          ) : (
+            <>
+              <ul className="space-y-2">
+                {connections.map((c) => (
+                  <li
+                    key={c.id}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-md border bg-background px-3 py-2 text-sm"
+                  >
+                    <div>
+                      <div className="font-medium">{c.emailAddress}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {c.watchExpiration
+                          ? `Push active until ${new Date(c.watchExpiration).toLocaleString()}`
+                          : 'Push not enabled'}
+                      </div>
+                    </div>
+                    <DisconnectGmailButton connectionId={c.id} label="Remove" />
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-wrap gap-3 pt-1">
+                {canAddInbox ? (
+                  <Button asChild variant="outline" size="sm">
+                    <Link href="/api/gmail/connect">+ Add another inbox</Link>
+                  </Button>
+                ) : isPremium ? (
+                  <div className="text-xs text-muted-foreground">
+                    Inbox limit reached ({PREMIUM_INBOX_LIMIT}). Remove one to add another.
+                  </div>
+                ) : (
+                  <div
+                    className="text-xs text-muted-foreground"
+                    title={`Premium supports up to ${PREMIUM_INBOX_LIMIT} inboxes`}
+                  >
+                    🔒 Add another inbox — premium only
+                  </div>
+                )}
+              </div>
+              <BackfillButton isPremium={isPremium} />
+              <div className="flex flex-wrap gap-3 pt-2">
+                <StartWatchButton />
+              </div>
+            </>
           )}
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Account</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
-          Signed in as {session!.user.email}
-        </CardContent>
-      </Card>
+      {process.env.NODE_ENV !== 'production' && <DevCronCard />}
     </div>
   );
 }

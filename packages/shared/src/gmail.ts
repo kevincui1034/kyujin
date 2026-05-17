@@ -1,7 +1,7 @@
 import { google, type gmail_v1 } from 'googleapis';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
-import { gmailConnections } from '@kyujin/db/schema';
+import { gmailConnections, type GmailConnection } from '@kyujin/db/schema';
 import type { NormalizedEmail } from './types';
 
 const SKEW_MS = 60_000;
@@ -19,7 +19,11 @@ function getOAuthClient() {
 export function buildAuthUrl(state: string): string {
   return getOAuthClient().generateAuthUrl({
     access_type: 'offline',
-    prompt: 'consent',
+    // `select_account` forces Google to show the account chooser even when one
+    // Google session is already active — required for multi-inbox so the user
+    // can pick a different account than the one they're signed in with.
+    // `consent` ensures Google issues a fresh refresh_token on every approval.
+    prompt: 'select_account consent',
     scope: ['https://www.googleapis.com/auth/gmail.readonly', 'openid', 'email'],
     state,
     include_granted_scopes: true,
@@ -32,22 +36,13 @@ export async function exchangeCode(code: string) {
   return tokens;
 }
 
-export async function getGmailClient(userId: string): Promise<{
+export interface GmailClientHandle {
   gmail: gmail_v1.Gmail;
   emailAddress: string;
   connectionId: string;
-}> {
-  const rows = await db
-    .select()
-    .from(gmailConnections)
-    .where(eq(gmailConnections.userId, userId))
-    .limit(1);
+}
 
-  const connection = rows[0];
-  if (!connection) {
-    throw new Error(`No Gmail connection for user ${userId}`);
-  }
-
+async function buildClientFromRow(connection: GmailConnection): Promise<GmailClientHandle> {
   const oauth = getOAuthClient();
   oauth.setCredentials({
     access_token: connection.accessToken,
@@ -77,6 +72,48 @@ export async function getGmailClient(userId: string): Promise<{
     emailAddress: connection.emailAddress,
     connectionId: connection.id,
   };
+}
+
+// Returns the user's first Gmail connection. Kept for callers that don't yet
+// care about multi-inbox (e.g. legacy single-inbox flows). Multi-inbox callers
+// should use `listGmailClients` or `getGmailClientById`.
+export async function getGmailClient(userId: string): Promise<GmailClientHandle> {
+  const rows = await db
+    .select()
+    .from(gmailConnections)
+    .where(eq(gmailConnections.userId, userId))
+    .limit(1);
+
+  const connection = rows[0];
+  if (!connection) {
+    throw new Error(`No Gmail connection for user ${userId}`);
+  }
+  return buildClientFromRow(connection);
+}
+
+// All Gmail clients for a user, one per connected inbox. Premium users may
+// connect more than one; free users see at most one.
+export async function listGmailClients(userId: string): Promise<GmailClientHandle[]> {
+  const rows = await db
+    .select()
+    .from(gmailConnections)
+    .where(eq(gmailConnections.userId, userId));
+  return Promise.all(rows.map(buildClientFromRow));
+}
+
+export async function getGmailClientById(
+  userId: string,
+  connectionId: string,
+): Promise<GmailClientHandle> {
+  const [connection] = await db
+    .select()
+    .from(gmailConnections)
+    .where(and(eq(gmailConnections.userId, userId), eq(gmailConnections.id, connectionId)))
+    .limit(1);
+  if (!connection) {
+    throw new Error(`No Gmail connection ${connectionId} for user ${userId}`);
+  }
+  return buildClientFromRow(connection);
 }
 
 function decodeHeader(headers: gmail_v1.Schema$MessagePartHeader[] | undefined, name: string): string {
@@ -171,10 +208,21 @@ export async function listJobMessageIds(
   return ids;
 }
 
-export const BACKFILL_QUERY = [
-  'newer_than:90d',
-  '(from:greenhouse.io OR from:lever.co OR from:myworkday.com OR from:ashbyhq.com',
-  'OR from:workable.com OR from:smartrecruiters.com OR from:bamboohr.com OR from:jobvite.com',
-  'OR from:taleo.net OR from:icims.com OR from:linkedin.com OR from:indeed.com',
-  'OR subject:application OR subject:interview OR subject:"thank you for applying")',
-].join(' ');
+export const BACKFILL_WINDOWS = [30, 90, 120, 240, 365] as const;
+export type BackfillWindow = (typeof BACKFILL_WINDOWS)[number];
+export const FREE_PLAN_MAX_DAYS = 90;
+
+export function buildBackfillQuery(days: number): string {
+  return [
+    `newer_than:${days}d`,
+    '(from:greenhouse.io OR from:lever.co OR from:myworkday.com OR from:ashbyhq.com',
+    'OR from:workable.com OR from:smartrecruiters.com OR from:bamboohr.com OR from:jobvite.com',
+    'OR from:taleo.net OR from:icims.com OR from:linkedin.com OR from:indeed.com',
+    'OR from:joinhandshake.com',
+    'OR subject:application OR subject:interview OR subject:"thank you for applying"',
+    'OR subject:"your application was sent")',
+  ].join(' ');
+}
+
+// Kept for back-compat with cron-style callers that don't pick a window.
+export const BACKFILL_QUERY = buildBackfillQuery(90);

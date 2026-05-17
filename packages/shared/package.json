@@ -8,20 +8,25 @@
     "./classifier": "./src/classifier.ts",
     "./gmail": "./src/gmail.ts",
     "./prompts": "./src/prompts.ts",
+    "./sender-domains": "./src/sender-domains.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.75",
     "@kyujin/db": "workspace:*",
     "ai": "^6.0.0",
     "drizzle-orm": "^0.38.3",
     "googleapis": "^144.0.0",
+    "papaparse": "^5.5.3",
+    "xlsx": "^0.18.5",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
+    "@types/papaparse": "^5.5.2",
     "typescript": "^5.7.3"
   }
 }

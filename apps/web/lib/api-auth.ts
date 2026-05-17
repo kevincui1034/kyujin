@@ -32,3 +32,15 @@ export async function getAuthUserId(req: NextRequest): Promise<string | null> {
 
   return rows[0]?.userId ?? null;
 }
+
+// True when the user is on any paid plan. Free is the schema default but
+// is unused in product today; gating against `plan === 'free'` covers both
+// 'standard' and 'premium' without needing to enumerate them here.
+export async function isPaidUser(userId: string): Promise<boolean> {
+  const [row] = await db
+    .select({ plan: users.plan })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+  return !!row && row.plan !== 'free';
+}

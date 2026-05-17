@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { lt, eq, or, isNull } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
 import { gmailConnections } from '@kyujin/db/schema';
-import { getGmailClient } from '@kyujin/shared/gmail';
+import { getGmailClientById } from '@kyujin/shared/gmail';
 import { isAuthorizedCron } from '@/lib/cron-auth';
 
 export const dynamic = 'force-dynamic';
@@ -14,6 +14,10 @@ export async function GET(req: NextRequest) {
   if (!isAuthorizedCron(req)) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   }
+  return runRefreshWatches();
+}
+
+export async function runRefreshWatches() {
   const topic = process.env.GMAIL_PUBSUB_TOPIC;
   if (!topic) {
     return NextResponse.json({ skipped: 'no topic configured' });
@@ -28,7 +32,7 @@ export async function GET(req: NextRequest) {
   let refreshed = 0;
   for (const conn of expiring) {
     try {
-      const { gmail } = await getGmailClient(conn.userId);
+      const { gmail } = await getGmailClientById(conn.userId, conn.id);
       const res = await gmail.users.watch({
         userId: 'me',
         requestBody: { topicName: topic, labelIds: ['INBOX'] },

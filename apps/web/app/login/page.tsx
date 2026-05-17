@@ -13,7 +13,7 @@ export default async function LoginPage() {
     <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-6 py-12">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Sign in to Kyujin</CardTitle>
+          <CardTitle>Sign in to Yume</CardTitle>
           <CardDescription>
             Sign in with Google or Apple. We&apos;ll ask for Gmail access separately, only after you
             choose to connect it.

@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { eq } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
 import { backfillQueue, gmailConnections } from '@kyujin/db/schema';
-import { getGmailClient } from '@kyujin/shared/gmail';
+import { getGmailClientById } from '@kyujin/shared/gmail';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ skipped: 'unknown email' });
   }
 
-  const { gmail } = await getGmailClient(conn.userId);
+  const { gmail } = await getGmailClientById(conn.userId, conn.id);
 
   // List history events since stored historyId; enumerate added messages.
   const startHistoryId = conn.historyId ? String(conn.historyId) : String(notification.historyId);
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
         if (!m.message?.id) continue;
         await db
           .insert(backfillQueue)
-          .values({ userId: conn.userId, gmailMessageId: m.message.id })
+          .values({ userId: conn.userId, gmailMessageId: m.message.id, connectionId: conn.id })
           .onConflictDoNothing();
         enqueued++;
       }

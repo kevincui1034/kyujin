@@ -1,0 +1,12 @@
+CREATE TABLE "chat_usage" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+ALTER TABLE "applications" ADD COLUMN "job_id" text;--> statement-breakpoint
+ALTER TABLE "classifications" ADD COLUMN "job_id" text;--> statement-breakpoint
+ALTER TABLE "users" ADD COLUMN "last_backfill_at" timestamp;--> statement-breakpoint
+ALTER TABLE "chat_usage" ADD CONSTRAINT "chat_usage_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "chat_usage_user_created_idx" ON "chat_usage" USING btree ("user_id","created_at");--> statement-breakpoint
+CREATE INDEX "applications_user_job_id_idx" ON "applications" USING btree ("user_id","job_id");

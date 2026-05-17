@@ -20,6 +20,8 @@
         "GMAIL_PUBSUB_TOPIC",
         "GMAIL_PUBSUB_TOKEN",
         "AI_GATEWAY_API_KEY",
+        "GOOGLE_GENERATIVE_AI_API_KEY",
+        "CLASSIFIER_DISABLE_SENDER_FILTER",
         "CRON_SECRET"
       ]
     },

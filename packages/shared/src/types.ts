@@ -33,7 +33,30 @@ export interface ClassificationResult {
   model?: string;
   company?: string | null;
   role?: string | null;
+  jobId?: string | null;
   promptTokens?: number;
   completionTokens?: number;
   raw?: unknown;
+}
+
+// ── CSV/XLSX import ───────────────────────────────────────────────────────
+
+export const IMPORT_TARGET_FIELDS = [
+  'company',
+  'role',
+  'status',
+  'sourceDomain',
+  'jobId',
+  'notes',
+  'firstSeenAt',
+  'lastEventAt',
+] as const;
+export type ImportTargetField = (typeof IMPORT_TARGET_FIELDS)[number];
+
+// 'custom' → goes into customFields jsonb under the original CSV header.
+// 'skip'   → dropped on import.
+export type ImportColumnTarget = ImportTargetField | 'custom' | 'skip';
+
+export interface ImportColumnMapping {
+  [csvHeader: string]: ImportColumnTarget;
 }
