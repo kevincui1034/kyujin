@@ -40,15 +40,19 @@ There is **no test suite** in this repo. "Verification" is manual; see README "V
 
 ### Email ingestion pipeline (the core of the product)
 
-Clients never trigger per-message processing. Ingestion is always server-side:
+Clients never trigger per-message processing. Ingestion is always server-side. The provider is selected per-environment by `EMAIL_PROVIDER` — `gmail` (direct OAuth, requires Google CASA Tier-2 audit) or `nylas` (routes through Nylas's CASA-bound shared Google app). **Production is on `nylas`.** Provider-aware glue lives in `apps/web/lib/email-provider.ts` (`EMAIL_PROVIDER`, `EMAIL_API_PREFIX`, `isNylasProvider`) and in `apps/web/lib/process-batch.ts` (the worker branches on the same env var).
 
-1. **Backfill or Pub/Sub** drops Gmail message IDs into the `backfill_queue` table.
-   - `POST /api/gmail/backfill` enqueues N days of history (90 default; 365 is premium-gated).
-   - `POST /api/gmail/pubsub` receives Gmail push notifications, diffs `historyId`, enqueues new IDs. Uses a shared-secret query-param token, not a session — must be excluded from auth middleware (see "Middleware split" below).
-2. **Vercel Cron** hits `GET /api/cron/process-batch` every 5 minutes (`vercel.ts` at repo root defines the schedule).
-3. The worker pulls up to **50** queued messages, fetches each via Gmail API, normalizes, runs `preClassify` (sender filter / handshake regex / etc.), then `classifyLlm` for survivors, then `upsertApplicationFromClassification`.
+1. **Backfill or webhook** drops message IDs into the `backfill_queue` table. `backfill_queue.gmail_message_id` stores the provider's message ID regardless of provider name — Nylas message IDs land in that column too. `backfill_queue.connection_id` still FKs to `gmail_connections` for legacy rows; Nylas-enqueued rows leave it null and the worker resolves the connection via `userId + EMAIL_PROVIDER`.
+   - **Gmail-direct path:**
+     - `POST /api/gmail/backfill` enqueues N days of history (90 default; 365 is premium-gated).
+     - `POST /api/gmail/pubsub` receives Gmail push notifications, diffs `historyId`, enqueues new IDs. Uses a shared-secret query-param token, not a session — must be excluded from auth middleware (see "Middleware split" below).
+   - **Nylas path:**
+     - `POST /api/email/backfill` mirrors the Gmail backfill route (same plan caps + cooldown + classifier-cap check). Uses `listJobMessageIds` against Nylas's `searchQueryNative` with the same Gmail query string.
+     - `POST /api/email/webhook` receives Nylas events (`message.created`, `grant.expired`, `grant.deleted`). HMAC-verified against `NYLAS_WEBHOOK_SECRET` over the raw body. **Wire format is snake_case** (`grant_id`, `thread_id`) — the handler reads both shapes, but if you add new fields, prefer reading snake_case first.
+2. **Vercel Cron** hits `GET /api/cron/process-batch` every 5 minutes (`vercel.ts` at repo root defines the schedule). Same worker drains both providers' queues — `process-batch.ts` branches on `EMAIL_PROVIDER` to pick the fetcher.
+3. The worker pulls up to **50** queued messages, fetches each via the active provider's SDK, normalizes (`normalizeGmailMessage` or `normalizeNylasMessage`), runs `preClassify` (sender filter / handshake regex / etc.), then `classifyLlm` for survivors, then `upsertApplicationFromClassification`.
 4. **Classifier:** `packages/shared/src/classifier.ts` uses `@ai-sdk/google` directly with `gemini-2.5-flash-lite`, reading `GOOGLE_GENERATIVE_AI_API_KEY`. **Not the Vercel AI Gateway** — `AI_GATEWAY_API_KEY` is in the env list but the active path doesn't use it.
-5. A second cron `GET /api/cron/refresh-watches` runs every 12 hours to re-issue Gmail `users.watch` subscriptions before they expire (Gmail watches die after 7 days).
+5. A second cron `GET /api/cron/refresh-watches` runs every 12 hours to re-issue Gmail `users.watch` subscriptions before they expire (Gmail watches die after 7 days). **Nylas-only deploys can skip this** — Nylas manages provider tokens server-side and webhook subscriptions are app-level, not per-grant.
 
 Both cron routes auth via `isAuthorizedCron` (Bearer `CRON_SECRET`). `maxDuration = 300` is set on `process-batch` to use the long-running Vercel function limit.
 
@@ -66,17 +70,20 @@ There are **two Auth.js configs**, and this is load-bearing:
 - `apps/web/auth.config.ts` — slim, Edge-safe, no DB adapter, JWT-only. Imported by `middleware.ts`.
 - `apps/web/auth.ts` — full config, spreads `auth.config.ts`, adds the DrizzleAdapter. Used by route handlers / server components on the Node runtime.
 
-`middleware.ts` uses an **explicit allowlist matcher** (`/app/:path*` plus four `/api/gmail/*` paths). Routes that auth themselves must stay off this list:
+`middleware.ts` uses an **explicit allowlist matcher** (`/app/:path*` plus the cookie-protected provider routes: `/api/gmail/{backfill,connect,disconnect,watch}` and `/api/email/{connect,backfill,disconnect}`). Routes that auth themselves must stay off this list:
 
 - `/api/gmail/pubsub` — auths via query-param token. Adding it to the matcher caused an infinite redirect loop with Google Pub/Sub (see commit `5c077d0`).
-- `/api/gmail/callback` — auths via signed OAuth state nonce.
+- `/api/gmail/callback` and `/api/email/callback` — auth via signed OAuth state nonce.
+- `/api/email/webhook` — auths via HMAC of the raw body against `NYLAS_WEBHOOK_SECRET`.
 - `/api/applications`, `/api/stats` — accept Bearer tokens, can't go through cookie-only redirect.
 
 If you add a new API route, decide its auth strategy first, then choose whether to add it to the middleware matcher or call `getAuthUserId` inside the handler.
 
-### Gmail: two OAuth clients
+### Gmail: two OAuth clients (Gmail-direct mode only)
 
-`AUTH_GOOGLE_*` (login, `openid email profile`) and `GMAIL_*` (data access, `gmail.readonly`) are **separate OAuth clients** by design. Login doesn't request Gmail scopes; the Gmail grant is opt-in from `/app/settings` so Apple users can also connect Gmail. `gmail.readonly` is a restricted scope — going public requires Google CASA certification.
+When `EMAIL_PROVIDER=gmail`: `AUTH_GOOGLE_*` (login, `openid email profile`) and `GMAIL_*` (data access, `gmail.readonly`) are **separate OAuth clients** by design. Login doesn't request Gmail scopes; the Gmail grant is opt-in from `/app/settings` so Apple users can also connect Gmail. `gmail.readonly` is a restricted scope — going public requires Google CASA Tier-2 audit.
+
+When `EMAIL_PROVIDER=nylas` (production): users authenticate through Nylas's hosted-auth screen, which forwards them to Nylas's own CASA-verified shared Google app. No Google audit needed on our side. The consent screen shows "Nylas," which the settings page copy explains ("Connect Gmail via Nylas"). The Nylas grant is keyed by `grant_id` in `nylas_connections`; we store no provider OAuth tokens of our own — Nylas refreshes them server-side. **`NYLAS_CLIENT_SECRET` is not required** despite being in Nylas's docs: the v3 server-side SDK authenticates with `NYLAS_API_KEY` alone (see `packages/shared/src/nylas.ts:exchangeCode`).
 
 ### Database (`packages/db/src/schema.ts`)
 
@@ -104,4 +111,6 @@ When working in `apps/ios`, prefer XcodeBuildMCP tools over `xcodebuild` shell i
 
 Vercel-only. `vercel.ts` at the repo root defines build/install/ignore commands and the cron schedule — Vercel reads it on every deploy. The `ignoreCommand` skips builds when only files outside `apps/web` and `packages` changed.
 
-Database is provisioned via the Vercel Marketplace (Neon Postgres), which auto-injects `DATABASE_URL`. Other secrets live in `vercel env`.
+Database is **Supabase Postgres** (pooled connection via `aws-1-us-west-1.pooler.supabase.com:6543`). `DATABASE_URL` is set as a Vercel env (not auto-injected by a Marketplace integration) and pulled locally via `vercel env pull`. Other secrets live in `vercel env`.
+
+Note on `drizzle-kit migrate`: the local `__drizzle_migrations` ledger has drifted from the journal file (mid-numbered tags applied out of order at some point), so `pnpm db:migrate` reports success without applying newer entries. Until that's reconciled, apply new migrations by piping the raw SQL through `psql "$DATABASE_URL"` — the schema lands correctly, just without a ledger row. The drizzle-orm bump follow-up is a good time to also reconcile this.
