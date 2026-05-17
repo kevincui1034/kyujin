@@ -13,6 +13,7 @@ import {
 } from '@/lib/apple';
 import { activeEntitlementSource, recomputeUserPlan } from '@/lib/entitlements';
 import { apiError } from '@/lib/api-errors';
+import { log } from '@/lib/log';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -139,7 +140,11 @@ export async function POST(req: NextRequest) {
     // If Apple's API is down, trust the JWS payload we already verified.
     // Logged so we know to investigate, but not fatal — the user just paid,
     // we should entitle them.
-    console.warn('[apple verify] status refresh failed, using JWS payload', err);
+    log.warn({
+      kind: 'billing.apple.verify.status_refresh_failed',
+      userId,
+      cause: err instanceof Error ? err.message : String(err),
+    });
   }
 
   // Cross-platform trial stamp. Only set on the first intro-offer transaction

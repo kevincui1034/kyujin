@@ -6,6 +6,7 @@ import { auth } from '@/auth';
 import { buildMatchKey } from '@kyujin/shared';
 import { apiError } from '@/lib/api-errors';
 import { validateBody, z } from '@/lib/with-validated-body';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,6 +24,9 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
   if (!session?.user?.id) return apiError('unauthenticated');
   const userId = session.user.id;
   const { id } = await ctx.params;
+
+  const limited = await enforceRateLimit({ userId, key: 'applications:write', window: '1m', max: 60 });
+  if (limited) return limited;
 
   const parsed = await validateBody(req, bodySchema);
   if (!parsed.ok) return parsed.response;

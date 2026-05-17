@@ -134,6 +134,13 @@
       "when": 1778984435265,
       "tag": "0019_breezy_blockbuster",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1778985473699,
+      "tag": "0020_closed_daimon_hellstrom",
+      "breakpoints": true
     }
   ]
 }

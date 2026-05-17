@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { Resend } from 'resend';
 import { auth } from '@/auth';
 import { apiError } from '@/lib/api-errors';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +28,16 @@ export async function POST(req: NextRequest) {
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
   }
+
+  // 5/hour keeps the inbox from being spammed by a single user. Genuine
+  // feedback rarely needs more than one submission per session.
+  const limited = await enforceRateLimit({
+    userId: session.user.id,
+    key: 'user:feedback',
+    window: '1h',
+    max: 5,
+  });
+  if (limited) return limited;
 
   const body = (await req.json().catch(() => null)) as {
     category?: string;

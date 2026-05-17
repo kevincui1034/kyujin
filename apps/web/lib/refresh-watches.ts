@@ -3,6 +3,7 @@ import { lt, eq, or, isNull } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
 import { gmailConnections } from '@kyujin/db/schema';
 import { getGmailClientById } from '@kyujin/shared/gmail';
+import { log } from '@/lib/log';
 
 // Gmail watches expire after 7 days; refresh anything within 24h of expiry.
 const ROLLING_HOURS = 24;
@@ -20,6 +21,7 @@ export async function runRefreshWatches() {
     .where(or(isNull(gmailConnections.watchExpiration), lt(gmailConnections.watchExpiration, cutoff)));
 
   let refreshed = 0;
+  let failed = 0;
   for (const conn of expiring) {
     try {
       const { gmail } = await getGmailClientById(conn.userId, conn.id);
@@ -36,10 +38,15 @@ export async function runRefreshWatches() {
         })
         .where(eq(gmailConnections.id, conn.id));
       refreshed++;
-    } catch {
-      // Don't fail the cron over one bad connection
+    } catch (err) {
+      // Don't fail the cron over one bad connection — but log it so an
+      // expired refresh token doesn't go unnoticed for days.
+      failed++;
+      log.error({ kind: 'cron.refresh_watches.connection_failed', connectionId: conn.id, cause: err });
     }
   }
 
-  return NextResponse.json({ checked: expiring.length, refreshed });
+  const summary = { checked: expiring.length, refreshed, failed };
+  log.info({ kind: 'cron.refresh_watches', ...summary });
+  return NextResponse.json(summary);
 }

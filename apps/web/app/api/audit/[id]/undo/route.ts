@@ -4,6 +4,7 @@ import { db } from '@kyujin/db/client';
 import { applicationAudit, applications, emailMessages } from '@kyujin/db/schema';
 import { auth } from '@/auth';
 import { apiError } from '@/lib/api-errors';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
@@ -90,6 +91,9 @@ export async function POST(_req: NextRequest, ctx: { params: Promise<{ id: strin
   const { id } = await ctx.params;
 
   if (!/^[0-9a-f-]{36}$/i.test(id)) return apiError('invalid_params');
+
+  const limited = await enforceRateLimit({ userId, key: 'audit:undo', window: '1m', max: 30 });
+  if (limited) return limited;
 
   const [entry] = await db
     .select()

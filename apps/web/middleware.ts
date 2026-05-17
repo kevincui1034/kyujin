@@ -5,6 +5,18 @@ import authConfig from './auth.config';
 // so it can run on the default Edge runtime under Turbopack. Session validation
 // in route handlers / server components still goes through the full ./auth.ts
 // with the Drizzle adapter on Node.
+
+// CORS posture (intentional — do not loosen without a clear reason):
+//   - We set NO `Access-Control-Allow-Origin` headers anywhere. Browsers
+//     enforce same-origin on `fetch` from any web app that isn't yumeai.app
+//     itself, which is exactly what we want.
+//   - The iOS app calls /api/applications, /api/stats, /api/billing/apple/*
+//     from URLSession with no Origin header, so CORS doesn't apply to it.
+//   - Stripe and Apple webhooks are server-to-server, also no CORS.
+//   - If a future contributor wants to expose a public-facing API to other
+//     web apps, do it with an explicit per-route allowlist of Origins, NOT
+//     with `*` and NOT with credentials. Don't add it here without that
+//     conversation first.
 export const { auth: middleware } = NextAuth(authConfig);
 
 // Routes excluded from middleware do their own auth in the handler:

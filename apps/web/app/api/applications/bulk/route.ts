@@ -6,6 +6,7 @@ import { auth } from '@/auth';
 import { APPLICATION_STATUSES, type ApplicationStatus } from '@kyujin/shared';
 import { apiError } from '@/lib/api-errors';
 import { validateBody, z } from '@/lib/with-validated-body';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,6 +43,10 @@ export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) return apiError('unauthenticated');
   const userId = session.user.id;
+
+  // Bulk is the heavy hammer — tighter cap than per-row writes.
+  const limited = await enforceRateLimit({ userId, key: 'applications:bulk', window: '1m', max: 10 });
+  if (limited) return limited;
 
   const parsed = await validateBody(req, bodySchema);
   if (!parsed.ok) return parsed.response;

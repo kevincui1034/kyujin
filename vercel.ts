@@ -9,5 +9,8 @@ export const config: VercelConfig = {
   crons: [
     { path: '/api/cron/process-batch', schedule: '*/5 * * * *' },
     { path: '/api/cron/refresh-watches', schedule: '0 */12 * * *' },
+    // Trim rate_limit_events older than 7 days. The longest window we
+    // enforce is 1d, so anything past 7d serves no counter.
+    { path: '/api/cron/cleanup-rate-limits', schedule: '0 3 * * *' },
   ],
 };

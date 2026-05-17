@@ -7,6 +7,7 @@ import { getStripe } from '@/lib/stripe';
 import { recomputeUserPlan } from '@/lib/entitlements';
 import { sendTrialEndingEmail } from '@/lib/billing-emails';
 import { apiError } from '@/lib/api-errors';
+import { log } from '@/lib/log';
 
 // Stripe needs the EXACT raw bytes for signature verification — any JSON
 // reparse mutates whitespace and the HMAC no longer matches. App Router's
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
     await handleEvent(event);
   } catch (err) {
     // Log but ack — see top-of-file comment about retry behavior.
-    console.error('[stripe webhook] handler failed', event.type, err);
+    log.error({ kind: 'billing.stripe.handler_failed', eventType: event.type, cause: err });
   }
   return NextResponse.json({ received: true });
 }
@@ -113,7 +114,11 @@ async function applySubscriptionToUser(
     clientReferenceUserId,
   });
   if (!userId) {
-    console.warn('[stripe webhook] no user for customer', customerId, 'sub', subscription.id);
+    log.warn({
+      kind: 'billing.stripe.user_not_found',
+      customerId,
+      subscriptionId: subscription.id,
+    });
     return;
   }
 
@@ -144,6 +149,15 @@ async function applySubscriptionToUser(
     })
     .where(eq(users.id, userId));
   await recomputeUserPlan(userId);
+  // State-transition audit. Cheap signal that lets us answer "did this user
+  // actually get upgraded?" without trawling Stripe.
+  log.info({
+    kind: 'billing.stripe.subscription_applied',
+    userId,
+    status: subscription.status,
+    priceId,
+    cancelAtPeriodEnd: subscription.cancel_at_period_end,
+  });
 }
 
 async function clearSubscription(subscription: Stripe.Subscription): Promise<void> {
@@ -166,6 +180,7 @@ async function clearSubscription(subscription: Stripe.Subscription): Promise<voi
     })
     .where(eq(users.id, userId));
   await recomputeUserPlan(userId);
+  log.info({ kind: 'billing.stripe.subscription_canceled', userId });
 }
 
 // Three signals point to the same user: subscription metadata.userId (set at

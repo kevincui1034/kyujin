@@ -9,6 +9,7 @@ import {
 } from '@/lib/apple';
 import { recomputeUserPlan } from '@/lib/entitlements';
 import { apiError } from '@/lib/api-errors';
+import { log } from '@/lib/log';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -50,7 +51,11 @@ export async function POST(req: NextRequest) {
     await handleNotification(decoded);
   } catch (err) {
     // Log but ack — see note above about retry storms.
-    console.error('[apple webhook] handler failed', decoded.notificationType, err);
+    log.error({
+      kind: 'billing.apple.handler_failed',
+      notificationType: decoded.notificationType,
+      cause: err,
+    });
   }
   return NextResponse.json({ received: true });
 }
@@ -80,12 +85,11 @@ async function handleNotification(payload: ResponseBodyV2DecodedPayload): Promis
     .where(eq(users.appleOriginalTransactionId, tx.originalTransactionId))
     .limit(1);
   if (!user) {
-    console.warn(
-      '[apple webhook] no user for originalTransactionId',
-      tx.originalTransactionId,
-      'event',
-      payload.notificationType,
-    );
+    log.warn({
+      kind: 'billing.apple.user_not_found',
+      originalTransactionId: tx.originalTransactionId,
+      notificationType: payload.notificationType,
+    });
     return;
   }
 
@@ -119,6 +123,13 @@ async function handleNotification(payload: ResponseBodyV2DecodedPayload): Promis
     .where(eq(users.id, user.id));
 
   await recomputeUserPlan(user.id);
+  log.info({
+    kind: 'billing.apple.notification_applied',
+    userId: user.id,
+    notificationType: payload.notificationType,
+    status,
+    productId: tx.productId ?? null,
+  });
 }
 
 // Map Apple's notificationType onto the apple_subscription_status string.

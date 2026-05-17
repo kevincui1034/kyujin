@@ -15,6 +15,7 @@ import {
 } from '@kyujin/shared';
 import { revalidateTag } from 'next/cache';
 import { auth } from '@/auth';
+import { log } from '@/lib/log';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 300;
@@ -222,13 +223,7 @@ export async function POST(req: NextRequest) {
       failed++;
       // Dev-only route, but keep the same no-leak discipline as prod: log the
       // real exception, return a stable label so the dev UI can render it.
-      console.error(
-        JSON.stringify({
-          kind: 'reclassify_error',
-          gmailMessageId: em.gmailMessageId,
-          cause: (err instanceof Error ? err.message : String(err)).slice(0, 500),
-        }),
-      );
+      log.error({ kind: 'dev.reclassify_error', gmailMessageId: em.gmailMessageId, cause: err });
       errors.push({ gmailMessageId: em.gmailMessageId, error: 'reclassify_failed' });
     }
   }

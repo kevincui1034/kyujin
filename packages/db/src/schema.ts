@@ -389,6 +389,32 @@ export const classifierUsage = pgTable(
   (t) => [index('classifier_usage_user_created_idx').on(t.userId, t.createdAt)],
 );
 
+// One row per rate-limited request. The rate-limit helper counts rows where
+// `(userId, key) AND createdAt >= now() - window`. Same pattern as
+// `chat_usage` / `classifier_usage` so we don't take on a new dependency
+// (Upstash/KV) for what's a small DB-backed counter. A cleanup cron deletes
+// rows older than the longest window we use (7d budget).
+export const rateLimitEvents = pgTable(
+  'rate_limit_events',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    // Free-form bucket name, e.g. `'applications:bulk'`, `'emails:move'`.
+    // Defined by the caller; not enumerated here so adding a new limit
+    // doesn't require a schema change.
+    key: text('key').notNull(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  },
+  (t) => [
+    // Backs both the count query (filter on user+key+createdAt) and the
+    // cleanup query (scan oldest-first by createdAt).
+    index('rate_limit_user_key_created_idx').on(t.userId, t.key, t.createdAt),
+    index('rate_limit_created_idx').on(t.createdAt),
+  ],
+);
+
 // Per-user sender rules. Augment the built-in allow/blocklists. Users can
 // add domains to either list; user rules win over the built-in defaults.
 export const userSenderRules = pgTable(

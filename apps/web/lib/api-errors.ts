@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { log } from './log';
 
 // Stable, client-safe error codes. Add new ones here so the union stays
 // closed and the iOS/web clients can switch on a known set.
@@ -59,17 +60,9 @@ export function apiError(
   status: number = DEFAULT_STATUS[code],
 ): NextResponse {
   if (opts.cause !== undefined) {
-    const causeMessage =
-      opts.cause instanceof Error ? opts.cause.message : String(opts.cause);
-    // One line, structured, easy to grep in Vercel logs.
-    console.error(
-      JSON.stringify({
-        kind: 'api_error',
-        code,
-        status,
-        cause: causeMessage.slice(0, 500),
-      }),
-    );
+    // Go through the structured logger so api_error events sit alongside
+    // billing/cron events in Vercel logs with the same shape.
+    log.error({ kind: 'api_error', code, status, cause: opts.cause });
   }
   const body: Record<string, unknown> = { error: code };
   if (opts.message) body.message = opts.message;

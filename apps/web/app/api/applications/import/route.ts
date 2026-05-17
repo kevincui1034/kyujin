@@ -4,6 +4,7 @@ import { and, eq, inArray } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
 import { applicationAudit, applications } from '@kyujin/db/schema';
 import { getAuthUserId, isPaidUser } from '@/lib/api-auth';
+import { log } from '@/lib/log';
 import {
   APPLICATION_STATUSES,
   applyMapping,
@@ -298,14 +299,7 @@ async function commit(req: NextRequest, userId: string, secret: string) {
       } catch (err) {
         // Log the real exception server-side; client sees only "write failed"
         // so we don't leak DB constraint names / driver text in the response.
-        console.error(
-          JSON.stringify({
-            kind: 'import_row_error',
-            userId,
-            matchKey: incoming.matchKey,
-            cause: (err instanceof Error ? err.message : String(err)).slice(0, 500),
-          }),
-        );
+        log.error({ kind: 'import.row_error', userId, matchKey: incoming.matchKey, cause: err });
         errors.push({ row: 0, reason: 'write_failed' });
       }
     }

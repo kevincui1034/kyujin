@@ -21,6 +21,7 @@ import {
 } from '@kyujin/shared';
 import { revalidateTag } from 'next/cache';
 import { classifierCapForPlan } from '@/lib/plan';
+import { log } from '@/lib/log';
 
 const BATCH_SIZE = 50;
 
@@ -281,10 +282,14 @@ export async function runProcessBatch() {
     revalidateTag(`user:${userId}:applications`);
   }
 
-  return NextResponse.json({
+  const summary = {
     processed,
     failed,
     users: byUser.size,
     durationMs: Date.now() - started,
-  });
+  };
+  // One log per run. Without this, a failing cron is invisible — the JSON
+  // response only goes to whoever curled it, not to Vercel logs we monitor.
+  log.info({ kind: 'cron.process_batch', ...summary });
+  return NextResponse.json(summary);
 }
