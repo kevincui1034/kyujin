@@ -415,6 +415,35 @@ export const rateLimitEvents = pgTable(
   ],
 );
 
+// User-saved job postings the user is considering but hasn't applied to yet.
+// Distinct from `applications` — no email pipeline, no status enum, no merge
+// logic. Single static status ("In Progress") rendered in the UI. All of url,
+// company, and position are optional; the API requires at least one. When the
+// user pastes a URL we try OG-tag / LLM extraction to pre-fill company and
+// position, but a fully manual entry (referral, networking lead, etc.) is
+// supported too. `(userId, url)` is unique so re-pasting the same URL surfaces
+// the existing row; Postgres allows multiple NULL urls per user, so manual
+// entries don't collide with each other.
+export const todoJobs = pgTable(
+  'todo_jobs',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    url: text('url'),
+    company: text('company'),
+    position: text('position'),
+    notes: text('notes').notNull().default(''),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
+  },
+  (t) => [
+    uniqueIndex('todo_jobs_user_url_unique').on(t.userId, t.url),
+    index('todo_jobs_user_created_idx').on(t.userId, t.createdAt.desc()),
+  ],
+);
+
 // Per-user sender rules. Augment the built-in allow/blocklists. Users can
 // add domains to either list; user rules win over the built-in defaults.
 export const userSenderRules = pgTable(
@@ -491,6 +520,8 @@ export type NewClassification = typeof classifications.$inferInsert;
 export type GmailConnection = typeof gmailConnections.$inferSelect;
 export type UserSenderRule = typeof userSenderRules.$inferSelect;
 export type NewUserSenderRule = typeof userSenderRules.$inferInsert;
+export type TodoJob = typeof todoJobs.$inferSelect;
+export type NewTodoJob = typeof todoJobs.$inferInsert;
 export type SenderRuleType = (typeof senderRuleType.enumValues)[number];
 export type ApplicationStatus = (typeof applicationStatus.enumValues)[number];
 export type ClassificationMethod = (typeof classificationMethod.enumValues)[number];

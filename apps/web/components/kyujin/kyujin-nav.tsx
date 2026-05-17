@@ -8,6 +8,7 @@ import { KyujinLogo } from './kyujin-logo';
 const TABS = [
   { id: 'home', label: 'Home', href: '/app' },
   { id: 'applications', label: 'Applications', href: '/app/applications' },
+  { id: 'todos', label: 'To Do', href: '/app/todos' },
   { id: 'insights', label: 'Insights', href: '/app/insights' },
   { id: 'settings', label: 'Settings', href: '/app/settings' },
 ] as const;
