@@ -62,9 +62,9 @@ export default async function PricingPage() {
             className="mx-auto mt-6 max-w-[560px] text-[15.5px] leading-[1.6]"
             style={{ color: 'var(--yume-ink-soft)' }}
           >
-            Pick the plan that fits how far back you want Yume to look. Monthly or annual, with
-            roughly two months off on the annual option. Cancel from the customer portal at any
-            time.
+            Start with a 7-day free trial of Standard — card on file, cancel anytime before the
+            trial ends to avoid being charged. Pick monthly or annual (roughly two months off on
+            annual). Cancel from the customer portal at any time.
           </p>
         </div>
 
@@ -95,6 +95,20 @@ export default async function PricingPage() {
                     }}
                   >
                     BEST VALUE
+                  </span>
+                )}
+                {id === 'standard' && (
+                  <span
+                    className="mono absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-white"
+                    style={{
+                      background: tone.accent,
+                      fontSize: 9.5,
+                      letterSpacing: '0.14em',
+                      fontWeight: 700,
+                      boxShadow: '0 8px 18px -8px rgba(232,90,122,0.45)',
+                    }}
+                  >
+                    7-DAY FREE TRIAL
                   </span>
                 )}
 
@@ -139,7 +153,7 @@ export default async function PricingPage() {
                     color: 'var(--yume-ink-muted)',
                   }}
                 >
-                  OR {plan.priceLabelAnnual}/YR · ~2 MONTHS FREE
+                  OR {plan.priceLabelAnnual}/YR · ~{Math.round((plan.priceCentsMonthly * 12 - plan.priceCentsAnnual) / plan.priceCentsMonthly)} MONTHS FREE
                 </div>
 
                 <ul className="mt-6 flex flex-1 flex-col gap-2.5">
@@ -184,7 +198,7 @@ export default async function PricingPage() {
                         }
                   }
                 >
-                  Choose {plan.name}
+                  {id === 'standard' ? 'Start 7-day free trial' : `Choose ${plan.name}`}
                   <span aria-hidden style={{ fontSize: 14 }}>
                     →
                   </span>
@@ -213,10 +227,11 @@ export default async function PricingPage() {
             className="mt-2 text-[14px] leading-[1.6]"
             style={{ color: 'var(--yume-ink-soft)' }}
           >
-            You can cancel from the Stripe customer portal at any time. Cancellation takes effect
-            at the end of your current billing period — you keep access until then, and your
-            subscription simply doesn&apos;t renew. We don&apos;t issue refunds for partial
-            months or unused time. Full details are in our{' '}
+            You can cancel from the Stripe customer portal at any time. If you cancel during your
+            7-day Standard trial, you won&apos;t be charged at all. After the trial, cancellation
+            takes effect at the end of your current billing period — you keep access until then,
+            and your subscription simply doesn&apos;t renew. We don&apos;t issue refunds for
+            partial months or unused time. Full details are in our{' '}
             <Link href="/refunds" style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}>
               Refund Policy
             </Link>{' '}

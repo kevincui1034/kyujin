@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { auth } from '@/auth';
+import { EMAIL_API_PREFIX, EMAIL_PROVIDER } from '@/lib/email-provider';
 import {
   getActiveThreads,
   getActivityOverTime,
   getFunnel,
-  getGmailConnection,
+  listInboxConnections,
   getRecentEvents,
   getStats,
   getTimeToRejectionHistogram,
@@ -101,10 +102,11 @@ export default async function DashboardPage() {
   const session = await auth();
   const userId = session!.user.id;
 
-  const [connection, profile] = await Promise.all([
-    getGmailConnection(userId),
+  const [connections, profile] = await Promise.all([
+    listInboxConnections(userId, EMAIL_PROVIDER),
     getUserProfile(userId),
   ]);
+  const connection = connections[0] ?? null;
   const userEmail = profile?.email ?? session!.user.email;
   const greetingName =
     (profile?.name && firstNameFromDisplayName(profile.name)) || firstNameFromEmail(userEmail);
@@ -122,7 +124,7 @@ export default async function DashboardPage() {
           </p>
           <div className="mt-5">
             <Link
-              href="/api/gmail/connect"
+              href={`${EMAIL_API_PREFIX}/connect`}
               className="inline-flex items-center rounded-full px-5 py-2.5 text-[13px] font-semibold text-white"
               style={{
                 background: 'var(--yume-pink-500)',

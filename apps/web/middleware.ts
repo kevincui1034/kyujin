@@ -25,8 +25,10 @@ export const { auth: middleware } = NextAuth(authConfig);
 // - `/api/gmail/pubsub` is called by Google Pub/Sub with no session cookie; it
 //   auths via a shared token query param. Including it here put it in an
 //   infinite 307 → /login redirect loop with Pub/Sub.
-// - `/api/gmail/callback` is the OAuth return URL from Google; it auths via
-//   the signed state nonce, not a session cookie.
+// - `/api/gmail/callback` and `/api/email/callback` are OAuth return URLs;
+//   they auth via the signed state nonce, not a session cookie.
+// - `/api/email/webhook` is called by Nylas server-to-server; it verifies
+//   via HMAC of the request body against NYLAS_WEBHOOK_SECRET.
 export const config = {
   matcher: [
     '/app/:path*',
@@ -34,5 +36,8 @@ export const config = {
     '/api/gmail/connect',
     '/api/gmail/disconnect',
     '/api/gmail/watch',
+    '/api/email/connect',
+    '/api/email/backfill',
+    '/api/email/disconnect',
   ],
 };

@@ -49,6 +49,11 @@ export default async function BillingSettingsPage() {
   const subscribed = isPaidPlan(entitlement.plan);
   const cadence = entitlement.cadence ?? 'monthly';
   const periodEndLabel = formatDate(entitlement.currentPeriodEnd);
+  // Trial eligibility mirrors the checkout route: Standard only, never
+  // trialed before, and not currently entitled via Apple (web checkout is
+  // server-blocked in that case so a trial offer would be misleading).
+  const trialEligible =
+    !!profile && profile.trialUsedAt === null && entitlement.source !== 'apple';
 
   return (
     <div className="space-y-6">
@@ -110,6 +115,9 @@ export default async function BillingSettingsPage() {
         // The flag flips the action button's copy to a heads-up message
         // instead of attempting a server round-trip that will 409.
         lockedByApple={entitlement.source === 'apple'}
+        // Standard-only 7-day free trial. False when the user has already
+        // consumed their trial (across either platform) or is Apple-locked.
+        trialEligible={trialEligible}
       />
 
       <p className="text-xs text-muted-foreground">

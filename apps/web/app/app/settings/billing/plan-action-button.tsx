@@ -13,6 +13,10 @@ interface PlanActionButtonProps {
   // server-blocked in this state; we surface the redirect-to-iOS message
   // instead of attempting a fetch that we know will 409.
   lockedByApple?: boolean;
+  // True when this CTA should advertise the 7-day free trial (Standard
+  // only, user has never trialed). Flips the button label so the user
+  // understands they won't be charged today.
+  showTrialCta?: boolean;
 }
 
 // POSTs to /api/billing/checkout, then redirects to the Stripe-hosted URL.
@@ -25,6 +29,7 @@ export function PlanActionButton({
   currentPlan,
   currentCadence,
   lockedByApple,
+  showTrialCta,
 }: PlanActionButtonProps) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +53,9 @@ export function PlanActionButton({
   const current = planRank(currentPlan);
   const target = planRank(targetPlan);
   const verb = current === 0 ? 'Upgrade' : target > current ? 'Upgrade' : 'Switch';
+  const label = showTrialCta
+    ? 'Start 7-day free trial'
+    : `${verb} to ${targetPlan === 'standard' ? 'Standard' : 'Premium'}`;
 
   async function go() {
     setBusy(true);
@@ -74,7 +82,7 @@ export function PlanActionButton({
   return (
     <div className="space-y-2">
       <Button className="w-full" onClick={go} disabled={busy}>
-        {busy ? 'Starting checkout…' : `${verb} to ${targetPlan === 'standard' ? 'Standard' : 'Premium'}`}
+        {busy ? 'Starting checkout…' : label}
       </Button>
       {error && (
         <p className="text-xs text-destructive" role="status">
