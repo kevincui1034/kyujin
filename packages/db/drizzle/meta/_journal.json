@@ -141,6 +141,13 @@
       "when": 1778985473699,
       "tag": "0020_closed_daimon_hellstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1778995256565,
+      "tag": "0021_nylas_connections",
+      "breakpoints": true
     }
   ]
 }

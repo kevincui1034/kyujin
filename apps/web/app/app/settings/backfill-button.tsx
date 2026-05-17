@@ -14,9 +14,12 @@ const WINDOWS = [
 
 interface Props {
   isPremium: boolean;
+  // Provider's API prefix (`/api/gmail` or `/api/email`). Passed in from the
+  // server parent because client components can't read process.env safely.
+  apiPrefix?: string;
 }
 
-export function BackfillButton({ isPremium }: Props) {
+export function BackfillButton({ isPremium, apiPrefix = '/api/gmail' }: Props) {
   const [days, setDays] = useState<number>(90);
   const [state, setState] = useState<'idle' | 'running' | 'done' | 'error'>('idle');
   const [message, setMessage] = useState<string | null>(null);
@@ -25,7 +28,7 @@ export function BackfillButton({ isPremium }: Props) {
     setState('running');
     setMessage(null);
     try {
-      const res = await fetch('/api/gmail/backfill', {
+      const res = await fetch(`${apiPrefix}/backfill`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ days }),

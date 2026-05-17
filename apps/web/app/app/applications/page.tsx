@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { ChevronDown, Search, X } from 'lucide-react';
 import { auth } from '@/auth';
+import { EMAIL_API_PREFIX, EMAIL_PROVIDER } from '@/lib/email-provider';
 import {
   listApplications,
   countApplications,
-  getGmailConnection,
-  listGmailConnections,
+  listInboxConnections,
   getUserProfile,
   type ApplicationsRangeKey,
   type ApplicationsSortDir,
@@ -145,11 +145,11 @@ export default async function ApplicationsListPage({
   // Only apply the hide-list when no explicit status filter is in the URL.
   const excludeStatuses = status ? undefined : hideStatuses;
 
-  const [total, connection, connections] = await Promise.all([
+  const [total, connections] = await Promise.all([
     countApplications(userId, { status, source, range, q, excludeStatuses }),
-    getGmailConnection(userId),
-    listGmailConnections(userId),
+    listInboxConnections(userId, EMAIL_PROVIDER),
   ]);
+  const connection = connections[0] ?? null;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   const page = Math.min(requestedPage, totalPages);
   const offset = (page - 1) * perPage;
@@ -185,7 +185,7 @@ export default async function ApplicationsListPage({
           </h1>
           <div className="mt-5">
             <Link
-              href="/api/gmail/connect"
+              href={`${EMAIL_API_PREFIX}/connect`}
               className="inline-flex items-center rounded-full px-5 py-2.5 text-[13px] font-semibold text-white"
               style={{
                 background: 'var(--yume-pink-500)',
