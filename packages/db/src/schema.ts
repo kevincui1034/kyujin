@@ -224,6 +224,13 @@ export const applications = pgTable(
     uniqueIndex('applications_user_company_role_unique').on(t.userId, t.company, t.role),
     uniqueIndex('applications_user_match_key_unique').on(t.userId, t.matchKey),
     index('applications_user_job_id_idx').on(t.userId, t.jobId),
+    // Backs the dashboard's primary sort (`listApplications` ORDER BY
+    // lastEventAt DESC), plus `getActiveThreads` and `getRecentEvents` which
+    // both filter/sort on lastEventAt within a user.
+    index('applications_user_last_event_idx').on(t.userId, t.lastEventAt.desc()),
+    // Backs the insights page's date-range filters: `getStats` and
+    // `getDailyActivity` both filter by `(userId, firstSeenAt >= since)`.
+    index('applications_user_first_seen_idx').on(t.userId, t.firstSeenAt),
   ],
 );
 
@@ -264,6 +271,11 @@ export const emailMessages = pgTable(
     index('email_thread_idx').on(t.gmailThreadId),
     index('email_received_idx').on(t.userId, t.receivedAt),
     index('email_app_order_idx').on(t.applicationId, t.displayOrder),
+    // Backs `listEmailsForApplication` — the per-application timeline fetch
+    // hit on every application detail page. The (userId, applicationId)
+    // prefix scopes the join, and receivedAt lets the index serve the
+    // ORDER BY without a separate sort.
+    index('email_user_app_received_idx').on(t.userId, t.applicationId, t.receivedAt),
   ],
 );
 

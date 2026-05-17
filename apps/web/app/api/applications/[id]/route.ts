@@ -8,22 +8,24 @@ import {
   buildMatchKey,
   type ApplicationStatus,
 } from '@kyujin/shared';
+import { apiError } from '@/lib/api-errors';
+import { validateBody, z } from '@/lib/with-validated-body';
 
 export const dynamic = 'force-dynamic';
 
 type FieldName = 'company' | 'role' | 'status' | 'notes';
 type FieldValue = string | null;
 
-interface PatchBody {
-  company?: unknown;
-  role?: unknown;
-  status?: unknown;
-  notes?: unknown;
-}
-
-function isStatus(v: unknown): v is ApplicationStatus {
-  return typeof v === 'string' && (APPLICATION_STATUSES as readonly string[]).includes(v);
-}
+// Each field is optional; absence means "don't touch." `null` on role/notes
+// clears the column; null is not accepted on company (column is NOT NULL).
+const bodySchema = z
+  .object({
+    company: z.string().min(1).optional(),
+    role: z.string().nullable().optional(),
+    status: z.enum(APPLICATION_STATUSES as readonly [string, ...string[]]).optional(),
+    notes: z.string().nullable().optional(),
+  })
+  .strict();
 
 function isPgUniqueViolation(err: unknown): boolean {
   return (
@@ -48,49 +50,36 @@ function isPgUniqueViolation(err: unknown): boolean {
 //     writes a `field_update` audit row capturing every previous/next pair.
 export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
   const userId = session.user.id;
   const { id } = await ctx.params;
 
-  let body: PatchBody;
-  try {
-    body = (await req.json()) as PatchBody;
-  } catch {
-    return NextResponse.json({ error: 'invalid body' }, { status: 400 });
-  }
+  const parsed = await validateBody(req, bodySchema);
+  if (!parsed.ok) return parsed.response;
+  const body = parsed.data;
 
-  // Validate types per field. Company must be a non-empty string when present
-  // (NOT NULL in schema). Role and notes accept null to clear them.
+  // Normalize trimmable fields. Schema already enforces types; trim happens
+  // here so the validator stays declarative.
   const proposed: Partial<Record<FieldName, FieldValue>> = {};
-  if ('company' in body) {
-    if (typeof body.company !== 'string' || body.company.trim().length === 0) {
-      return NextResponse.json({ error: 'invalid_company' }, { status: 400 });
+  if (body.company !== undefined) {
+    const trimmed = body.company.trim();
+    if (trimmed.length === 0) {
+      return apiError('invalid_body', { message: 'invalid_company' });
     }
-    proposed.company = body.company.trim();
+    proposed.company = trimmed;
   }
-  if ('role' in body) {
-    if (body.role !== null && typeof body.role !== 'string') {
-      return NextResponse.json({ error: 'invalid_role' }, { status: 400 });
-    }
-    proposed.role = body.role === null ? null : (body.role as string).trim() || null;
+  if (body.role !== undefined) {
+    proposed.role = body.role === null ? null : body.role.trim() || null;
   }
-  if ('status' in body) {
-    if (!isStatus(body.status)) {
-      return NextResponse.json({ error: 'invalid_status' }, { status: 400 });
-    }
-    proposed.status = body.status;
+  if (body.status !== undefined) {
+    proposed.status = body.status as ApplicationStatus;
   }
-  if ('notes' in body) {
-    if (body.notes !== null && typeof body.notes !== 'string') {
-      return NextResponse.json({ error: 'invalid_notes' }, { status: 400 });
-    }
-    proposed.notes = body.notes === null ? null : (body.notes as string);
+  if (body.notes !== undefined) {
+    proposed.notes = body.notes;
   }
 
   if (Object.keys(proposed).length === 0) {
-    return NextResponse.json({ error: 'no_fields' }, { status: 400 });
+    return apiError('invalid_body', { message: 'no_fields' });
   }
 
   const [row] = await db
@@ -98,7 +87,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     .from(applications)
     .where(and(eq(applications.userId, userId), eq(applications.id, id)))
     .limit(1);
-  if (!row) return NextResponse.json({ error: 'not_found' }, { status: 404 });
+  if (!row) return apiError('not_found');
 
   // Diff: only act on fields whose values actually change.
   const changes: Partial<Record<FieldName, { previous: FieldValue; next: FieldValue }>> = {};
@@ -159,10 +148,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         .from(applications)
         .where(and(eq(applications.userId, userId), eq(applications.matchKey, nextMatchKey!)))
         .limit(1);
-      return NextResponse.json(
-        { error: 'duplicate_match_key', existingId: existing?.id ?? null },
-        { status: 409 },
-      );
+      return apiError('conflict', {
+        message: 'duplicate_match_key',
+        details: { existingId: existing?.id ?? null },
+      });
     }
     throw err;
   }

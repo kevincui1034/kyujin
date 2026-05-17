@@ -88,7 +88,12 @@ function applicationsFilterConditions(
   }
   const query = q?.trim();
   if (query) {
-    const term = `%${query}%`;
+    // Escape LIKE wildcards. Drizzle parameterizes the value so injection
+    // isn't on the table, but unescaped `%` / `_` from the user lets them
+    // semantically alter the pattern (`%` matches everything, `_` is a
+    // single-char wildcard). Backslash is the default escape in Postgres.
+    const safe = query.replace(/[\\%_]/g, (c) => `\\${c}`);
+    const term = `%${safe}%`;
     const searchClause = or(ilike(applications.company, term), ilike(applications.role, term));
     if (searchClause) conditions.push(searchClause);
   }

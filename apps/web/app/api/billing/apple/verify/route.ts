@@ -12,6 +12,7 @@ import {
   type JWSTransactionDecodedPayload,
 } from '@/lib/apple';
 import { activeEntitlementSource, recomputeUserPlan } from '@/lib/entitlements';
+import { apiError } from '@/lib/api-errors';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -52,8 +53,7 @@ export async function POST(req: NextRequest) {
   try {
     decoded = await getVerifier().verifyAndDecodeTransaction(parsed.data.signedTransaction);
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'unknown';
-    return NextResponse.json({ error: 'invalid_signature', message }, { status: 400 });
+    return apiError('invalid_signature', { cause: err });
   }
 
   // Reject anything that isn't an active auto-renewable subscription —

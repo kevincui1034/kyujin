@@ -1,12 +1,20 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { and, asc, eq } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
-import { userSenderRules, type SenderRuleType } from '@kyujin/db/schema';
+import { userSenderRules } from '@kyujin/db/schema';
 import { auth } from '@/auth';
+import { apiError } from '@/lib/api-errors';
+import { validateBody, z } from '@/lib/with-validated-body';
 
 export const dynamic = 'force-dynamic';
 
 const DOMAIN_RE = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i;
+
+const bodySchema = z.object({
+  domain: z.string().min(1).max(253),
+  type: z.enum(['allow', 'block']),
+  note: z.string().max(200).optional(),
+});
 
 function normalizeDomain(input: string): string | null {
   let d = input.trim().toLowerCase();
@@ -22,9 +30,7 @@ function normalizeDomain(input: string): string | null {
 
 export async function GET() {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
   const rules = await db
     .select()
     .from(userSenderRules)
@@ -35,27 +41,17 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
-  const body = (await req.json().catch(() => null)) as {
-    domain?: string;
-    type?: SenderRuleType;
-    note?: string;
-  } | null;
-  if (!body) {
-    return NextResponse.json({ error: 'invalid_body' }, { status: 400 });
-  }
-  const { domain: raw, type, note } = body;
-  if (type !== 'allow' && type !== 'block') {
-    return NextResponse.json({ error: 'type must be "allow" or "block"' }, { status: 400 });
-  }
-  const domain = raw ? normalizeDomain(raw) : null;
+  if (!session?.user?.id) return apiError('unauthenticated');
+  const parsed = await validateBody(req, bodySchema);
+  if (!parsed.ok) return parsed.response;
+  const { domain: raw, type, note } = parsed.data;
+
+  const domain = normalizeDomain(raw);
   if (!domain) {
-    return NextResponse.json(
-      { error: 'invalid_domain', hint: 'expected something like "example.com"' },
-      { status: 400 },
-    );
+    return apiError('invalid_body', {
+      message: 'invalid_domain',
+      details: { hint: 'expected something like "example.com"' },
+    });
   }
   const [inserted] = await db
     .insert(userSenderRules)
@@ -72,13 +68,11 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
   const url = new URL(req.url);
   const id = url.searchParams.get('id');
-  if (!id) {
-    return NextResponse.json({ error: 'id required' }, { status: 400 });
+  if (!id || !/^[0-9a-f-]{36}$/i.test(id)) {
+    return apiError('invalid_query', { message: 'id required' });
   }
   await db
     .delete(userSenderRules)

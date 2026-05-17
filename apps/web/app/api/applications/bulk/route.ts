@@ -4,6 +4,8 @@ import { db } from '@kyujin/db/client';
 import { applicationAudit, applications } from '@kyujin/db/schema';
 import { auth } from '@/auth';
 import { APPLICATION_STATUSES, type ApplicationStatus } from '@kyujin/shared';
+import { apiError } from '@/lib/api-errors';
+import { validateBody, z } from '@/lib/with-validated-body';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,17 +14,19 @@ export const dynamic = 'force-dynamic';
 // surfaces this cap when a filter would exceed it.
 const BULK_MAX = 100;
 
-type BulkField = 'status' | 'notes';
+const statusBody = z.object({
+  ids: z.array(z.string().uuid()).min(1).max(BULK_MAX),
+  field: z.literal('status'),
+  value: z.enum(APPLICATION_STATUSES as readonly [string, ...string[]]),
+});
 
-interface BulkBody {
-  ids?: unknown;
-  field?: unknown;
-  value?: unknown;
-}
+const notesBody = z.object({
+  ids: z.array(z.string().uuid()).min(1).max(BULK_MAX),
+  field: z.literal('notes'),
+  value: z.string().nullable(),
+});
 
-function isStatus(v: unknown): v is ApplicationStatus {
-  return typeof v === 'string' && (APPLICATION_STATUSES as readonly string[]).includes(v);
-}
+const bodySchema = z.discriminatedUnion('field', [statusBody, notesBody]);
 
 // POST a single field update across many of the caller's applications.
 // Body: { ids: string[], field: 'status'|'notes', value: ... }
@@ -36,49 +40,16 @@ function isStatus(v: unknown): v is ApplicationStatus {
 //     snapshot atomically.
 export async function POST(req: NextRequest) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
   const userId = session.user.id;
 
-  let body: BulkBody;
-  try {
-    body = (await req.json()) as BulkBody;
-  } catch {
-    return NextResponse.json({ error: 'invalid body' }, { status: 400 });
-  }
+  const parsed = await validateBody(req, bodySchema);
+  if (!parsed.ok) return parsed.response;
+  const body = parsed.data;
 
-  if (!Array.isArray(body.ids) || body.ids.length === 0) {
-    return NextResponse.json({ error: 'ids_required' }, { status: 400 });
-  }
-  if (!body.ids.every((v): v is string => typeof v === 'string')) {
-    return NextResponse.json({ error: 'invalid_ids' }, { status: 400 });
-  }
-  if (body.ids.length > BULK_MAX) {
-    return NextResponse.json(
-      { error: 'too_many', max: BULK_MAX, received: body.ids.length },
-      { status: 400 },
-    );
-  }
-  const ids: string[] = Array.from(new Set(body.ids));
-
-  if (body.field !== 'status' && body.field !== 'notes') {
-    return NextResponse.json({ error: 'invalid_field' }, { status: 400 });
-  }
-  const field: BulkField = body.field;
-
-  let value: string | null;
-  if (field === 'status') {
-    if (!isStatus(body.value)) {
-      return NextResponse.json({ error: 'invalid_value' }, { status: 400 });
-    }
-    value = body.value;
-  } else {
-    if (body.value !== null && typeof body.value !== 'string') {
-      return NextResponse.json({ error: 'invalid_value' }, { status: 400 });
-    }
-    value = body.value === null ? null : (body.value as string);
-  }
+  const ids = Array.from(new Set(body.ids));
+  const field = body.field;
+  const value: string | null = body.value as string | null;
 
   // Pull all targeted rows up front so we can (a) verify ownership of every
   // id before any write, and (b) snapshot previous values for the audit.
@@ -88,10 +59,10 @@ export async function POST(req: NextRequest) {
     .where(and(eq(applications.userId, userId), inArray(applications.id, ids)));
 
   if (rows.length !== ids.length) {
-    return NextResponse.json(
-      { error: 'not_found_or_forbidden', missing: ids.length - rows.length },
-      { status: 403 },
-    );
+    return apiError('forbidden', {
+      message: 'not_found_or_forbidden',
+      details: { missing: ids.length - rows.length },
+    });
   }
 
   // Build the changeset. Skip rows where the value is already equal so the
@@ -102,7 +73,7 @@ export async function POST(req: NextRequest) {
     previousManualOverride: string | null;
   }> = [];
   for (const r of rows) {
-    const current = field === 'status' ? r.status : r.notes;
+    const current: string | null = field === 'status' ? r.status : r.notes;
     if (current === value) continue;
     snapshots.push({
       id: r.id,
@@ -130,7 +101,7 @@ export async function POST(req: NextRequest) {
         manualOverride: nextOverride,
         updatedAt: new Date(),
       };
-      if (field === 'status') update.status = value;
+      if (field === 'status') update.status = value as ApplicationStatus;
       else update.notes = value;
 
       await tx

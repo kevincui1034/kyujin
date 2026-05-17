@@ -3,6 +3,7 @@ import { and, eq } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
 import { applicationAudit, applications, emailMessages } from '@kyujin/db/schema';
 import { auth } from '@/auth';
+import { apiError } from '@/lib/api-errors';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,20 +85,20 @@ interface BulkFieldUpdatePayload {
 // Each audit row can only be undone once (revertedAt is set on first undo).
 export async function POST(_req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
   const userId = session.user.id;
   const { id } = await ctx.params;
+
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return apiError('invalid_params');
 
   const [entry] = await db
     .select()
     .from(applicationAudit)
     .where(and(eq(applicationAudit.userId, userId), eq(applicationAudit.id, id)))
     .limit(1);
-  if (!entry) return NextResponse.json({ error: 'not_found' }, { status: 404 });
+  if (!entry) return apiError('not_found');
   if (entry.revertedAt) {
-    return NextResponse.json({ error: 'already_reverted' }, { status: 409 });
+    return apiError('conflict', { message: 'already_reverted' });
   }
 
   if (entry.action === 'merge') {
@@ -215,7 +216,7 @@ export async function POST(_req: NextRequest, ctx: { params: Promise<{ id: strin
       }
     });
   } else {
-    return NextResponse.json({ error: 'unknown_action' }, { status: 400 });
+    return apiError('invalid_body', { message: 'unknown_action' });
   }
 
   await db

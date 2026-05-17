@@ -4,8 +4,14 @@ import { db } from '@kyujin/db/client';
 import { applicationAudit, applications, emailMessages } from '@kyujin/db/schema';
 import { auth } from '@/auth';
 import { buildMatchKey } from '@kyujin/shared';
+import { apiError } from '@/lib/api-errors';
+import { validateBody, z } from '@/lib/with-validated-body';
 
 export const dynamic = 'force-dynamic';
+
+const bodySchema = z.object({
+  intoId: z.string().uuid(),
+});
 
 // Manually merge this application's emails INTO another application owned by
 // the same user, then delete this application. Writes an audit entry that
@@ -14,32 +20,23 @@ export const dynamic = 'force-dynamic';
 // Body: { intoId: string }
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
   const userId = session.user.id;
   const { id } = await ctx.params;
 
-  let intoId: string;
-  try {
-    const body = (await req.json()) as { intoId?: string };
-    if (!body.intoId || typeof body.intoId !== 'string') {
-      return NextResponse.json({ error: 'intoId required' }, { status: 400 });
-    }
-    intoId = body.intoId;
-  } catch {
-    return NextResponse.json({ error: 'invalid body' }, { status: 400 });
-  }
+  const parsed = await validateBody(req, bodySchema);
+  if (!parsed.ok) return parsed.response;
+  const { intoId } = parsed.data;
 
   if (intoId === id) {
-    return NextResponse.json({ error: 'cannot merge into self' }, { status: 400 });
+    return apiError('invalid_body', { message: 'cannot merge into self' });
   }
 
   const rows = await db.select().from(applications).where(eq(applications.userId, userId));
   const source = rows.find((r) => r.id === id);
   const target = rows.find((r) => r.id === intoId);
-  if (!source) return NextResponse.json({ error: 'source_not_found' }, { status: 404 });
-  if (!target) return NextResponse.json({ error: 'target_not_found' }, { status: 404 });
+  if (!source) return apiError('not_found', { message: 'source_not_found' });
+  if (!target) return apiError('not_found', { message: 'target_not_found' });
 
   // Capture pre-merge snapshots before we touch anything. The full source
   // row goes into the audit so undo can re-insert it; the target's status,

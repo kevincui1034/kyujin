@@ -3,8 +3,15 @@ import { and, eq } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
 import { applications, applicationAudit, emailMessages } from '@kyujin/db/schema';
 import { auth } from '@/auth';
+import { apiError } from '@/lib/api-errors';
+import { validateBody, z } from '@/lib/with-validated-body';
 
 export const dynamic = 'force-dynamic';
+
+const bodySchema = z.object({
+  applicationId: z.string().uuid().nullable(),
+  allInThread: z.boolean().optional().default(false),
+});
 
 // Move a single email (or every email in its Gmail thread) between
 // applications, or detach. Logs an undoable audit entry.
@@ -16,25 +23,13 @@ export const dynamic = 'force-dynamic';
 //                  don't trample on unrelated history.)
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
   const userId = session.user.id;
   const { id } = await ctx.params;
 
-  let applicationId: string | null;
-  let allInThread = false;
-  try {
-    const body = (await req.json()) as { applicationId?: unknown; allInThread?: unknown };
-    if (body.applicationId === null) applicationId = null;
-    else if (typeof body.applicationId === 'string') applicationId = body.applicationId;
-    else {
-      return NextResponse.json({ error: 'applicationId required (string or null)' }, { status: 400 });
-    }
-    if (body.allInThread === true) allInThread = true;
-  } catch {
-    return NextResponse.json({ error: 'invalid body' }, { status: 400 });
-  }
+  const parsed = await validateBody(req, bodySchema);
+  if (!parsed.ok) return parsed.response;
+  const { applicationId, allInThread } = parsed.data;
 
   // Pull the email row so we know its thread and previous application.
   const [email] = await db
@@ -46,7 +41,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     .from(emailMessages)
     .where(and(eq(emailMessages.userId, userId), eq(emailMessages.id, id)))
     .limit(1);
-  if (!email) return NextResponse.json({ error: 'email_not_found' }, { status: 404 });
+  if (!email) return apiError('not_found', { message: 'email_not_found' });
 
   if (applicationId !== null) {
     const [target] = await db
@@ -55,7 +50,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
       .where(and(eq(applications.userId, userId), eq(applications.id, applicationId)))
       .limit(1);
     if (!target) {
-      return NextResponse.json({ error: 'target_application_not_found' }, { status: 404 });
+      return apiError('not_found', { message: 'target_application_not_found' });
     }
   }
 

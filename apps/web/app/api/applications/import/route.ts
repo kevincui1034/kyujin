@@ -296,10 +296,17 @@ async function commit(req: NextRequest, userId: string, secret: string) {
           inserted += 1;
         }
       } catch (err) {
-        errors.push({
-          row: 0,
-          reason: err instanceof Error ? err.message : 'unknown error',
-        });
+        // Log the real exception server-side; client sees only "write failed"
+        // so we don't leak DB constraint names / driver text in the response.
+        console.error(
+          JSON.stringify({
+            kind: 'import_row_error',
+            userId,
+            matchKey: incoming.matchKey,
+            cause: (err instanceof Error ? err.message : String(err)).slice(0, 500),
+          }),
+        );
+        errors.push({ row: 0, reason: 'write_failed' });
       }
     }
 

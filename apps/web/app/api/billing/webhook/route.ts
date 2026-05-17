@@ -6,6 +6,7 @@ import { users } from '@kyujin/db/schema';
 import { getStripe } from '@/lib/stripe';
 import { recomputeUserPlan } from '@/lib/entitlements';
 import { sendTrialEndingEmail } from '@/lib/billing-emails';
+import { apiError } from '@/lib/api-errors';
 
 // Stripe needs the EXACT raw bytes for signature verification — any JSON
 // reparse mutates whitespace and the HMAC no longer matches. App Router's
@@ -37,8 +38,7 @@ export async function POST(req: NextRequest) {
   try {
     event = stripe.webhooks.constructEvent(rawBody, signature, secret);
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'unknown';
-    return NextResponse.json({ error: 'invalid_signature', message }, { status: 400 });
+    return apiError('invalid_signature', { cause: err });
   }
 
   try {

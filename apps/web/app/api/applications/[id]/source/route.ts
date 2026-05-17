@@ -8,12 +8,14 @@ import {
   APPLICATION_SOURCE_CANONICAL_DOMAIN,
   type ApplicationSource,
 } from '@kyujin/shared';
+import { apiError } from '@/lib/api-errors';
+import { validateBody, z } from '@/lib/with-validated-body';
 
 export const dynamic = 'force-dynamic';
 
-function isSource(v: unknown): v is ApplicationSource {
-  return typeof v === 'string' && (APPLICATION_SOURCES as readonly string[]).includes(v);
-}
+const bodySchema = z.object({
+  source: z.enum(APPLICATION_SOURCES as readonly [string, ...string[]]),
+});
 
 // Manual source override. The source surfaced on the applications list is
 // derived from `source_domain` via getApplicationSource(); we honor the
@@ -22,29 +24,20 @@ function isSource(v: unknown): v is ApplicationSource {
 // Body: { source: ApplicationSource }
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
   const userId = session.user.id;
   const { id } = await ctx.params;
 
-  let source: ApplicationSource;
-  try {
-    const body = (await req.json()) as { source?: unknown };
-    if (!isSource(body.source)) {
-      return NextResponse.json({ error: 'invalid source' }, { status: 400 });
-    }
-    source = body.source;
-  } catch {
-    return NextResponse.json({ error: 'invalid body' }, { status: 400 });
-  }
+  const parsed = await validateBody(req, bodySchema);
+  if (!parsed.ok) return parsed.response;
+  const source = parsed.data.source as ApplicationSource;
 
   const [row] = await db
     .select()
     .from(applications)
     .where(and(eq(applications.userId, userId), eq(applications.id, id)))
     .limit(1);
-  if (!row) return NextResponse.json({ error: 'not_found' }, { status: 404 });
+  if (!row) return apiError('not_found');
 
   const nextDomain =
     source === 'other' ? null : APPLICATION_SOURCE_CANONICAL_DOMAIN[source];

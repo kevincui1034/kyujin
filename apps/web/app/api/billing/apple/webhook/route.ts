@@ -8,6 +8,7 @@ import {
   type ResponseBodyV2DecodedPayload,
 } from '@/lib/apple';
 import { recomputeUserPlan } from '@/lib/entitlements';
+import { apiError } from '@/lib/api-errors';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -42,8 +43,7 @@ export async function POST(req: NextRequest) {
   try {
     decoded = await getVerifier().verifyAndDecodeNotification(body.signedPayload);
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'unknown';
-    return NextResponse.json({ error: 'invalid_signature', message }, { status: 400 });
+    return apiError('invalid_signature', { cause: err });
   }
 
   try {

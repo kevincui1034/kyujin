@@ -220,10 +220,16 @@ export async function POST(req: NextRequest) {
       reclassified++;
     } catch (err) {
       failed++;
-      errors.push({
-        gmailMessageId: em.gmailMessageId,
-        error: err instanceof Error ? err.message : String(err),
-      });
+      // Dev-only route, but keep the same no-leak discipline as prod: log the
+      // real exception, return a stable label so the dev UI can render it.
+      console.error(
+        JSON.stringify({
+          kind: 'reclassify_error',
+          gmailMessageId: em.gmailMessageId,
+          cause: (err instanceof Error ? err.message : String(err)).slice(0, 500),
+        }),
+      );
+      errors.push({ gmailMessageId: em.gmailMessageId, error: 'reclassify_failed' });
     }
   }
 

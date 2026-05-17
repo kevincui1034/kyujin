@@ -3,8 +3,19 @@ import { and, eq, inArray } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
 import { applicationAudit, emailMessages } from '@kyujin/db/schema';
 import { auth } from '@/auth';
+import { apiError } from '@/lib/api-errors';
+import { validateBody, z } from '@/lib/with-validated-body';
 
 export const dynamic = 'force-dynamic';
+
+// Cap matches the practical max number of emails attached to a single
+// application's timeline. Far above any real run; protects against a
+// pathological client sending an unbounded array.
+const REORDER_MAX = 500;
+
+const bodySchema = z.object({
+  orderedEmailIds: z.array(z.string().uuid()).max(REORDER_MAX),
+});
 
 // Reorder the timeline emails of a single application. Body provides the
 // full ordered list of email IDs the user wants displayed top-to-bottom.
@@ -13,22 +24,13 @@ export const dynamic = 'force-dynamic';
 // Body: { orderedEmailIds: string[] }
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
   const userId = session.user.id;
   const { id: applicationId } = await ctx.params;
 
-  let orderedEmailIds: string[];
-  try {
-    const body = (await req.json()) as { orderedEmailIds?: unknown };
-    if (!Array.isArray(body.orderedEmailIds) || body.orderedEmailIds.some((v) => typeof v !== 'string')) {
-      return NextResponse.json({ error: 'orderedEmailIds required' }, { status: 400 });
-    }
-    orderedEmailIds = body.orderedEmailIds as string[];
-  } catch {
-    return NextResponse.json({ error: 'invalid body' }, { status: 400 });
-  }
+  const parsed = await validateBody(req, bodySchema);
+  if (!parsed.ok) return parsed.response;
+  const { orderedEmailIds } = parsed.data;
 
   if (orderedEmailIds.length === 0) {
     return NextResponse.json({ ok: true, count: 0 });
@@ -49,14 +51,14 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     );
 
   if (owned.length !== orderedEmailIds.length) {
-    return NextResponse.json({ error: 'one or more emails not found' }, { status: 404 });
+    return apiError('not_found', { message: 'one or more emails not found' });
   }
   for (const e of owned) {
     if (e.applicationId !== applicationId) {
-      return NextResponse.json(
-        { error: 'email not attached to this application', emailId: e.id },
-        { status: 400 },
-      );
+      return apiError('invalid_body', {
+        message: 'email not attached to this application',
+        details: { emailId: e.id },
+      });
     }
   }
 

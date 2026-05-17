@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { Resend } from 'resend';
 import { auth } from '@/auth';
+import { apiError } from '@/lib/api-errors';
 
 export const dynamic = 'force-dynamic';
 
@@ -86,16 +87,10 @@ export async function POST(req: NextRequest) {
       html,
     });
     if (result.error) {
-      return NextResponse.json(
-        { error: 'send_failed', hint: result.error.message },
-        { status: 502 },
-      );
+      return apiError('upstream_failed', { cause: result.error.message });
     }
   } catch (err) {
-    return NextResponse.json(
-      { error: 'send_failed', hint: err instanceof Error ? err.message : 'unknown' },
-      { status: 502 },
-    );
+    return apiError('upstream_failed', { cause: err });
   }
 
   return NextResponse.json({ ok: true });

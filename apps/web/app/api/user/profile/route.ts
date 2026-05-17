@@ -3,7 +3,9 @@ import { eq } from 'drizzle-orm';
 import { db } from '@kyujin/db/client';
 import { users } from '@kyujin/db/schema';
 import { auth } from '@/auth';
-import { APPLICATION_STATUSES, type ApplicationStatus } from '@kyujin/shared';
+import { APPLICATION_STATUSES } from '@kyujin/shared';
+import { apiError } from '@/lib/api-errors';
+import { validateBody, z } from '@/lib/with-validated-body';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,132 +18,63 @@ const APP_SORTS = ['lastEvent', 'company', 'source'] as const;
 const APP_RANGES = ['all', '7d', '30d', '90d', '365d'] as const;
 const APP_DIRS = ['asc', 'desc'] as const;
 
-type DashboardView = (typeof DASHBOARD_VIEWS)[number];
-type AppSort = (typeof APP_SORTS)[number];
-type AppRange = (typeof APP_RANGES)[number];
-type AppDir = (typeof APP_DIRS)[number];
-
-function isIn<T extends readonly string[]>(list: T, v: unknown): v is T[number] {
-  return typeof v === 'string' && (list as readonly string[]).includes(v);
-}
-
-function isStatusArray(v: unknown): v is ApplicationStatus[] {
-  return (
-    Array.isArray(v) &&
-    v.every((x) => typeof x === 'string' && (APPLICATION_STATUSES as readonly string[]).includes(x))
-  );
-}
+// Each field is optional; the PATCH applies only the fields present in the
+// body. `null` on `name` clears the column.
+const bodySchema = z
+  .object({
+    name: z
+      .union([z.string(), z.null()])
+      .optional()
+      .transform((v) => (typeof v === 'string' ? v.trim() : v)),
+    applicationGoal: z.number().int().min(MIN_GOAL).max(MAX_GOAL).optional(),
+    dashboardView: z.enum(DASHBOARD_VIEWS).optional(),
+    defaultAppSort: z.enum(APP_SORTS).optional(),
+    defaultAppRange: z.enum(APP_RANGES).optional(),
+    defaultAppDir: z.enum(APP_DIRS).optional(),
+    hideStatuses: z
+      .array(z.enum(APPLICATION_STATUSES as readonly [string, ...string[]]))
+      .optional(),
+  })
+  .strict();
 
 export async function PATCH(req: NextRequest) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
-  }
-  const body = (await req.json().catch(() => null)) as {
-    name?: string | null;
-    applicationGoal?: number;
-    dashboardView?: string;
-    defaultAppSort?: string;
-    defaultAppRange?: string;
-    defaultAppDir?: string;
-    hideStatuses?: string[];
-  } | null;
-  if (!body) {
-    return NextResponse.json({ error: 'invalid_body' }, { status: 400 });
-  }
+  if (!session?.user?.id) return apiError('unauthenticated');
 
-  const updates: {
-    name?: string | null;
-    applicationGoal?: number;
-    dashboardView?: DashboardView;
-    defaultAppSort?: AppSort;
-    defaultAppRange?: AppRange;
-    defaultAppDir?: AppDir;
-    hideStatuses?: ApplicationStatus[];
-  } = {};
+  const parsed = await validateBody(req, bodySchema);
+  if (!parsed.ok) return parsed.response;
+  const body = parsed.data;
 
-  if ('name' in body) {
-    const raw = body.name;
-    const trimmed = typeof raw === 'string' ? raw.trim() : '';
+  const updates: Record<string, unknown> = {};
+
+  if ('name' in body && body.name !== undefined) {
+    const trimmed = typeof body.name === 'string' ? body.name : '';
     if (trimmed.length > MAX_NAME_LEN) {
-      return NextResponse.json(
-        { error: 'name_too_long', hint: `max ${MAX_NAME_LEN} characters` },
-        { status: 400 },
-      );
+      return apiError('invalid_body', {
+        message: 'name_too_long',
+        details: { hint: `max ${MAX_NAME_LEN} characters` },
+      });
     }
     if (trimmed.length > 0 && !NAME_RE.test(trimmed)) {
-      return NextResponse.json(
-        { error: 'invalid_name', hint: 'letters and numbers only' },
-        { status: 400 },
-      );
+      return apiError('invalid_body', {
+        message: 'invalid_name',
+        details: { hint: 'letters and numbers only' },
+      });
     }
     updates.name = trimmed.length === 0 ? null : trimmed;
   }
-
-  if ('applicationGoal' in body) {
-    const n = Number(body.applicationGoal);
-    if (!Number.isFinite(n) || !Number.isInteger(n) || n < MIN_GOAL || n > MAX_GOAL) {
-      return NextResponse.json(
-        { error: 'invalid_goal', hint: `whole number between ${MIN_GOAL} and ${MAX_GOAL}` },
-        { status: 400 },
-      );
-    }
-    updates.applicationGoal = n;
-  }
-
-  if ('dashboardView' in body) {
-    if (!isIn(DASHBOARD_VIEWS, body.dashboardView)) {
-      return NextResponse.json(
-        { error: 'invalid_view', hint: `one of: ${DASHBOARD_VIEWS.join(', ')}` },
-        { status: 400 },
-      );
-    }
-    updates.dashboardView = body.dashboardView;
-  }
-
-  if ('defaultAppSort' in body) {
-    if (!isIn(APP_SORTS, body.defaultAppSort)) {
-      return NextResponse.json(
-        { error: 'invalid_sort', hint: `one of: ${APP_SORTS.join(', ')}` },
-        { status: 400 },
-      );
-    }
-    updates.defaultAppSort = body.defaultAppSort;
-  }
-
-  if ('defaultAppRange' in body) {
-    if (!isIn(APP_RANGES, body.defaultAppRange)) {
-      return NextResponse.json(
-        { error: 'invalid_range', hint: `one of: ${APP_RANGES.join(', ')}` },
-        { status: 400 },
-      );
-    }
-    updates.defaultAppRange = body.defaultAppRange;
-  }
-
-  if ('defaultAppDir' in body) {
-    if (!isIn(APP_DIRS, body.defaultAppDir)) {
-      return NextResponse.json(
-        { error: 'invalid_dir', hint: `one of: ${APP_DIRS.join(', ')}` },
-        { status: 400 },
-      );
-    }
-    updates.defaultAppDir = body.defaultAppDir;
-  }
-
-  if ('hideStatuses' in body) {
-    if (!isStatusArray(body.hideStatuses)) {
-      return NextResponse.json(
-        { error: 'invalid_hide_statuses', hint: 'array of valid statuses' },
-        { status: 400 },
-      );
-    }
+  if (body.applicationGoal !== undefined) updates.applicationGoal = body.applicationGoal;
+  if (body.dashboardView !== undefined) updates.dashboardView = body.dashboardView;
+  if (body.defaultAppSort !== undefined) updates.defaultAppSort = body.defaultAppSort;
+  if (body.defaultAppRange !== undefined) updates.defaultAppRange = body.defaultAppRange;
+  if (body.defaultAppDir !== undefined) updates.defaultAppDir = body.defaultAppDir;
+  if (body.hideStatuses !== undefined) {
     // Dedupe so the column stays tidy.
     updates.hideStatuses = Array.from(new Set(body.hideStatuses));
   }
 
   if (Object.keys(updates).length === 0) {
-    return NextResponse.json({ error: 'nothing_to_update' }, { status: 400 });
+    return apiError('invalid_body', { message: 'nothing_to_update' });
   }
 
   await db.update(users).set(updates).where(eq(users.id, session.user.id));
