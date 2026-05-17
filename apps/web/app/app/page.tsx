@@ -11,13 +11,13 @@ import {
   getUserProfile,
 } from '@/lib/data';
 import { formatRelative } from '@/lib/utils';
-import { AppRow } from '@/components/yume/app-row';
-import { BarChart } from '@/components/yume/bar-chart';
-import { CalicoMark } from '@/components/yume/calico-mark';
-import { Eyebrow } from '@/components/yume/eyebrow';
-import { KPITile } from '@/components/yume/kpi-tile';
-import { PillowCard } from '@/components/yume/pillow-card';
-import { Sankey } from '@/components/yume/sankey';
+import { AppRow } from '@/components/kyujin/app-row';
+import { BarChart } from '@/components/kyujin/bar-chart';
+import { CalicoMark } from '@/components/kyujin/calico-mark';
+import { Eyebrow } from '@/components/kyujin/eyebrow';
+import { KPITile } from '@/components/kyujin/kpi-tile';
+import { PillowCard } from '@/components/kyujin/pillow-card';
+import { Sankey } from '@/components/kyujin/sankey';
 import { GoalCard } from './goal-card';
 import { ViewTabs, type DashboardView } from './view-tabs';
 
@@ -54,11 +54,11 @@ function chartHeading(
 }
 
 const EVENT_COLORS = [
-  'var(--yume-pink-500)',
-  'var(--yume-lilac-deep)',
-  'var(--yume-mint-deep)',
-  'var(--yume-coral-deep)',
-  'var(--yume-butter-deep)',
+  'var(--kyujin-pink-500)',
+  'var(--kyujin-lilac-deep)',
+  'var(--kyujin-mint-deep)',
+  'var(--kyujin-coral-deep)',
+  'var(--kyujin-butter-deep)',
 ];
 
 function dateEyebrow(now = new Date()) {
@@ -115,10 +115,10 @@ export default async function DashboardPage() {
         <PillowCard>
           <Eyebrow>GET STARTED</Eyebrow>
           <h1 className="serif mt-2" style={{ fontSize: 32, letterSpacing: '-0.024em', lineHeight: 1.1 }}>
-            Connect <span className="serif-italic" style={{ color: 'var(--yume-pink-500)' }}>Gmail</span> to begin.
+            Connect <span className="serif-italic" style={{ color: 'var(--kyujin-pink-500)' }}>Gmail</span> to begin.
           </h1>
-          <p className="mt-3" style={{ color: 'var(--yume-ink-soft)', fontSize: 14, lineHeight: 1.5 }}>
-            Yume reads job-application emails to build your tracker. Nothing is sent to recruiters
+          <p className="mt-3" style={{ color: 'var(--kyujin-ink-soft)', fontSize: 14, lineHeight: 1.5 }}>
+            Kyujin reads job-application emails to build your tracker. Nothing is sent to recruiters
             and you can disconnect anytime.
           </p>
           <div className="mt-5">
@@ -126,7 +126,7 @@ export default async function DashboardPage() {
               href="/api/gmail/connect"
               className="inline-flex items-center rounded-full px-5 py-2.5 text-[13px] font-semibold text-white"
               style={{
-                background: 'var(--yume-pink-500)',
+                background: 'var(--kyujin-pink-500)',
                 boxShadow:
                   '0 14px 26px -10px rgba(232,90,122,0.6), inset 0 1px 0 rgba(255,255,255,0.25)',
               }}
@@ -164,13 +164,13 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-5 px-1">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <Eyebrow color="var(--yume-pink-600)">{dateEyebrow()}</Eyebrow>
+          <Eyebrow color="var(--kyujin-pink-600)">{dateEyebrow()}</Eyebrow>
           <h1
             className="serif mt-1"
-            style={{ fontSize: 50, lineHeight: 1, letterSpacing: '-0.028em', color: 'var(--yume-ink)' }}
+            style={{ fontSize: 50, lineHeight: 1, letterSpacing: '-0.028em', color: 'var(--kyujin-ink)' }}
           >
             {greeting()},{' '}
-            <span className="serif-italic" style={{ color: 'var(--yume-pink-500)' }}>
+            <span className="serif-italic" style={{ color: 'var(--kyujin-pink-500)' }}>
               {greetingName}.
             </span>
           </h1>
@@ -178,7 +178,7 @@ export default async function DashboardPage() {
         <div className="flex items-center gap-3">
           <span
             className="mono"
-            style={{ fontSize: 11.5, color: 'var(--yume-ink-muted)', letterSpacing: '0.04em', textTransform: 'uppercase' }}
+            style={{ fontSize: 11.5, color: 'var(--kyujin-ink-muted)', letterSpacing: '0.04em', textTransform: 'uppercase' }}
           >
             Synced {formatRelative(connection.updatedAt ?? connection.createdAt ?? new Date())}
           </span>
@@ -186,7 +186,7 @@ export default async function DashboardPage() {
             href="/app/applications"
             className="rounded-full px-4 py-2 text-[13px] font-semibold text-white"
             style={{
-              background: 'var(--yume-pink-500)',
+              background: 'var(--kyujin-pink-500)',
               boxShadow:
                 '0 14px 26px -10px rgba(232,90,122,0.6), inset 0 1px 0 rgba(255,255,255,0.25)',
             }}
@@ -232,8 +232,8 @@ export default async function DashboardPage() {
           className="flex flex-col"
         >
           <div className="flex items-center justify-between">
-            <Eyebrow color="var(--yume-pink-600)">ACTIVE THREADS</Eyebrow>
-            <span style={{ fontSize: 11.5, color: 'var(--yume-ink-soft)' }}>
+            <Eyebrow color="var(--kyujin-pink-600)">ACTIVE THREADS</Eyebrow>
+            <span style={{ fontSize: 11.5, color: 'var(--kyujin-ink-soft)' }}>
               {activeCount} open
             </span>
           </div>
@@ -241,7 +241,7 @@ export default async function DashboardPage() {
             {activeThreads.length === 0 ? (
               <div
                 className="px-1 py-3 text-[13px]"
-                style={{ color: 'var(--yume-ink-soft)' }}
+                style={{ color: 'var(--kyujin-ink-soft)' }}
               >
                 No active threads. New ones land here once a recruiter replies.
               </div>
@@ -269,14 +269,14 @@ export default async function DashboardPage() {
           <CalicoMark size={56} />
           <div
             className="serif mt-2.5"
-            style={{ fontSize: 20, color: 'var(--yume-ink)', lineHeight: 1.15, letterSpacing: '-0.022em' }}
+            style={{ fontSize: 20, color: 'var(--kyujin-ink)', lineHeight: 1.15, letterSpacing: '-0.022em' }}
           >
-            <span className="serif-italic" style={{ color: 'var(--yume-pink-500)' }}>
+            <span className="serif-italic" style={{ color: 'var(--kyujin-pink-500)' }}>
               nyaa
             </span>{' '}
             — keep going.
           </div>
-          <div className="mt-1" style={{ fontSize: 11.5, color: 'var(--yume-ink-soft)' }}>
+          <div className="mt-1" style={{ fontSize: 11.5, color: 'var(--kyujin-ink-soft)' }}>
             {stats.total} sent · {activeCount} active
           </div>
         </PillowCard>
@@ -290,13 +290,13 @@ export default async function DashboardPage() {
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <Eyebrow color="var(--yume-pink-600)">{chartMeta.eyebrow}</Eyebrow>
+              <Eyebrow color="var(--kyujin-pink-600)">{chartMeta.eyebrow}</Eyebrow>
               <div
                 className="serif mt-1"
-                style={{ fontSize: 22, color: 'var(--yume-ink)', lineHeight: 1.05, letterSpacing: '-0.022em' }}
+                style={{ fontSize: 22, color: 'var(--kyujin-ink)', lineHeight: 1.05, letterSpacing: '-0.022em' }}
               >
                 {chartMeta.titleStart}{' '}
-                <span className="serif-italic" style={{ color: 'var(--yume-pink-500)' }}>
+                <span className="serif-italic" style={{ color: 'var(--kyujin-pink-500)' }}>
                   {chartMeta.titleAccent}
                 </span>{' '}
                 {chartMeta.titleEnd}
@@ -306,7 +306,7 @@ export default async function DashboardPage() {
               <ViewTabs active={dashboardView} />
               <Link
                 href="/app/insights"
-                style={{ fontSize: 12.5, color: 'var(--yume-pink-600)', fontWeight: 600 }}
+                style={{ fontSize: 12.5, color: 'var(--kyujin-pink-600)', fontWeight: 600 }}
               >
                 Open full →
               </Link>
@@ -324,7 +324,7 @@ export default async function DashboardPage() {
               ) : (
                 <div
                   className="flex h-full items-center justify-center text-[13px]"
-                  style={{ color: 'var(--yume-ink-muted)' }}
+                  style={{ color: 'var(--kyujin-ink-muted)' }}
                 >
                   Not enough data yet. Send a few applications to see your funnel.
                 </div>
@@ -342,8 +342,8 @@ export default async function DashboardPage() {
                 data={rejectHist}
                 width={940}
                 height={300}
-                barColor="var(--yume-peach)"
-                hoverColor="var(--yume-peach-deep)"
+                barColor="var(--kyujin-peach)"
+                hoverColor="var(--kyujin-peach-deep)"
                 emptyLabel="No rejections yet — quiet is a kind of progress."
               />
             )}
@@ -351,16 +351,16 @@ export default async function DashboardPage() {
         </PillowCard>
 
         <PillowCard span={4} padding="18px 20px 18px" className="flex flex-col overflow-hidden">
-          <Eyebrow color="var(--yume-pink-600)">THIS WEEK</Eyebrow>
+          <Eyebrow color="var(--kyujin-pink-600)">THIS WEEK</Eyebrow>
           <div
             className="serif mt-1"
-            style={{ fontSize: 20, color: 'var(--yume-ink)', lineHeight: 1.1, letterSpacing: '-0.022em' }}
+            style={{ fontSize: 20, color: 'var(--kyujin-ink)', lineHeight: 1.1, letterSpacing: '-0.022em' }}
           >
             {recentEvents.length} {recentEvents.length === 1 ? 'new event' : 'new events'}
           </div>
           <div className="mt-3 flex flex-1 flex-col gap-2.5 overflow-auto" style={{ fontSize: 13, minHeight: 0 }}>
             {recentEvents.length === 0 ? (
-              <div style={{ color: 'var(--yume-ink-soft)', fontSize: 13 }}>
+              <div style={{ color: 'var(--kyujin-ink-soft)', fontSize: 13 }}>
                 Quiet week. New activity shows up here as recruiters reply.
               </div>
             ) : (
@@ -370,7 +370,7 @@ export default async function DashboardPage() {
                   <Link
                     key={e.id}
                     href={`/app/applications/${e.id}`}
-                    className="flex items-start gap-2.5 rounded-xl px-1 py-1 -mx-1 transition-colors hover:bg-yume-pink-50"
+                    className="flex items-start gap-2.5 rounded-xl px-1 py-1 -mx-1 transition-colors hover:bg-kyujin-pink-50"
                   >
                     <span
                       className="mt-1.5 flex-none"
@@ -383,10 +383,10 @@ export default async function DashboardPage() {
                       }}
                     />
                     <div className="flex-1">
-                      <div style={{ color: 'var(--yume-ink)' }}>
+                      <div style={{ color: 'var(--kyujin-ink)' }}>
                         <strong>{e.company}</strong> · {e.status.replace('_', ' ')}
                       </div>
-                      <div className="mono mt-0.5" style={{ fontSize: 10.5, color: 'var(--yume-ink-muted)' }}>
+                      <div className="mono mt-0.5" style={{ fontSize: 10.5, color: 'var(--kyujin-ink-muted)' }}>
                         {formatRelative(e.lastEventAt)}
                       </div>
                     </div>

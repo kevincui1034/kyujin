@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
       {
         error: 'stripe_subscription_active',
         message:
-          'You already subscribe to Yume on the web. Cancel that subscription first, then re-subscribe in the app. Apple will refund the duplicate charge if you contact Support.',
+          'You already subscribe to Kyujin on the web. Cancel that subscription first, then re-subscribe in the app. Apple will refund the duplicate charge if you contact Support.',
       },
       { status: 409 },
     );

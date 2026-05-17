@@ -23,7 +23,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Yume — job application tracker',
+  title: 'Kyujin — job application tracker',
   description:
     'Automatically tracks your job applications by reading confirmations, interviews, and rejections from your Gmail.',
 };

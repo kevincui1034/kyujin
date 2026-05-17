@@ -28,18 +28,18 @@ export function MarketingNav({ signedIn }: { signedIn: boolean }) {
           style={{
             fontSize: 24,
             letterSpacing: '-0.025em',
-            color: 'var(--yume-ink)',
+            color: 'var(--kyujin-ink)',
             lineHeight: 1,
           }}
         >
-          Yume
+          Kyujin
         </span>
       </Link>
 
       <div
         className="hidden items-center gap-1 justify-self-center rounded-full bg-white/70 px-2 py-1.5 backdrop-blur-md md:flex"
         style={{
-          border: '1px solid var(--yume-line-soft)',
+          border: '1px solid var(--kyujin-line-soft)',
           boxShadow: '0 8px 24px -14px rgba(31,20,24,0.18)',
         }}
       >
@@ -55,14 +55,14 @@ export function MarketingNav({ signedIn }: { signedIn: boolean }) {
                 active
                   ? {
                       background: '#fff',
-                      color: 'var(--yume-ink)',
+                      color: 'var(--kyujin-ink)',
                       fontWeight: 600,
-                      border: '1px solid var(--yume-pink-200)',
+                      border: '1px solid var(--kyujin-pink-200)',
                       boxShadow: '0 6px 16px -8px #f6a8b8',
                       transform: 'rotate(-1deg)',
                     }
                   : {
-                      color: 'var(--yume-ink-soft)',
+                      color: 'var(--kyujin-ink-soft)',
                       fontWeight: 500,
                     }
               }
@@ -78,8 +78,8 @@ export function MarketingNav({ signedIn }: { signedIn: boolean }) {
           href={signedIn ? '/app' : '/login'}
           className="rounded-full bg-white px-5 py-2.5 text-[13.5px] font-semibold transition-transform duration-200 hover:-translate-y-[1px]"
           style={{
-            color: 'var(--yume-ink)',
-            border: '1px solid var(--yume-line-soft)',
+            color: 'var(--kyujin-ink)',
+            border: '1px solid var(--kyujin-line-soft)',
             boxShadow: '0 6px 16px -10px rgba(31,20,24,0.2)',
           }}
         >
@@ -89,7 +89,7 @@ export function MarketingNav({ signedIn }: { signedIn: boolean }) {
           href={signedIn ? '/app' : '/login'}
           className="rounded-full px-5 py-2.5 text-[13.5px] font-semibold text-white transition-transform duration-200 hover:-translate-y-[1px]"
           style={{
-            background: 'var(--yume-ink)',
+            background: 'var(--kyujin-ink)',
             boxShadow: '0 10px 22px -10px rgba(31,20,24,0.5)',
           }}
         >
@@ -110,7 +110,7 @@ function BrandPlate({ size }: { size: number }) {
         width: size,
         height: size,
         borderRadius: radius,
-        border: '1px solid var(--yume-line)',
+        border: '1px solid var(--kyujin-line)',
         boxShadow:
           'inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 14px -8px rgba(232,90,122,0.35)',
       }}

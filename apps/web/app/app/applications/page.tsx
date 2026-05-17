@@ -13,9 +13,9 @@ import {
 import { ExportButton } from './export-button';
 import { ImportButton } from './import-button';
 import { RowSourceEditor, RowStatusEditor } from './row-editors';
-import { CompanyAvatar } from '@/components/yume/company-avatar';
-import { Eyebrow } from '@/components/yume/eyebrow';
-import { PillowCard } from '@/components/yume/pillow-card';
+import { CompanyAvatar } from '@/components/kyujin/company-avatar';
+import { Eyebrow } from '@/components/kyujin/eyebrow';
+import { PillowCard } from '@/components/kyujin/pillow-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -180,14 +180,14 @@ export default async function ApplicationsListPage({
             className="serif mt-2"
             style={{ fontSize: 32, letterSpacing: '-0.024em', lineHeight: 1.1 }}
           >
-            Connect <span className="serif-italic" style={{ color: 'var(--yume-pink-500)' }}>Gmail</span> to begin.
+            Connect <span className="serif-italic" style={{ color: 'var(--kyujin-pink-500)' }}>Gmail</span> to begin.
           </h1>
           <div className="mt-5">
             <Link
               href="/api/gmail/connect"
               className="inline-flex items-center rounded-full px-5 py-2.5 text-[13px] font-semibold text-white"
               style={{
-                background: 'var(--yume-pink-500)',
+                background: 'var(--kyujin-pink-500)',
                 boxShadow:
                   '0 14px 26px -10px rgba(232,90,122,0.6), inset 0 1px 0 rgba(255,255,255,0.25)',
               }}
@@ -242,12 +242,12 @@ export default async function ApplicationsListPage({
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <Eyebrow color="var(--yume-pink-600)">ALL APPLICATIONS</Eyebrow>
+          <Eyebrow color="var(--kyujin-pink-600)">ALL APPLICATIONS</Eyebrow>
           <h1
             className="serif mt-1"
-            style={{ fontSize: 44, lineHeight: 1, letterSpacing: '-0.028em', color: 'var(--yume-ink)' }}
+            style={{ fontSize: 44, lineHeight: 1, letterSpacing: '-0.028em', color: 'var(--kyujin-ink)' }}
           >
-            Every <span className="serif-italic" style={{ color: 'var(--yume-pink-500)' }}>thread.</span>
+            Every <span className="serif-italic" style={{ color: 'var(--kyujin-pink-500)' }}>thread.</span>
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -274,7 +274,7 @@ export default async function ApplicationsListPage({
           )}
           <Search
             aria-hidden
-            className="pointer-events-none absolute left-3.5 h-4 w-4 text-yume-ink-muted"
+            className="pointer-events-none absolute left-3.5 h-4 w-4 text-kyujin-ink-muted"
           />
           <Input
             type="search"
@@ -288,7 +288,7 @@ export default async function ApplicationsListPage({
             <Link
               href={buildUrl({ ...preserveBase, q: undefined })}
               aria-label="Clear search"
-              className="absolute right-3 inline-flex h-6 w-6 items-center justify-center rounded-full text-yume-ink-muted transition-colors hover:bg-yume-pink-50 hover:text-yume-pink-700"
+              className="absolute right-3 inline-flex h-6 w-6 items-center justify-center rounded-full text-kyujin-ink-muted transition-colors hover:bg-kyujin-pink-50 hover:text-kyujin-pink-700"
             >
               <X className="h-3.5 w-3.5" />
             </Link>
@@ -343,7 +343,7 @@ export default async function ApplicationsListPage({
               asChild
               variant="ghost"
               size="sm"
-              className="rounded-full text-yume-ink-muted hover:text-yume-pink-700"
+              className="rounded-full text-kyujin-ink-muted hover:text-kyujin-pink-700"
             >
               <Link href="/app/applications">Clear all</Link>
             </Button>
@@ -353,7 +353,7 @@ export default async function ApplicationsListPage({
 
       {apps.length === 0 ? (
         <PillowCard>
-          <div className="py-8 text-center text-[13px]" style={{ color: 'var(--yume-ink-soft)' }}>
+          <div className="py-8 text-center text-[13px]" style={{ color: 'var(--kyujin-ink-soft)' }}>
             {q
               ? `No applications match "${q}".`
               : 'No applications match these filters.'}
@@ -363,7 +363,7 @@ export default async function ApplicationsListPage({
         <PillowCard padding="8px 12px">
           <table className="w-full text-[13px]">
             <thead>
-              <tr style={{ color: 'var(--yume-ink-muted)' }}>
+              <tr style={{ color: 'var(--kyujin-ink-muted)' }}>
                 <SortableHeader
                   href={sortHref('company')}
                   active={sort === 'company'}
@@ -400,12 +400,12 @@ export default async function ApplicationsListPage({
               {apps.map((a, i) => (
                 <tr
                   key={a.id}
-                  className="transition-colors hover:bg-yume-pink-50"
+                  className="transition-colors hover:bg-kyujin-pink-50"
                   style={{
-                    borderTop: i === 0 ? 'none' : '1px solid var(--yume-line-faint)',
+                    borderTop: i === 0 ? 'none' : '1px solid var(--kyujin-line-faint)',
                   }}
                 >
-                  <td className="px-3 py-3 font-medium" style={{ color: 'var(--yume-ink)' }}>
+                  <td className="px-3 py-3 font-medium" style={{ color: 'var(--kyujin-ink)' }}>
                     <Link href={`/app/applications/${a.id}`} className="flex items-center gap-2.5 hover:underline">
                       <CompanyAvatar company={a.company} size={24} />
                       <span className="flex flex-col">
@@ -413,7 +413,7 @@ export default async function ApplicationsListPage({
                         {showInbox && a.inboxEmails.length > 0 && (
                           <span
                             className="font-normal"
-                            style={{ fontSize: 11, color: 'var(--yume-ink-muted)' }}
+                            style={{ fontSize: 11, color: 'var(--kyujin-ink-muted)' }}
                           >
                             {a.inboxEmails.join(', ')}
                           </span>
@@ -421,19 +421,19 @@ export default async function ApplicationsListPage({
                       </span>
                     </Link>
                   </td>
-                  <td className="px-3 py-3" style={{ color: 'var(--yume-ink-soft)' }}>
+                  <td className="px-3 py-3" style={{ color: 'var(--kyujin-ink-soft)' }}>
                     {a.role ?? '—'}
                   </td>
                   <td className="px-3 py-3">
                     <RowStatusEditor applicationId={a.id} currentStatus={a.status} />
                   </td>
-                  <td className="px-3 py-3" style={{ color: 'var(--yume-ink-soft)' }}>
+                  <td className="px-3 py-3" style={{ color: 'var(--kyujin-ink-soft)' }}>
                     <RowSourceEditor
                       applicationId={a.id}
                       currentSourceDomain={a.sourceDomain}
                     />
                   </td>
-                  <td className="px-3 py-3" style={{ color: 'var(--yume-ink-soft)' }}>
+                  <td className="px-3 py-3" style={{ color: 'var(--kyujin-ink-soft)' }}>
                     {formatRelative(a.lastEventAt)}
                   </td>
                 </tr>
@@ -447,7 +447,7 @@ export default async function ApplicationsListPage({
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
           <div
             className="flex items-center gap-3 text-[12.5px]"
-            style={{ color: 'var(--yume-ink-muted)' }}
+            style={{ color: 'var(--kyujin-ink-muted)' }}
           >
             <span>
               {rangeStart}–{rangeEnd} of {total}
@@ -462,7 +462,7 @@ export default async function ApplicationsListPage({
                   action="/app/applications"
                   method="get"
                   className="flex items-center gap-1.5 text-[12.5px]"
-                  style={{ color: 'var(--yume-ink-muted)' }}
+                  style={{ color: 'var(--kyujin-ink-muted)' }}
                 >
                   {status && <input type="hidden" name="status" value={status} />}
                   {source && <input type="hidden" name="source" value={source} />}
@@ -554,9 +554,9 @@ function PerPageDropdown({
         <Button
           variant="outline"
           size="sm"
-          className="h-8 gap-1.5 rounded-full border-[var(--yume-line)] bg-yume-paper text-[12px] font-medium text-yume-ink-soft hover:bg-yume-pink-50 hover:text-yume-pink-700"
+          className="h-8 gap-1.5 rounded-full border-[var(--kyujin-line)] bg-kyujin-paper text-[12px] font-medium text-kyujin-ink-soft hover:bg-kyujin-pink-50 hover:text-kyujin-pink-700"
         >
-          <span className="text-yume-ink-muted">Per page:</span>
+          <span className="text-kyujin-ink-muted">Per page:</span>
           <span>{current}</span>
           <ChevronDown className="h-3.5 w-3.5 opacity-60" />
         </Button>
@@ -566,7 +566,7 @@ function PerPageDropdown({
         <DropdownMenuSeparator />
         {PER_PAGE_OPTIONS.map((n) => (
           <DropdownMenuItem key={n} asChild>
-            <Link href={hrefFor(n)} className={cn(n === current && 'font-semibold text-yume-pink-700')}>
+            <Link href={hrefFor(n)} className={cn(n === current && 'font-semibold text-kyujin-pink-700')}>
               {n}
             </Link>
           </DropdownMenuItem>
@@ -596,7 +596,7 @@ function SortableHeader({
           fontSize: 11,
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
-          color: active ? 'var(--yume-pink-600)' : 'var(--yume-ink-muted)',
+          color: active ? 'var(--kyujin-pink-600)' : 'var(--kyujin-ink-muted)',
         }}
       >
         {label}
@@ -632,12 +632,12 @@ function FilterDropdown({
           variant="outline"
           size="sm"
           className={cn(
-            'h-10 gap-1.5 rounded-full border-[var(--yume-line)] bg-yume-paper text-[12.5px] font-medium text-yume-ink-soft hover:bg-yume-pink-50 hover:text-yume-pink-700',
+            'h-10 gap-1.5 rounded-full border-[var(--kyujin-line)] bg-kyujin-paper text-[12.5px] font-medium text-kyujin-ink-soft hover:bg-kyujin-pink-50 hover:text-kyujin-pink-700',
             isActive &&
-              'border-[rgba(232,90,122,0.25)] bg-gradient-to-b from-yume-pink-50 to-yume-pink-100 text-yume-pink-700',
+              'border-[rgba(232,90,122,0.25)] bg-gradient-to-b from-kyujin-pink-50 to-kyujin-pink-100 text-kyujin-pink-700',
           )}
         >
-          <span className="text-yume-ink-muted">{label}:</span>
+          <span className="text-kyujin-ink-muted">{label}:</span>
           <span>{activeLabel ?? allLabel}</span>
           <ChevronDown className="h-3.5 w-3.5 opacity-60" />
         </Button>
@@ -645,14 +645,14 @@ function FilterDropdown({
       <DropdownMenuContent align="start" className="min-w-[14rem]">
         <DropdownMenuLabel>{label}</DropdownMenuLabel>
         <DropdownMenuItem asChild>
-          <Link href={allHref} className={cn(!isActive && 'font-semibold text-yume-pink-700')}>
+          <Link href={allHref} className={cn(!isActive && 'font-semibold text-kyujin-pink-700')}>
             {allLabel}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {options.map((opt) => (
           <DropdownMenuItem key={opt.key} asChild>
-            <Link href={opt.href} className={cn(opt.active && 'font-semibold text-yume-pink-700')}>
+            <Link href={opt.href} className={cn(opt.active && 'font-semibold text-kyujin-pink-700')}>
               {opt.label}
             </Link>
           </DropdownMenuItem>

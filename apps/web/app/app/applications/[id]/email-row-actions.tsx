@@ -66,7 +66,7 @@ export function EmailRowActions({
       <button
         type="button"
         onClick={() => setMode('choose')}
-        className="text-[10.5px] font-medium text-yume-ink-muted underline-offset-2 transition-colors hover:text-yume-pink-700 hover:underline"
+        className="text-[10.5px] font-medium text-kyujin-ink-muted underline-offset-2 transition-colors hover:text-kyujin-pink-700 hover:underline"
       >
         Move / detach
       </button>
@@ -99,7 +99,7 @@ export function EmailRowActions({
             <label
               key={a.id}
               className={`flex cursor-pointer items-center gap-2 border-b px-2 py-1 text-[11.5px] last:border-b-0 ${
-                targetId === a.id ? 'bg-yume-pink-50' : ''
+                targetId === a.id ? 'bg-kyujin-pink-50' : ''
               }`}
             >
               <input
@@ -116,7 +116,7 @@ export function EmailRowActions({
         )}
       </div>
       {threadSiblingCount > 1 && (
-        <label className="mt-1.5 flex items-center gap-1.5 text-[11px] text-yume-ink-soft">
+        <label className="mt-1.5 flex items-center gap-1.5 text-[11px] text-kyujin-ink-soft">
           <input
             type="checkbox"
             checked={allInThread}

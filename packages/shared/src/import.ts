@@ -245,7 +245,7 @@ export interface MappedImportRow {
 }
 
 // Apply a column mapping to a single parsed row. Pure function; no DB.
-// `statusOverrides` lets the preview UI force a specific Yume status for a
+// `statusOverrides` lets the preview UI force a specific Kyujin status for a
 // given raw cell value (keyed by the raw string, lower-cased + trimmed).
 export function applyMapping(
   row: Record<string, string>,

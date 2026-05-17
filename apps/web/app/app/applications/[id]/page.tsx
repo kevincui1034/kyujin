@@ -7,9 +7,9 @@ import {
   listGmailConnectionEmails,
   listOtherApplicationsForPicker,
 } from '@/lib/data';
-import { CompanyAvatar } from '@/components/yume/company-avatar';
-import { Eyebrow } from '@/components/yume/eyebrow';
-import { PillowCard } from '@/components/yume/pillow-card';
+import { CompanyAvatar } from '@/components/kyujin/company-avatar';
+import { Eyebrow } from '@/components/kyujin/eyebrow';
+import { PillowCard } from '@/components/kyujin/pillow-card';
 import { ApplicationManageControls } from './manage-controls';
 import { SourceChanger } from './source-changer';
 import { StatusChanger } from './status-changer';
@@ -66,7 +66,7 @@ export default async function ApplicationDetailPage({
       <div>
         <Link
           href="/app/applications"
-          className="text-[12px] font-medium text-yume-ink-muted transition-colors hover:text-yume-pink-700"
+          className="text-[12px] font-medium text-kyujin-ink-muted transition-colors hover:text-kyujin-pink-700"
         >
           ← All applications
         </Link>
@@ -77,14 +77,14 @@ export default async function ApplicationDetailPage({
           <div className="flex items-start gap-4">
             <CompanyAvatar company={app.company} size={48} />
             <div>
-              <Eyebrow color="var(--yume-pink-600)">APPLICATION</Eyebrow>
+              <Eyebrow color="var(--kyujin-pink-600)">APPLICATION</Eyebrow>
               <h1
                 className="serif mt-1"
                 style={{
                   fontSize: 36,
                   lineHeight: 1.05,
                   letterSpacing: '-0.024em',
-                  color: 'var(--yume-ink)',
+                  color: 'var(--kyujin-ink)',
                 }}
               >
                 {app.company}
@@ -92,7 +92,7 @@ export default async function ApplicationDetailPage({
               {app.role && (
                 <p
                   className="serif-italic mt-1"
-                  style={{ fontSize: 18, color: 'var(--yume-ink-soft)' }}
+                  style={{ fontSize: 18, color: 'var(--kyujin-ink-soft)' }}
                 >
                   {app.role}
                 </p>
@@ -112,16 +112,16 @@ export default async function ApplicationDetailPage({
       {app.customFields && Object.keys(app.customFields).length > 0 && (
         <PillowCard>
           <Eyebrow>DETAILS</Eyebrow>
-          <div className="mt-1.5 text-[11px]" style={{ color: 'var(--yume-ink-muted)' }}>
+          <div className="mt-1.5 text-[11px]" style={{ color: 'var(--kyujin-ink-muted)' }}>
             Imported from CSV/XLSX. These fields aren't editable yet.
           </div>
           <dl className="mt-4 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
             {Object.entries(app.customFields).map(([key, value]) => (
               <div key={key} className="flex flex-col gap-0.5">
-                <dt className="text-[11px] uppercase tracking-wider text-yume-ink-muted">
+                <dt className="text-[11px] uppercase tracking-wider text-kyujin-ink-muted">
                   {key}
                 </dt>
-                <dd className="serif text-sm text-yume-ink whitespace-pre-wrap break-words">
+                <dd className="serif text-sm text-kyujin-ink whitespace-pre-wrap break-words">
                   {value}
                 </dd>
               </div>
@@ -132,7 +132,7 @@ export default async function ApplicationDetailPage({
 
       <PillowCard>
         <Eyebrow>TIMELINE</Eyebrow>
-        <div className="mt-1.5 text-[11px]" style={{ color: 'var(--yume-ink-muted)' }}>
+        <div className="mt-1.5 text-[11px]" style={{ color: 'var(--kyujin-ink-muted)' }}>
           Drag rows by the <span className="font-mono">⋮⋮</span> handle on the right to reorder.
           Undo is in the audit log.
         </div>

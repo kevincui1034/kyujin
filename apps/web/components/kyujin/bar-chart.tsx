@@ -21,8 +21,8 @@ export function BarChart({
   data,
   width = 1040,
   height = 380,
-  barColor = 'var(--yume-pink-400)',
-  hoverColor = 'var(--yume-pink-600)',
+  barColor = 'var(--kyujin-pink-400)',
+  hoverColor = 'var(--kyujin-pink-600)',
   yTickCount = 4,
   emptyLabel = 'Not enough data yet.',
 }: BarChartProps) {
@@ -32,7 +32,7 @@ export function BarChart({
     return (
       <div
         className="flex h-full w-full items-center justify-center text-[13px]"
-        style={{ color: 'var(--yume-ink-muted)' }}
+        style={{ color: 'var(--kyujin-ink-muted)' }}
       >
         {emptyLabel}
       </div>
@@ -66,7 +66,7 @@ export function BarChart({
               x2={width - padding.right}
               y1={y}
               y2={y}
-              stroke="var(--yume-line-soft)"
+              stroke="var(--kyujin-line-soft)"
               strokeDasharray={i === 0 ? undefined : '2 4'}
               strokeWidth={i === 0 ? 1 : 1}
               opacity={i === 0 ? 0.8 : 0.6}
@@ -75,7 +75,7 @@ export function BarChart({
               x={padding.left - 8}
               y={y + 4}
               textAnchor="end"
-              style={{ fontSize: 11, fill: 'var(--yume-ink-soft)' }}
+              style={{ fontSize: 11, fill: 'var(--kyujin-ink-soft)' }}
             >
               {t}
             </text>
@@ -121,7 +121,7 @@ export function BarChart({
                 className="serif"
                 style={{
                   fontSize: 13,
-                  fill: isHover ? hoverColor : 'var(--yume-ink)',
+                  fill: isHover ? hoverColor : 'var(--kyujin-ink)',
                   letterSpacing: '-0.01em',
                   opacity: isHover ? 1 : 0.85,
                   transition: 'opacity 180ms, fill 180ms',
@@ -136,7 +136,7 @@ export function BarChart({
               textAnchor="middle"
               style={{
                 fontSize: 11.5,
-                fill: 'var(--yume-ink-soft)',
+                fill: 'var(--kyujin-ink-soft)',
                 fontWeight: isHover ? 600 : 500,
               }}
             >

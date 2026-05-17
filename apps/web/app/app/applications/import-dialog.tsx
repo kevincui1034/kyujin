@@ -31,7 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Eyebrow } from '@/components/yume/eyebrow';
+import { Eyebrow } from '@/components/kyujin/eyebrow';
 import { cn } from '@/lib/utils';
 
 const TARGET_LABEL: Record<ImportColumnTarget, string> = {
@@ -169,7 +169,7 @@ export function ImportDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <Eyebrow color="var(--yume-pink-600)">IMPORT APPLICATIONS</Eyebrow>
+          <Eyebrow color="var(--kyujin-pink-600)">IMPORT APPLICATIONS</Eyebrow>
           <DialogTitle>
             {step === 'upload' && 'Upload a CSV or XLSX file'}
             {step === 'map' && 'Match your columns'}
@@ -181,7 +181,7 @@ export function ImportDialog({ open, onOpenChange }: Props) {
             {step === 'map' &&
               'We guessed where each column should go. Anything you keep as "Custom field" is preserved on the application detail page.'}
             {step === 'preview' &&
-              'Confirm how foreign status values map to your Yume statuses, then import.'}
+              'Confirm how foreign status values map to your Kyujin statuses, then import.'}
             {step === 'done' && 'Your file has been imported.'}
           </DialogDescription>
         </DialogHeader>
@@ -291,10 +291,10 @@ function UploadStep({ file, onFile }: { file: File | null; onFile: (f: File | nu
     <label
       htmlFor="import-file"
       className={cn(
-        'flex flex-col items-center justify-center gap-2 rounded-pillow border-2 border-dashed py-10 text-sm text-yume-ink-muted transition-colors',
+        'flex flex-col items-center justify-center gap-2 rounded-pillow border-2 border-dashed py-10 text-sm text-kyujin-ink-muted transition-colors',
         dragOver
-          ? 'border-[var(--yume-pink-500)] bg-[#fff1f5]'
-          : 'border-[var(--yume-line-soft)] hover:border-[var(--yume-pink-500)]',
+          ? 'border-[var(--kyujin-pink-500)] bg-[#fff1f5]'
+          : 'border-[var(--kyujin-line-soft)] hover:border-[var(--kyujin-pink-500)]',
       )}
       onDragOver={(e) => {
         e.preventDefault();
@@ -311,7 +311,7 @@ function UploadStep({ file, onFile }: { file: File | null; onFile: (f: File | nu
       <Upload className="h-6 w-6" />
       {file ? (
         <>
-          <div className="serif text-base text-yume-ink">{file.name}</div>
+          <div className="serif text-base text-kyujin-ink">{file.name}</div>
           <div className="text-xs">{Math.round(file.size / 1024)} KB · click to choose another</div>
         </>
       ) : (
@@ -344,7 +344,7 @@ function MapStep({
     onMappingChange({ ...mapping, [header]: target });
   }
   // Targets already claimed by another header — these get disabled so we
-  // don't let two CSV columns map to the same Yume field.
+  // don't let two CSV columns map to the same Kyujin field.
   const claimed = new Set<string>();
   for (const [h, t] of Object.entries(mapping)) {
     if (t === 'custom' || t === 'skip') continue;
@@ -362,12 +362,12 @@ function MapStep({
         return (
           <div
             key={h}
-            className="flex items-center gap-3 rounded-lg border border-[var(--yume-line-soft)] bg-yume-paper px-3 py-2"
+            className="flex items-center gap-3 rounded-lg border border-[var(--kyujin-line-soft)] bg-kyujin-paper px-3 py-2"
           >
             <div className="min-w-0 flex-1">
-              <div className="serif truncate text-sm text-yume-ink">{h}</div>
+              <div className="serif truncate text-sm text-kyujin-ink">{h}</div>
               {sample && (
-                <div className="truncate text-xs text-yume-ink-muted">e.g. {sample}</div>
+                <div className="truncate text-xs text-kyujin-ink-muted">e.g. {sample}</div>
               )}
             </div>
             <Select
@@ -418,30 +418,30 @@ function PreviewStep({
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-2 text-sm">
-        <div className="rounded-lg border border-[var(--yume-line-soft)] bg-yume-paper p-3">
-          <div className="text-xs text-yume-ink-muted">Rows</div>
-          <div className="serif text-2xl text-yume-ink">{preview.rowCount}</div>
+        <div className="rounded-lg border border-[var(--kyujin-line-soft)] bg-kyujin-paper p-3">
+          <div className="text-xs text-kyujin-ink-muted">Rows</div>
+          <div className="serif text-2xl text-kyujin-ink">{preview.rowCount}</div>
         </div>
-        <div className="rounded-lg border border-[var(--yume-line-soft)] bg-yume-paper p-3">
-          <div className="text-xs text-yume-ink-muted">Custom fields</div>
-          <div className="serif text-2xl text-yume-ink">{customCount}</div>
+        <div className="rounded-lg border border-[var(--kyujin-line-soft)] bg-kyujin-paper p-3">
+          <div className="text-xs text-kyujin-ink-muted">Custom fields</div>
+          <div className="serif text-2xl text-kyujin-ink">{customCount}</div>
         </div>
-        <div className="rounded-lg border border-[var(--yume-line-soft)] bg-yume-paper p-3">
-          <div className="text-xs text-yume-ink-muted">Status fallback</div>
-          <div className="serif text-2xl text-yume-ink">{fallbackCount}</div>
+        <div className="rounded-lg border border-[var(--kyujin-line-soft)] bg-kyujin-paper p-3">
+          <div className="text-xs text-kyujin-ink-muted">Status fallback</div>
+          <div className="serif text-2xl text-kyujin-ink">{fallbackCount}</div>
         </div>
       </div>
 
       {statusEntries.length > 0 ? (
         <div className="space-y-2">
-          <div className="text-xs uppercase tracking-wider text-yume-ink-muted">Status mapping</div>
+          <div className="text-xs uppercase tracking-wider text-kyujin-ink-muted">Status mapping</div>
           {statusEntries.map(([raw, info]) => (
             <div
               key={raw}
-              className="flex items-center gap-3 rounded-lg border border-[var(--yume-line-soft)] bg-yume-paper px-3 py-2"
+              className="flex items-center gap-3 rounded-lg border border-[var(--kyujin-line-soft)] bg-kyujin-paper px-3 py-2"
             >
               <div className="min-w-0 flex-1">
-                <div className="serif text-sm text-yume-ink">
+                <div className="serif text-sm text-kyujin-ink">
                   {raw}
                   {!info.matched && (
                     <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] uppercase tracking-wider text-amber-700">
@@ -449,7 +449,7 @@ function PreviewStep({
                     </span>
                   )}
                 </div>
-                <div className="text-xs text-yume-ink-muted">{info.count} rows</div>
+                <div className="text-xs text-kyujin-ink-muted">{info.count} rows</div>
               </div>
               <Select
                 value={statusOverrides[raw] ?? info.mappedTo}
@@ -470,7 +470,7 @@ function PreviewStep({
           ))}
         </div>
       ) : (
-        <div className="text-sm text-yume-ink-muted">
+        <div className="text-sm text-kyujin-ink-muted">
           No status column mapped — every row will be imported as <strong>Applied</strong>.
         </div>
       )}
@@ -488,17 +488,17 @@ function DoneStep({ result }: { result: CommitResponse }) {
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-3 gap-2 text-sm">
-        <div className="rounded-lg border border-[var(--yume-line-soft)] bg-yume-paper p-3">
-          <div className="text-xs text-yume-ink-muted">Created</div>
-          <div className="serif text-2xl text-yume-ink">{result.inserted}</div>
+        <div className="rounded-lg border border-[var(--kyujin-line-soft)] bg-kyujin-paper p-3">
+          <div className="text-xs text-kyujin-ink-muted">Created</div>
+          <div className="serif text-2xl text-kyujin-ink">{result.inserted}</div>
         </div>
-        <div className="rounded-lg border border-[var(--yume-line-soft)] bg-yume-paper p-3">
-          <div className="text-xs text-yume-ink-muted">Merged</div>
-          <div className="serif text-2xl text-yume-ink">{result.merged}</div>
+        <div className="rounded-lg border border-[var(--kyujin-line-soft)] bg-kyujin-paper p-3">
+          <div className="text-xs text-kyujin-ink-muted">Merged</div>
+          <div className="serif text-2xl text-kyujin-ink">{result.merged}</div>
         </div>
-        <div className="rounded-lg border border-[var(--yume-line-soft)] bg-yume-paper p-3">
-          <div className="text-xs text-yume-ink-muted">Skipped</div>
-          <div className="serif text-2xl text-yume-ink">{result.skipped}</div>
+        <div className="rounded-lg border border-[var(--kyujin-line-soft)] bg-kyujin-paper p-3">
+          <div className="text-xs text-kyujin-ink-muted">Skipped</div>
+          <div className="serif text-2xl text-kyujin-ink">{result.skipped}</div>
         </div>
       </div>
       {result.errors.length > 0 && (

@@ -11,11 +11,11 @@ interface KPITileProps {
 }
 
 const COLOR: Record<NonNullable<KPITileProps['tone']>, string> = {
-  'pink-600': 'var(--yume-pink-600)',
-  'mint-deep': 'var(--yume-mint-deep)',
-  'lilac-deep': 'var(--yume-lilac-deep)',
-  'peach-deep': 'var(--yume-peach-deep)',
-  'butter-deep': 'var(--yume-butter-deep)',
+  'pink-600': 'var(--kyujin-pink-600)',
+  'mint-deep': 'var(--kyujin-mint-deep)',
+  'lilac-deep': 'var(--kyujin-lilac-deep)',
+  'peach-deep': 'var(--kyujin-peach-deep)',
+  'butter-deep': 'var(--kyujin-butter-deep)',
 };
 
 export function KPITile({ label, value, sub, tone = 'pink-600', span = 3 }: KPITileProps) {
@@ -29,7 +29,7 @@ export function KPITile({ label, value, sub, tone = 'pink-600', span = 3 }: KPIT
         {value}
       </div>
       {sub && (
-        <div className="mt-1 text-[12px]" style={{ color: 'var(--yume-ink-soft)' }}>
+        <div className="mt-1 text-[12px]" style={{ color: 'var(--kyujin-ink-soft)' }}>
           {sub}
         </div>
       )}

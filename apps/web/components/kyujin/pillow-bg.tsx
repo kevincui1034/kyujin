@@ -17,7 +17,7 @@ export function PillowBG({ id = 'e' }: { id?: string }) {
           height: 400,
           borderRadius: '50%',
           background:
-            'radial-gradient(circle, var(--yume-pink-200) 0%, rgba(251,208,217,0) 70%)',
+            'radial-gradient(circle, var(--kyujin-pink-200) 0%, rgba(251,208,217,0) 70%)',
           filter: 'blur(10px)',
         }}
       />
@@ -31,7 +31,7 @@ export function PillowBG({ id = 'e' }: { id?: string }) {
           height: 380,
           borderRadius: '50%',
           background:
-            'radial-gradient(circle, var(--yume-pink-100) 0%, rgba(253,231,236,0) 70%)',
+            'radial-gradient(circle, var(--kyujin-pink-100) 0%, rgba(253,231,236,0) 70%)',
           filter: 'blur(10px)',
         }}
       />
@@ -44,7 +44,7 @@ export function PillowBG({ id = 'e' }: { id?: string }) {
       >
         <defs>
           <pattern id={dotsId} x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
-            <circle cx="4" cy="4" r="1.4" fill="var(--yume-pink-200)" />
+            <circle cx="4" cy="4" r="1.4" fill="var(--kyujin-pink-200)" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill={`url(#${dotsId})`} />

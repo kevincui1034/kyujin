@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { YumeLogo } from './yume-logo';
+import { KyujinLogo } from './kyujin-logo';
 
 const TABS = [
   { id: 'home', label: 'Home', href: '/app' },
@@ -17,7 +17,7 @@ function isActive(pathname: string, tabHref: string) {
   return pathname === tabHref || pathname.startsWith(`${tabHref}/`);
 }
 
-export function YumeNav({
+export function KyujinNav({
   email,
   displayName,
   signOut,
@@ -32,8 +32,8 @@ export function YumeNav({
 
   return (
     <div className="relative z-10 flex items-center justify-between px-9 pb-3.5 pt-4">
-      <Link href="/app" aria-label="Yume — Job Tracker" className="shrink-0">
-        <YumeLogo size={32} withTag />
+      <Link href="/app" aria-label="Kyujin — Job Tracker" className="shrink-0">
+        <KyujinLogo size={32} withTag />
       </Link>
 
       <nav className="flex items-center gap-2">
@@ -47,12 +47,12 @@ export function YumeNav({
               style={{
                 fontSize: 13.5,
                 fontWeight: 600,
-                color: active ? 'var(--yume-ink)' : 'var(--yume-ink-soft)',
-                background: active ? 'var(--yume-paper)' : 'transparent',
+                color: active ? 'var(--kyujin-ink)' : 'var(--kyujin-ink-soft)',
+                background: active ? 'var(--kyujin-paper)' : 'transparent',
                 border: active
-                  ? '1.5px solid var(--yume-pink-200)'
+                  ? '1.5px solid var(--kyujin-pink-200)'
                   : '1.5px solid transparent',
-                boxShadow: active ? '0 6px 16px -8px var(--yume-pink-300)' : 'none',
+                boxShadow: active ? '0 6px 16px -8px var(--kyujin-pink-300)' : 'none',
                 transform: active ? 'rotate(-1deg)' : 'none',
               }}
             >
@@ -64,13 +64,13 @@ export function YumeNav({
 
       <div className="flex items-center gap-3">
         <div
-          className="inline-flex items-center gap-2 rounded-full bg-yume-paper py-[6px] pl-[6px] pr-[14px]"
+          className="inline-flex items-center gap-2 rounded-full bg-kyujin-paper py-[6px] pl-[6px] pr-[14px]"
           style={{
-            border: '1.5px solid var(--yume-pink-200)',
+            border: '1.5px solid var(--kyujin-pink-200)',
             fontSize: 12.5,
-            color: 'var(--yume-ink-soft)',
+            color: 'var(--kyujin-ink-soft)',
             fontWeight: 500,
-            boxShadow: '0 4px 10px -6px var(--yume-pink-300)',
+            boxShadow: '0 4px 10px -6px var(--kyujin-pink-300)',
           }}
         >
           <span
@@ -80,7 +80,7 @@ export function YumeNav({
               width: 22,
               height: 22,
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, var(--yume-pink-400), var(--yume-coral))',
+              background: 'linear-gradient(135deg, var(--kyujin-pink-400), var(--kyujin-coral))',
               fontSize: 11,
               fontWeight: 700,
             }}

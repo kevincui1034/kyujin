@@ -2,8 +2,8 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eyebrow } from '@/components/yume/eyebrow';
-import { PillowCard } from '@/components/yume/pillow-card';
+import { Eyebrow } from '@/components/kyujin/eyebrow';
+import { PillowCard } from '@/components/kyujin/pillow-card';
 
 interface Props {
   total: number;
@@ -112,7 +112,7 @@ export function GoalCard({ total, goal }: Props) {
               className="h-7 w-20 rounded-md px-2 text-[12.5px]"
               style={{
                 background: 'rgba(255,255,255,0.92)',
-                color: 'var(--yume-ink)',
+                color: 'var(--kyujin-ink)',
                 border: '1px solid rgba(255,255,255,0.6)',
               }}
             />
@@ -122,7 +122,7 @@ export function GoalCard({ total, goal }: Props) {
               className="rounded-full px-3 py-1 text-[11.5px] font-semibold"
               style={{
                 background: '#fff',
-                color: 'var(--yume-coral-deep, #c45a4a)',
+                color: 'var(--kyujin-coral-deep, #c45a4a)',
                 opacity: saving ? 0.6 : 1,
               }}
             >

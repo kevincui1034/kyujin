@@ -8,7 +8,7 @@ import authConfig from './auth.config';
 
 // CORS posture (intentional — do not loosen without a clear reason):
 //   - We set NO `Access-Control-Allow-Origin` headers anywhere. Browsers
-//     enforce same-origin on `fetch` from any web app that isn't yumeai.app
+//     enforce same-origin on `fetch` from any web app that isn't kyujin.dev
 //     itself, which is exactly what we want.
 //   - The iOS app calls /api/applications, /api/stats, /api/billing/apple/*
 //     from URLSession with no Origin header, so CORS doesn't apply to it.

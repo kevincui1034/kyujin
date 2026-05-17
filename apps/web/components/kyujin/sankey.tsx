@@ -44,16 +44,16 @@ interface SankeyProps {
 }
 
 const COLOR: Record<NodeColor, string> = {
-  pink: 'var(--yume-pink-300)',
-  pinkD: 'var(--yume-pink-400)',
-  pinkXD: 'var(--yume-pink-600)',
-  peach: 'var(--yume-peach)',
-  coral: 'var(--yume-coral)',
-  mint: 'var(--yume-mint)',
-  lilac: 'var(--yume-lilac)',
-  butter: 'var(--yume-butter)',
-  sand: 'var(--yume-sand)',
-  cream: 'var(--yume-cream)',
+  pink: 'var(--kyujin-pink-300)',
+  pinkD: 'var(--kyujin-pink-400)',
+  pinkXD: 'var(--kyujin-pink-600)',
+  peach: 'var(--kyujin-peach)',
+  coral: 'var(--kyujin-coral)',
+  mint: 'var(--kyujin-mint)',
+  lilac: 'var(--kyujin-lilac)',
+  butter: 'var(--kyujin-butter)',
+  sand: 'var(--kyujin-sand)',
+  cream: 'var(--kyujin-cream)',
 };
 
 type LayoutNode = SankeyExtraProperties &
@@ -205,7 +205,7 @@ export function Sankey({
               style={{
                 fontSize: smallNode ? 12 : 13,
                 fontWeight: 600,
-                fill: 'var(--yume-ink)',
+                fill: 'var(--kyujin-ink)',
                 letterSpacing: '-0.005em',
                 transition: 'opacity 220ms',
               }}
@@ -223,7 +223,7 @@ export function Sankey({
                 style={{
                   fontSize: smallNode ? 14 : 18,
                   letterSpacing: '-0.02em',
-                  fill: n.color === 'sand' ? 'var(--yume-ink-soft)' : color,
+                  fill: n.color === 'sand' ? 'var(--kyujin-ink-soft)' : color,
                   transition: 'opacity 220ms',
                 }}
               >

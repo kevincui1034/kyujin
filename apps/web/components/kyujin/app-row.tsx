@@ -16,9 +16,9 @@ export function AppRow({ id, company, role, status, dense = false, showDivider =
   return (
     <Link
       href={`/app/applications/${id}`}
-      className="flex items-center justify-between rounded-2xl px-2 py-2 transition-colors hover:bg-yume-pink-50"
+      className="flex items-center justify-between rounded-2xl px-2 py-2 transition-colors hover:bg-kyujin-pink-50"
       style={{
-        borderTop: showDivider ? '1px solid var(--yume-line-faint)' : 'none',
+        borderTop: showDivider ? '1px solid var(--kyujin-line-faint)' : 'none',
       }}
     >
       <div className="flex min-w-0 items-center gap-3">
@@ -26,14 +26,14 @@ export function AppRow({ id, company, role, status, dense = false, showDivider =
         <div className="min-w-0">
           <div
             className="truncate font-semibold"
-            style={{ fontSize: dense ? 13 : 14, color: 'var(--yume-ink)' }}
+            style={{ fontSize: dense ? 13 : 14, color: 'var(--kyujin-ink)' }}
           >
             {company}
           </div>
           {role && (
             <div
               className="truncate"
-              style={{ fontSize: 12, color: 'var(--yume-ink-soft)' }}
+              style={{ fontSize: 12, color: 'var(--kyujin-ink-soft)' }}
             >
               {role}
             </div>

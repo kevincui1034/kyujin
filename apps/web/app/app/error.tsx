@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
-import { PillowCard } from '@/components/yume/pillow-card';
+import { PillowCard } from '@/components/kyujin/pillow-card';
 import { Button } from '@/components/ui/button';
 import { log } from '@/lib/log';
 
 // Authenticated-zone error boundary. Catches throws from any server or
 // client component below /app. The Next.js default page is unstyled — this
-// keeps the user inside the Yume shell with a working reset button.
+// keeps the user inside the Kyujin shell with a working reset button.
 export default function AppError({
   error,
   reset,
@@ -25,8 +25,8 @@ export default function AppError({
     <div className="mx-auto flex max-w-xl flex-col gap-6 pt-12">
       <PillowCard tone="pink">
         <div className="flex flex-col gap-4 p-2">
-          <h1 className="font-serif text-2xl text-yume-ink">Something went sideways</h1>
-          <p className="text-sm" style={{ color: 'var(--yume-ink-muted)' }}>
+          <h1 className="font-serif text-2xl text-kyujin-ink">Something went sideways</h1>
+          <p className="text-sm" style={{ color: 'var(--kyujin-ink-muted)' }}>
             We hit an unexpected error loading this page. Try again, or head back to your
             dashboard.
           </p>

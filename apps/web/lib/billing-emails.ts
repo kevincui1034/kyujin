@@ -66,27 +66,27 @@ export async function sendTrialEndingEmail(subscription: Stripe.Subscription): P
   const dateLabel = formatDate(trialEndsAt);
   const manageUrl = `${appUrlOrigin()}/app/settings/billing`;
 
-  const subject = `Your Yume trial ends ${dateLabel}`;
+  const subject = `Your Kyujin trial ends ${dateLabel}`;
   const greeting = user.name ? `Hi ${user.name},` : 'Hi,';
   const text = [
     greeting,
     '',
-    `Your free trial of Yume ends on ${dateLabel}. After that, your card will be charged ${amountLabel} for the next billing period.`,
+    `Your free trial of Kyujin ends on ${dateLabel}. After that, your card will be charged ${amountLabel} for the next billing period.`,
     '',
     `If you'd like to continue, no action is needed — your sync will keep running.`,
     `If you'd rather not be charged, cancel anytime before ${dateLabel} here:`,
     manageUrl,
     '',
-    'Thanks for trying Yume.',
+    'Thanks for trying Kyujin.',
   ].join('\n');
   const html = `
     <div style="font-family:system-ui,sans-serif;font-size:14px;line-height:1.5;color:#111">
       <p>${greeting}</p>
-      <p>Your free trial of Yume ends on <strong>${dateLabel}</strong>. After that, your card will be charged <strong>${amountLabel}</strong> for the next billing period.</p>
+      <p>Your free trial of Kyujin ends on <strong>${dateLabel}</strong>. After that, your card will be charged <strong>${amountLabel}</strong> for the next billing period.</p>
       <p>If you'd like to continue, no action is needed — your sync will keep running.</p>
       <p>If you'd rather not be charged, you can cancel anytime before ${dateLabel}:</p>
       <p><a href="${manageUrl}" style="display:inline-block;padding:10px 16px;background:#111;color:#fff;text-decoration:none;border-radius:6px">Manage subscription</a></p>
-      <p style="color:#666;font-size:12px">Thanks for trying Yume.</p>
+      <p style="color:#666;font-size:12px">Thanks for trying Kyujin.</p>
     </div>
   `;
 

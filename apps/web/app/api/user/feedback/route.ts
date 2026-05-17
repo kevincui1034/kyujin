@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
 
   const userEmail = session.user.email ?? 'unknown';
   const userId = session.user.id;
-  const subject = `[Yume feedback · ${category}] from ${userEmail}`;
+  const subject = `[Kyujin feedback · ${category}] from ${userEmail}`;
   const text = [
     `From: ${userEmail} (user ${userId})`,
     `Category: ${category}`,

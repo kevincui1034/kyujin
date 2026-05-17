@@ -63,7 +63,7 @@ export default async function SettingsPage({
         <CardHeader>
           <CardTitle>Gmail inboxes</CardTitle>
           <CardDescription>
-            Yume reads job-application emails only — and never sends mail on your behalf.
+            Kyujin reads job-application emails only — and never sends mail on your behalf.
             {isPremium
               ? ` Premium supports up to ${PREMIUM_INBOX_LIMIT} inboxes (${connections.length}/${PREMIUM_INBOX_LIMIT} used).`
               : ` Single inbox — multi-inbox is Premium-only (${connections.length}/${NON_PREMIUM_INBOX_LIMIT}).`}

@@ -29,7 +29,7 @@ export default function GlobalError({
           <h1 style={{ fontSize: 24, marginBottom: 12 }}>Something went very wrong</h1>
           <p style={{ fontSize: 14, color: '#6b5158', marginBottom: 20 }}>
             We couldn't render the page. Refresh to try again — if it keeps happening, let us
-            know at support@yumeai.app.
+            know at support@kyujin.dev.
           </p>
           {error.digest ? (
             <p style={{ fontSize: 12, color: '#a89098', marginBottom: 20 }}>

@@ -24,7 +24,7 @@ export default async function RulesPage() {
         <CardHeader>
           <CardTitle>Allow / block list</CardTitle>
           <CardDescription>
-            Override Yume&apos;s built-in classifier. Allow forces a sender through to the LLM
+            Override Kyujin&apos;s built-in classifier. Allow forces a sender through to the LLM
             even if it wouldn&apos;t normally qualify. Block silently ignores everything from that
             sender. Use the domain only — e.g. <code className="rounded bg-muted px-1">stripe.com</code>.
           </CardDescription>

@@ -19,7 +19,7 @@ export function ImportButton({ isPaid }: Props) {
         size="sm"
         disabled
         title="A paid plan is required to import"
-        className="h-10 rounded-full text-yume-ink-muted"
+        className="h-10 rounded-full text-kyujin-ink-muted"
       >
         🔒 Import
       </Button>

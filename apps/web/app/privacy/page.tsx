@@ -4,9 +4,9 @@ import type { ReactNode } from 'react';
 import { MarketingShell } from '@/components/marketing/marketing-shell';
 
 export const metadata: Metadata = {
-  title: 'Privacy — Yume',
+  title: 'Privacy — Kyujin',
   description:
-    'What Yume reads from your Gmail, what we store, and what we never touch. Read-only scope, classification metadata only.',
+    'What Kyujin reads from your Gmail, what we store, and what we never touch. Read-only scope, classification metadata only.',
 };
 
 export default function PrivacyPage() {
@@ -16,12 +16,12 @@ export default function PrivacyPage() {
         <div
           className="mono inline-block rounded-full bg-white/85 px-3 py-1.5 backdrop-blur-md"
           style={{
-            border: '1px solid var(--yume-line-soft)',
+            border: '1px solid var(--kyujin-line-soft)',
             boxShadow: '0 6px 16px -10px rgba(31,20,24,0.18)',
             fontSize: 10.5,
             letterSpacing: '0.14em',
             fontWeight: 600,
-            color: 'var(--yume-ink-soft)',
+            color: 'var(--kyujin-ink-soft)',
           }}
         >
           PRIVACY · UPDATED 2026-05-16
@@ -29,7 +29,7 @@ export default function PrivacyPage() {
 
         <h1
           className="serif mt-6 text-[clamp(40px,6vw,68px)]"
-          style={{ letterSpacing: '-0.028em', lineHeight: 1.05, color: 'var(--yume-ink)' }}
+          style={{ letterSpacing: '-0.028em', lineHeight: 1.05, color: 'var(--kyujin-ink)' }}
         >
           What we read,
           <br />
@@ -48,9 +48,9 @@ export default function PrivacyPage() {
 
         <p
           className="mt-6 max-w-[640px] text-[15.5px] leading-[1.6]"
-          style={{ color: 'var(--yume-ink-soft)' }}
+          style={{ color: 'var(--kyujin-ink-soft)' }}
         >
-          Yume only does one thing with your Gmail: classify recruiting threads so you can see
+          Kyujin only does one thing with your Gmail: classify recruiting threads so you can see
           where each application stands. Below is exactly what that means in practice.
         </p>
 
@@ -61,21 +61,21 @@ export default function PrivacyPage() {
               <code
                 className="mono rounded px-1.5 py-0.5"
                 style={{
-                  background: 'var(--yume-pink-50)',
-                  color: 'var(--yume-pink-700)',
+                  background: 'var(--kyujin-pink-50)',
+                  color: 'var(--kyujin-pink-700)',
                   fontSize: 12,
                 }}
               >
                 gmail.readonly
               </code>
-              . Yume cannot send, delete, draft, or modify any email on your behalf — Google
+              . Kyujin cannot send, delete, draft, or modify any email on your behalf — Google
               enforces this at the API level.
             </p>
           </PrivacySection>
 
           <PrivacySection eyebrow="WHAT WE PROCESS" title="Application-shaped messages.">
             <p>
-              When a new message arrives, Yume reads the sender, subject, and body to decide
+              When a new message arrives, Kyujin reads the sender, subject, and body to decide
               whether it&apos;s a job-application thread (confirmation, interview invite,
               rejection, offer). Non-application mail is ignored.
             </p>
@@ -104,7 +104,7 @@ export default function PrivacyPage() {
               Disconnecting Gmail from{' '}
               <Link
                 href="/app/settings"
-                style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}
+                style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}
               >
                 Settings
               </Link>{' '}
@@ -118,10 +118,10 @@ export default function PrivacyPage() {
             <p>
               Email{' '}
               <a
-                href="mailto:support@yumeai.app"
-                style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}
+                href="mailto:support@kyujin.dev"
+                style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}
               >
-                support@yumeai.app
+                support@kyujin.dev
               </a>{' '}
               and a human will get back to you.
             </p>
@@ -144,7 +144,7 @@ function PrivacySection({
   return (
     <article
       className="pillow rounded-[28px] bg-white"
-      style={{ padding: '24px 26px', border: '1px solid var(--yume-line-soft)' }}
+      style={{ padding: '24px 26px', border: '1px solid var(--kyujin-line-soft)' }}
     >
       <div
         className="mono"
@@ -152,20 +152,20 @@ function PrivacySection({
           fontSize: 10.5,
           letterSpacing: '0.14em',
           fontWeight: 600,
-          color: 'var(--yume-ink-muted)',
+          color: 'var(--kyujin-ink-muted)',
         }}
       >
         {eyebrow}
       </div>
       <h2
         className="serif mt-2 text-[24px]"
-        style={{ letterSpacing: '-0.022em', color: 'var(--yume-ink)', lineHeight: 1.15 }}
+        style={{ letterSpacing: '-0.022em', color: 'var(--kyujin-ink)', lineHeight: 1.15 }}
       >
         {title}
       </h2>
       <div
         className="mt-3 text-[14.5px] leading-[1.6]"
-        style={{ color: 'var(--yume-ink-soft)' }}
+        style={{ color: 'var(--kyujin-ink-soft)' }}
       >
         {children}
       </div>

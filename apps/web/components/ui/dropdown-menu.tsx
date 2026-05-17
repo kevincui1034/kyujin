@@ -55,7 +55,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        'z-50 min-w-[10rem] overflow-hidden rounded-xl border border-[var(--yume-line-soft)] bg-popover p-1 text-popover-foreground shadow-[0_18px_40px_-18px_rgba(232,90,122,0.22),0_4px_10px_-4px_rgba(31,20,24,0.08)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+        'z-50 min-w-[10rem] overflow-hidden rounded-xl border border-[var(--kyujin-line-soft)] bg-popover p-1 text-popover-foreground shadow-[0_18px_40px_-18px_rgba(232,90,122,0.22),0_4px_10px_-4px_rgba(31,20,24,0.08)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
         className,
       )}
       {...props}
@@ -71,7 +71,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center rounded-lg px-2.5 py-2 text-sm outline-none transition-colors focus:bg-yume-pink-50 focus:text-yume-pink-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-pointer select-none items-center rounded-lg px-2.5 py-2 text-sm outline-none transition-colors focus:bg-kyujin-pink-50 focus:text-kyujin-pink-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       inset && 'pl-8',
       className,
     )}
@@ -87,7 +87,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center rounded-lg py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-yume-pink-50 focus:text-yume-pink-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-pointer select-none items-center rounded-lg py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-kyujin-pink-50 focus:text-kyujin-pink-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className,
     )}
     checked={checked}
@@ -110,7 +110,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center rounded-lg py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-yume-pink-50 focus:text-yume-pink-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-pointer select-none items-center rounded-lg py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-kyujin-pink-50 focus:text-kyujin-pink-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className,
     )}
     {...props}
@@ -132,7 +132,7 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      'px-2.5 py-1.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-yume-ink-muted',
+      'px-2.5 py-1.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-kyujin-ink-muted',
       inset && 'pl-8',
       className,
     )}
@@ -147,7 +147,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn('-mx-1 my-1 h-px bg-[var(--yume-line-soft)]', className)}
+    className={cn('-mx-1 my-1 h-px bg-[var(--kyujin-line-soft)]', className)}
     {...props}
   />
 ));

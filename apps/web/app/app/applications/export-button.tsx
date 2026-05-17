@@ -31,7 +31,7 @@ export function ExportButton({ isPaid }: Props) {
       // Use the server-provided filename when available; fall back to a default.
       const disposition = res.headers.get('content-disposition') ?? '';
       const match = disposition.match(/filename="?([^";]+)"?/);
-      a.download = match?.[1] ?? `yume-applications-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.download = match?.[1] ?? `kyujin-applications-${new Date().toISOString().slice(0, 10)}.csv`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -50,7 +50,7 @@ export function ExportButton({ isPaid }: Props) {
         size="sm"
         disabled
         title="A paid plan is required for CSV export"
-        className="h-10 rounded-full text-yume-ink-muted"
+        className="h-10 rounded-full text-kyujin-ink-muted"
       >
         🔒 Export CSV
       </Button>

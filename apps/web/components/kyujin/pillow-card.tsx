@@ -3,11 +3,11 @@ import type { CSSProperties, ReactNode } from 'react';
 type Tone = 'paper' | 'pink' | 'cream' | 'coral';
 
 const TONE: Record<Tone, string> = {
-  paper: 'bg-yume-paper border-[var(--yume-line-soft)] text-yume-ink',
-  pink: 'bg-[#fff1f5] border-[rgba(232,90,122,0.15)] text-yume-ink',
-  cream: 'bg-[#fff8e8] border-[rgba(168,122,42,0.12)] text-yume-ink',
+  paper: 'bg-kyujin-paper border-[var(--kyujin-line-soft)] text-kyujin-ink',
+  pink: 'bg-[#fff1f5] border-[rgba(232,90,122,0.15)] text-kyujin-ink',
+  cream: 'bg-[#fff8e8] border-[rgba(168,122,42,0.12)] text-kyujin-ink',
   coral:
-    'bg-[linear-gradient(155deg,var(--yume-pink-500)_0%,var(--yume-coral)_100%)] border-[rgba(255,255,255,0.2)] text-white',
+    'bg-[linear-gradient(155deg,var(--kyujin-pink-500)_0%,var(--kyujin-coral)_100%)] border-[rgba(255,255,255,0.2)] text-white',
 };
 
 interface PillowCardProps {

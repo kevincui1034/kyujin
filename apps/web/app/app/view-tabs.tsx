@@ -52,7 +52,7 @@ export function ViewTabs({ active }: Props) {
             className="rounded-full px-3 py-1 transition-colors"
             style={{
               fontWeight: 600,
-              color: isActive ? 'var(--yume-pink-700)' : 'var(--yume-ink-soft)',
+              color: isActive ? 'var(--kyujin-pink-700)' : 'var(--kyujin-ink-soft)',
               background: isActive ? 'rgba(232,90,122,0.10)' : 'transparent',
               border: isActive ? '1px solid rgba(232,90,122,0.22)' : '1px solid transparent',
               opacity: pending && !isPending ? 0.5 : 1,

@@ -52,7 +52,7 @@ export function SourceChanger({ applicationId, currentSourceDomain }: Props) {
         title="Change source"
       >
         <SourceTag source={currentSource} />
-        <span className="text-[11px] font-medium text-yume-ink-muted underline-offset-2 transition-colors group-hover:text-yume-pink-700 group-hover:underline">
+        <span className="text-[11px] font-medium text-kyujin-ink-muted underline-offset-2 transition-colors group-hover:text-kyujin-pink-700 group-hover:underline">
           Edit
         </span>
       </button>

@@ -98,7 +98,7 @@ export function ApplicationManageControls({ applicationId, otherApps }: Props) {
         </Button>
         <a
           href="/app/audit"
-          className="text-[12px] font-medium text-yume-ink-muted underline-offset-2 transition-colors hover:text-yume-pink-700 hover:underline"
+          className="text-[12px] font-medium text-kyujin-ink-muted underline-offset-2 transition-colors hover:text-kyujin-pink-700 hover:underline"
         >
           Audit log →
         </a>
@@ -127,7 +127,7 @@ export function ApplicationManageControls({ applicationId, otherApps }: Props) {
               <label
                 key={a.id}
                 className={`flex cursor-pointer items-center gap-2 border-b px-2 py-1.5 text-xs last:border-b-0 ${
-                  mergeTargetId === a.id ? 'bg-yume-pink-50' : ''
+                  mergeTargetId === a.id ? 'bg-kyujin-pink-50' : ''
                 }`}
               >
                 <input
@@ -146,11 +146,11 @@ export function ApplicationManageControls({ applicationId, otherApps }: Props) {
         <div className="rounded border bg-muted/20 p-2 text-[11.5px]">
           {selected ? (
             <div className="space-y-1">
-              <div className="font-semibold text-yume-ink">{selected.company}</div>
+              <div className="font-semibold text-kyujin-ink">{selected.company}</div>
               {selected.role && (
                 <div className="text-muted-foreground">{selected.role}</div>
               )}
-              <div className="pt-1.5 text-yume-ink-muted">
+              <div className="pt-1.5 text-kyujin-ink-muted">
                 <div>
                   Status: <span className="font-medium">{STATUS_LABEL[selected.status] ?? selected.status}</span>
                 </div>

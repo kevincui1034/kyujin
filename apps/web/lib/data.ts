@@ -23,7 +23,7 @@ import {
 } from '@kyujin/db/schema';
 import type { ApplicationSource, ApplicationStatus } from '@kyujin/shared';
 import { sourceMatchPatterns } from '@kyujin/shared';
-import type { NodeColor, SankeyData } from '@/components/yume/sankey';
+import type { NodeColor, SankeyData } from '@/components/kyujin/sankey';
 
 const GHOST_THRESHOLD_DAYS = 30;
 const ACTIVE_THREAD_STATUSES: ApplicationStatus[] = ['interview', 'accepted'];

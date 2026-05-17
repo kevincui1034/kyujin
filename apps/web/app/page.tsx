@@ -16,7 +16,7 @@ export default async function HomePage() {
 
           <h1
             className="serif mt-7 text-[clamp(54px,7vw,92px)]"
-            style={{ letterSpacing: '-0.028em', lineHeight: 1, color: 'var(--yume-ink)' }}
+            style={{ letterSpacing: '-0.028em', lineHeight: 1, color: 'var(--kyujin-ink)' }}
           >
             Your job hunt,
             <br />
@@ -35,9 +35,9 @@ export default async function HomePage() {
 
           <p
             className="mt-7 max-w-[460px] text-[15.5px] leading-[1.55]"
-            style={{ color: 'var(--yume-ink-soft)' }}
+            style={{ color: 'var(--kyujin-ink-soft)' }}
           >
-            Connect Gmail. Yume classifies every application thread — applied, interviewing,
+            Connect Gmail. Kyujin classifies every application thread — applied, interviewing,
             decided — and shows you where each conversation actually stands.
           </p>
 
@@ -46,7 +46,7 @@ export default async function HomePage() {
               href={ctaHref}
               className="inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[14.5px] font-semibold text-white transition-transform duration-200 hover:-translate-y-[2px]"
               style={{
-                background: 'var(--yume-ink)',
+                background: 'var(--kyujin-ink)',
                 boxShadow:
                   '0 14px 28px -10px rgba(31,20,24,0.55), inset 0 1px 0 rgba(255,255,255,0.08)',
               }}
@@ -60,10 +60,10 @@ export default async function HomePage() {
               href="/pricing"
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-[14.5px] font-semibold transition-transform duration-200 hover:-translate-y-[2px]"
               style={{
-                color: 'var(--yume-ink)',
+                color: 'var(--kyujin-ink)',
                 boxShadow:
                   '0 10px 22px -10px rgba(31,20,24,0.18), 0 1px 0 rgba(255,255,255,0.7), inset 0 1px 0 #fff',
-                border: '1px solid var(--yume-line-soft)',
+                border: '1px solid var(--kyujin-line-soft)',
               }}
             >
               See pricing
@@ -78,7 +78,7 @@ export default async function HomePage() {
                   className="flex h-[18px] w-[18px] items-center justify-center rounded-full"
                   style={{
                     background: 'rgba(90,157,122,0.18)',
-                    color: 'var(--yume-mint-deep)',
+                    color: 'var(--kyujin-mint-deep)',
                     fontSize: 11,
                     fontWeight: 700,
                   }}
@@ -87,7 +87,7 @@ export default async function HomePage() {
                 </span>
                 <span
                   className="text-[13.5px]"
-                  style={{ color: 'var(--yume-ink-soft)', fontWeight: 500 }}
+                  style={{ color: 'var(--kyujin-ink-soft)', fontWeight: 500 }}
                 >
                   {label}
                 </span>
@@ -107,14 +107,14 @@ function EyebrowPill() {
     <span
       className="inline-flex items-center gap-3 rounded-full bg-white/85 px-3 py-1.5 backdrop-blur-md"
       style={{
-        border: '1px solid var(--yume-line-soft)',
+        border: '1px solid var(--kyujin-line-soft)',
         boxShadow: '0 6px 16px -10px rgba(31,20,24,0.18)',
       }}
     >
       <span
         className="mono rounded-full px-2 py-0.5 text-white"
         style={{
-          background: 'var(--yume-ink)',
+          background: 'var(--kyujin-ink)',
           fontSize: 9.5,
           letterSpacing: '0.14em',
           fontWeight: 600,
@@ -128,7 +128,7 @@ function EyebrowPill() {
           fontSize: 10.5,
           letterSpacing: '0.14em',
           fontWeight: 600,
-          color: 'var(--yume-ink-soft)',
+          color: 'var(--kyujin-ink-soft)',
         }}
       >
         REAL-TIME GMAIL · PUB/SUB PUSH
@@ -215,7 +215,7 @@ function HeroPreview() {
             width: 92,
             height: 92,
             borderRadius: 22,
-            border: '1px solid var(--yume-line)',
+            border: '1px solid var(--kyujin-line)',
             boxShadow:
               '0 22px 40px -18px rgba(232,90,122,0.45), inset 0 1px 0 rgba(255,255,255,0.7)',
           }}
@@ -236,7 +236,7 @@ function HeroPreview() {
         style={{
           bottom: -22,
           right: -18,
-          border: '1px solid var(--yume-line-soft)',
+          border: '1px solid var(--kyujin-line-soft)',
           boxShadow:
             '0 18px 36px -16px rgba(232,90,122,0.4), 0 1px 0 rgba(255,255,255,0.7), inset 0 1px 0 #fff',
         }}
@@ -244,7 +244,7 @@ function HeroPreview() {
         <span
           aria-hidden
           className="inline-block h-[7px] w-[7px] rounded-full"
-          style={{ background: 'var(--yume-mint-deep)' }}
+          style={{ background: 'var(--kyujin-mint-deep)' }}
         />
         <div className="flex flex-col leading-tight">
           <span
@@ -253,7 +253,7 @@ function HeroPreview() {
               fontSize: 9,
               letterSpacing: '0.14em',
               fontWeight: 600,
-              color: 'var(--yume-ink-muted)',
+              color: 'var(--kyujin-ink-muted)',
             }}
           >
             RESPONSE
@@ -262,7 +262,7 @@ function HeroPreview() {
             className="serif"
             style={{
               fontSize: 20,
-              color: 'var(--yume-ink)',
+              color: 'var(--kyujin-ink)',
               letterSpacing: '-0.02em',
               lineHeight: 1,
             }}
@@ -276,7 +276,7 @@ function HeroPreview() {
         className="pillow relative rounded-[28px] bg-white"
         style={{
           padding: '22px 24px',
-          border: '1px solid var(--yume-line-soft)',
+          border: '1px solid var(--kyujin-line-soft)',
           transform: 'rotate(-1.2deg)',
         }}
       >
@@ -286,7 +286,7 @@ function HeroPreview() {
             style={{
               fontSize: 22,
               letterSpacing: '-0.022em',
-              color: 'var(--yume-ink)',
+              color: 'var(--kyujin-ink)',
               lineHeight: 1,
             }}
           >
@@ -311,7 +311,7 @@ function HeroPreview() {
             <li
               key={row.company}
               className="flex items-center gap-3 py-3"
-              style={{ borderTop: i === 0 ? 'none' : '1px solid var(--yume-line-faint)' }}
+              style={{ borderTop: i === 0 ? 'none' : '1px solid var(--kyujin-line-faint)' }}
             >
               <span
                 aria-hidden
@@ -331,13 +331,13 @@ function HeroPreview() {
               <div className="flex min-w-0 flex-1 flex-col">
                 <span
                   className="text-[14px]"
-                  style={{ color: 'var(--yume-ink)', fontWeight: 600, lineHeight: 1.2 }}
+                  style={{ color: 'var(--kyujin-ink)', fontWeight: 600, lineHeight: 1.2 }}
                 >
                   {row.company}
                 </span>
                 <span
                   className="text-[12.5px]"
-                  style={{ color: 'var(--yume-ink-muted)', lineHeight: 1.3 }}
+                  style={{ color: 'var(--kyujin-ink-muted)', lineHeight: 1.3 }}
                 >
                   {row.role}
                 </span>

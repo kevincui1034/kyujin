@@ -4,13 +4,13 @@ import type { ReactNode } from 'react';
 import { MarketingShell } from '@/components/marketing/marketing-shell';
 
 export const metadata: Metadata = {
-  title: 'Refund Policy — Yume',
+  title: 'Refund Policy — Kyujin',
   description:
     'Cancellation takes effect at the end of your current billing period. No refunds for partial periods or unused time.',
 };
 
 const EFFECTIVE_DATE = '2026-05-16';
-const CONTACT_EMAIL = 'support@yumeai.app';
+const CONTACT_EMAIL = 'support@kyujin.dev';
 
 export default function RefundsPage() {
   return (
@@ -19,12 +19,12 @@ export default function RefundsPage() {
         <div
           className="mono inline-block rounded-full bg-white/85 px-3 py-1.5 backdrop-blur-md"
           style={{
-            border: '1px solid var(--yume-line-soft)',
+            border: '1px solid var(--kyujin-line-soft)',
             boxShadow: '0 6px 16px -10px rgba(31,20,24,0.18)',
             fontSize: 10.5,
             letterSpacing: '0.14em',
             fontWeight: 600,
-            color: 'var(--yume-ink-soft)',
+            color: 'var(--kyujin-ink-soft)',
           }}
         >
           REFUND POLICY · EFFECTIVE {EFFECTIVE_DATE}
@@ -32,7 +32,7 @@ export default function RefundsPage() {
 
         <h1
           className="serif mt-6 text-[clamp(40px,6vw,68px)]"
-          style={{ letterSpacing: '-0.028em', lineHeight: 1.05, color: 'var(--yume-ink)' }}
+          style={{ letterSpacing: '-0.028em', lineHeight: 1.05, color: 'var(--kyujin-ink)' }}
         >
           Cancel anytime.
           <br />
@@ -51,9 +51,9 @@ export default function RefundsPage() {
 
         <p
           className="mt-6 max-w-[640px] text-[15.5px] leading-[1.6]"
-          style={{ color: 'var(--yume-ink-soft)' }}
+          style={{ color: 'var(--kyujin-ink-soft)' }}
         >
-          We keep this short on purpose. You can cancel your Yume subscription at any time and we
+          We keep this short on purpose. You can cancel your Kyujin subscription at any time and we
           will not charge you again — but we don&rsquo;t issue refunds for the period you&rsquo;re
           already in.
         </p>
@@ -83,7 +83,7 @@ export default function RefundsPage() {
 
           <Section eyebrow="02" title="No refunds for partial periods.">
             <p>
-              Yume is a subscription service. Because you pay in advance for a defined billing
+              Kyujin is a subscription service. Because you pay in advance for a defined billing
               period, we treat that period as fully earned once it starts. We do not refund:
             </p>
             <ul className="mt-3 list-disc space-y-1.5 pl-5">
@@ -120,7 +120,7 @@ export default function RefundsPage() {
               If you believe you were charged in error, please contact us first at{' '}
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
-                style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}
+                style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}
               >
                 {CONTACT_EMAIL}
               </a>{' '}
@@ -132,10 +132,10 @@ export default function RefundsPage() {
 
           <Section eyebrow="05" title="Free trials and promotional offers.">
             <p>
-              Yume does not currently offer a free tier. Any time-limited promotional pricing
+              Kyujin does not currently offer a free tier. Any time-limited promotional pricing
               will be disclosed clearly at the point of checkout — once the promotional period
               ends, your subscription renews at the standard plan rate shown on the{' '}
-              <Link href="/pricing" style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}>
+              <Link href="/pricing" style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}>
                 Pricing
               </Link>{' '}
               page until you cancel.
@@ -148,7 +148,7 @@ export default function RefundsPage() {
               stored classifications deleted, request deletion from{' '}
               <Link
                 href="/app/settings"
-                style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}
+                style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}
               >
                 Settings
               </Link>{' '}
@@ -161,7 +161,7 @@ export default function RefundsPage() {
               Billing questions? Email{' '}
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
-                style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}
+                style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}
               >
                 {CONTACT_EMAIL}
               </a>{' '}
@@ -187,7 +187,7 @@ function Section({
   return (
     <article
       className="pillow rounded-[28px] bg-white"
-      style={{ padding: '24px 26px', border: '1px solid var(--yume-line-soft)' }}
+      style={{ padding: '24px 26px', border: '1px solid var(--kyujin-line-soft)' }}
     >
       <div
         className="mono"
@@ -195,20 +195,20 @@ function Section({
           fontSize: 10.5,
           letterSpacing: '0.14em',
           fontWeight: 600,
-          color: 'var(--yume-ink-muted)',
+          color: 'var(--kyujin-ink-muted)',
         }}
       >
         {eyebrow}
       </div>
       <h2
         className="serif mt-2 text-[24px]"
-        style={{ letterSpacing: '-0.022em', color: 'var(--yume-ink)', lineHeight: 1.15 }}
+        style={{ letterSpacing: '-0.022em', color: 'var(--kyujin-ink)', lineHeight: 1.15 }}
       >
         {title}
       </h2>
       <div
         className="mt-3 text-[14.5px] leading-[1.6]"
-        style={{ color: 'var(--yume-ink-soft)' }}
+        style={{ color: 'var(--kyujin-ink-soft)' }}
       >
         {children}
       </div>

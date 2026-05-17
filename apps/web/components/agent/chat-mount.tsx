@@ -15,7 +15,7 @@ const EDGE_PAD = 16;
 // Anything past it engages drag mode and skips the open/close toggle on
 // release.
 const DRAG_THRESHOLD = 5;
-const STORAGE_KEY = 'yume-fab-pos';
+const STORAGE_KEY = 'kyujin-fab-pos';
 
 // Idle cat-sound rotation. Every IDLE_INTERVAL_MS the FAB pops a random
 // sound for IDLE_VISIBLE_MS, sourced from this list at random (no
@@ -235,8 +235,8 @@ export function ChatMount() {
           width: FAB_SIZE,
           height: FAB_SIZE,
           borderRadius: 22,
-          background: 'var(--yume-paper)',
-          border: '1.5px solid var(--yume-line)',
+          background: 'var(--kyujin-paper)',
+          border: '1.5px solid var(--kyujin-line)',
           cursor: dragging ? 'grabbing' : 'grab',
           touchAction: 'none',
           userSelect: 'none',
@@ -264,7 +264,7 @@ export function ChatMount() {
           <span
             aria-hidden
             className="absolute inset-0 flex items-center justify-center"
-            style={{ color: 'var(--yume-ink)', pointerEvents: 'none' }}
+            style={{ color: 'var(--kyujin-ink)', pointerEvents: 'none' }}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path
@@ -323,9 +323,9 @@ function HoverBubble({
         top: above ? anchor.y - 10 : anchor.y + anchorSize + 10,
         transform: above ? 'translate(-50%, -100%)' : 'translate(-50%, 0)',
         whiteSpace: 'nowrap',
-        background: 'var(--yume-paper)',
-        border: '1.5px solid var(--yume-line)',
-        color: 'var(--yume-ink)',
+        background: 'var(--kyujin-paper)',
+        border: '1.5px solid var(--kyujin-line)',
+        color: 'var(--kyujin-ink)',
         padding: '10px 18px',
         borderRadius: 18,
         fontSize: 14,
@@ -333,7 +333,7 @@ function HoverBubble({
         letterSpacing: '-0.005em',
         boxShadow:
           '0 14px 32px -10px rgba(232,90,122,0.35), 0 3px 8px -3px rgba(31,20,24,0.12)',
-        animation: 'yume-bubble-in 180ms cubic-bezier(0.22, 0.61, 0.36, 1) both',
+        animation: 'kyujin-bubble-in 180ms cubic-bezier(0.22, 0.61, 0.36, 1) both',
       }}
     >
       {text}
@@ -345,20 +345,20 @@ function HoverBubble({
           width: tailSize,
           height: tailSize,
           marginLeft: -tailSize / 2,
-          background: 'var(--yume-paper)',
+          background: 'var(--kyujin-paper)',
           // Rotate a square and only show the two outward-facing borders so it
           // reads as a small triangle stitched to the bubble's edge.
           transform: 'rotate(45deg)',
           ...(above
             ? {
                 bottom: -tailSize / 2 - 1,
-                borderRight: '1.5px solid var(--yume-line)',
-                borderBottom: '1.5px solid var(--yume-line)',
+                borderRight: '1.5px solid var(--kyujin-line)',
+                borderBottom: '1.5px solid var(--kyujin-line)',
               }
             : {
                 top: -tailSize / 2 - 1,
-                borderLeft: '1.5px solid var(--yume-line)',
-                borderTop: '1.5px solid var(--yume-line)',
+                borderLeft: '1.5px solid var(--kyujin-line)',
+                borderTop: '1.5px solid var(--kyujin-line)',
               }),
         }}
       />

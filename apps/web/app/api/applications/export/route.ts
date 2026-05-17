@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
     );
   }
   const body = lines.join('\r\n') + '\r\n';
-  const filename = `yume-applications-${new Date().toISOString().slice(0, 10)}.csv`;
+  const filename = `kyujin-applications-${new Date().toISOString().slice(0, 10)}.csv`;
 
   return new NextResponse(body, {
     status: 200,

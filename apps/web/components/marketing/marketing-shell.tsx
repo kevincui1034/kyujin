@@ -50,24 +50,24 @@ function MarketingFooter() {
     fontSize: 10.5,
     letterSpacing: '0.14em',
     fontWeight: 600,
-    color: 'var(--yume-ink-muted)',
+    color: 'var(--kyujin-ink-muted)',
   } as const;
   return (
     <footer className="mt-16 flex flex-col gap-3 pb-2 md:flex-row md:items-center md:justify-between">
       <span className="mono" style={monoStyle}>
-        © 2026 YUME
+        © 2026 KYUJIN
       </span>
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-        <Link href="/privacy" className="mono hover:text-yume-ink" style={monoStyle}>
+        <Link href="/privacy" className="mono hover:text-kyujin-ink" style={monoStyle}>
           PRIVACY
         </Link>
-        <Link href="/terms" className="mono hover:text-yume-ink" style={monoStyle}>
+        <Link href="/terms" className="mono hover:text-kyujin-ink" style={monoStyle}>
           TERMS
         </Link>
-        <Link href="/refunds" className="mono hover:text-yume-ink" style={monoStyle}>
+        <Link href="/refunds" className="mono hover:text-kyujin-ink" style={monoStyle}>
           REFUNDS
         </Link>
-        <Link href="/pricing" className="mono hover:text-yume-ink" style={monoStyle}>
+        <Link href="/pricing" className="mono hover:text-kyujin-ink" style={monoStyle}>
           PRICING
         </Link>
       </div>

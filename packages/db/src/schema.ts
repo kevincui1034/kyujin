@@ -213,7 +213,7 @@ export const applications = pgTable(
     manualOverride: text('manual_override'),
     notes: text('notes'),
     // Free-form key/value bag for columns that arrived via CSV/XLSX import and
-    // don't map to a Yume field (e.g. salary, location, recruiter). Surfaced
+    // don't map to a Kyujin field (e.g. salary, location, recruiter). Surfaced
     // on the application detail page; not indexed in v1 (display-only).
     customFields: jsonb('custom_fields').$type<Record<string, string>>(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),

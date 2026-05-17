@@ -4,13 +4,13 @@ import type { ReactNode } from 'react';
 import { MarketingShell } from '@/components/marketing/marketing-shell';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — Yume',
+  title: 'Terms of Service — Kyujin',
   description:
-    'The terms governing your use of Yume — accounts, subscriptions, acceptable use, disclaimers, and liability.',
+    'The terms governing your use of Kyujin — accounts, subscriptions, acceptable use, disclaimers, and liability.',
 };
 
 const EFFECTIVE_DATE = '2026-05-16';
-const CONTACT_EMAIL = 'support@yumeai.app';
+const CONTACT_EMAIL = 'support@kyujin.dev';
 
 export default function TermsPage() {
   return (
@@ -19,12 +19,12 @@ export default function TermsPage() {
         <div
           className="mono inline-block rounded-full bg-white/85 px-3 py-1.5 backdrop-blur-md"
           style={{
-            border: '1px solid var(--yume-line-soft)',
+            border: '1px solid var(--kyujin-line-soft)',
             boxShadow: '0 6px 16px -10px rgba(31,20,24,0.18)',
             fontSize: 10.5,
             letterSpacing: '0.14em',
             fontWeight: 600,
-            color: 'var(--yume-ink-soft)',
+            color: 'var(--kyujin-ink-soft)',
           }}
         >
           TERMS · EFFECTIVE {EFFECTIVE_DATE}
@@ -32,7 +32,7 @@ export default function TermsPage() {
 
         <h1
           className="serif mt-6 text-[clamp(40px,6vw,68px)]"
-          style={{ letterSpacing: '-0.028em', lineHeight: 1.05, color: 'var(--yume-ink)' }}
+          style={{ letterSpacing: '-0.028em', lineHeight: 1.05, color: 'var(--kyujin-ink)' }}
         >
           Terms of
           <br />
@@ -51,10 +51,10 @@ export default function TermsPage() {
 
         <p
           className="mt-6 max-w-[640px] text-[15.5px] leading-[1.6]"
-          style={{ color: 'var(--yume-ink-soft)' }}
+          style={{ color: 'var(--kyujin-ink-soft)' }}
         >
-          These Terms govern your use of Yume (the &ldquo;Service&rdquo;), a job-application
-          tracker provided by the operator of yumeai.app (&ldquo;Yume,&rdquo; &ldquo;we,&rdquo;
+          These Terms govern your use of Kyujin (the &ldquo;Service&rdquo;), a job-application
+          tracker provided by the operator of kyujin.dev (&ldquo;Kyujin,&rdquo; &ldquo;we,&rdquo;
           &ldquo;us&rdquo;). By creating an account or connecting Gmail, you agree to these
           Terms. If you do not agree, do not use the Service.
         </p>
@@ -71,12 +71,12 @@ export default function TermsPage() {
 
           <Section eyebrow="02" title="What the Service does.">
             <p>
-              Yume connects to your Gmail under the read-only{' '}
+              Kyujin connects to your Gmail under the read-only{' '}
               <code
                 className="mono rounded px-1.5 py-0.5"
                 style={{
-                  background: 'var(--yume-pink-50)',
-                  color: 'var(--yume-pink-700)',
+                  background: 'var(--kyujin-pink-50)',
+                  color: 'var(--kyujin-pink-700)',
                   fontSize: 12,
                 }}
               >
@@ -84,7 +84,7 @@ export default function TermsPage() {
               </code>{' '}
               scope, classifies recruiting threads using large language models, and presents the
               result as a dashboard. The Service is provided on a subscription basis — see our{' '}
-              <Link href="/pricing" style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}>
+              <Link href="/pricing" style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}>
                 Pricing
               </Link>{' '}
               page.
@@ -107,7 +107,7 @@ export default function TermsPage() {
               keep access until then, and your subscription does not renew. Except where required
               by law, we do not issue refunds for partial billing periods, unused time, or
               downgrades. See our{' '}
-              <Link href="/refunds" style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}>
+              <Link href="/refunds" style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}>
                 Refund Policy
               </Link>{' '}
               for details.
@@ -134,14 +134,14 @@ export default function TermsPage() {
           <Section eyebrow="06" title="Your data and Google&rsquo;s policies.">
             <p>
               How we handle Gmail data is described in our{' '}
-              <Link href="/privacy" style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}>
+              <Link href="/privacy" style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}>
                 Privacy Policy
               </Link>
               . You retain all rights in the underlying Gmail content. Your use of Google
-              services through Yume is also governed by the{' '}
+              services through Kyujin is also governed by the{' '}
               <a
                 href="https://policies.google.com/terms"
-                style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}
+                style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}
                 rel="noreferrer"
                 target="_blank"
               >
@@ -150,7 +150,7 @@ export default function TermsPage() {
               . You can revoke our Gmail access at any time from{' '}
               <a
                 href="https://myaccount.google.com/permissions"
-                style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}
+                style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}
                 rel="noreferrer"
                 target="_blank"
               >
@@ -172,7 +172,7 @@ export default function TermsPage() {
           <Section eyebrow="08" title="Intellectual property.">
             <p>
               The Service, including its design, code, brand, and the calico mark, is owned by
-              Yume and protected by applicable IP laws. Nothing in these Terms grants you any
+              Kyujin and protected by applicable IP laws. Nothing in these Terms grants you any
               right in our marks or software beyond the limited license to use the Service
               described here.
             </p>
@@ -182,8 +182,8 @@ export default function TermsPage() {
             <p
               className="rounded-lg p-3"
               style={{
-                background: 'var(--yume-pink-50)',
-                color: 'var(--yume-pink-700)',
+                background: 'var(--kyujin-pink-50)',
+                color: 'var(--kyujin-pink-700)',
                 fontWeight: 600,
               }}
             >
@@ -193,8 +193,8 @@ export default function TermsPage() {
               SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, OR PRODUCE ACCURATE CLASSIFICATIONS.
             </p>
             <p className="mt-3">
-              Yume uses LLMs to classify email and is not a system of record. You should not rely
-              on Yume as your sole tracker for legally or financially material decisions (offer
+              Kyujin uses LLMs to classify email and is not a system of record. You should not rely
+              on Kyujin as your sole tracker for legally or financially material decisions (offer
               acceptance, deadlines, etc.). Verify directly against the source email.
             </p>
           </Section>
@@ -203,26 +203,26 @@ export default function TermsPage() {
             <p
               className="rounded-lg p-3"
               style={{
-                background: 'var(--yume-pink-50)',
-                color: 'var(--yume-pink-700)',
+                background: 'var(--kyujin-pink-50)',
+                color: 'var(--kyujin-pink-700)',
                 fontWeight: 600,
               }}
             >
-              TO THE MAXIMUM EXTENT PERMITTED BY LAW, YUME WILL NOT BE LIABLE FOR ANY INDIRECT,
+              TO THE MAXIMUM EXTENT PERMITTED BY LAW, KYUJIN WILL NOT BE LIABLE FOR ANY INDIRECT,
               INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS,
               REVENUE, DATA, GOODWILL, OR OPPORTUNITIES — INCLUDING ANY MISSED INTERVIEW, OFFER,
               OR DEADLINE — ARISING FROM OR RELATED TO YOUR USE OF THE SERVICE.
             </p>
             <p className="mt-3">
               Our total cumulative liability for any claim arising out of or related to the
-              Service is limited to the greater of (a) the amount you paid Yume in the twelve
+              Service is limited to the greater of (a) the amount you paid Kyujin in the twelve
               months immediately preceding the event giving rise to the claim, or (b) USD $50.
             </p>
           </Section>
 
           <Section eyebrow="11" title="Indemnification.">
             <p>
-              You agree to defend, indemnify, and hold harmless Yume and its operators from any
+              You agree to defend, indemnify, and hold harmless Kyujin and its operators from any
               claim, loss, or expense (including reasonable attorneys&rsquo; fees) arising from
               your use of the Service, your violation of these Terms, or your violation of any
               law or third-party right.
@@ -248,7 +248,7 @@ export default function TermsPage() {
 
           <Section eyebrow="14" title="Governing law.">
             <p>
-              These Terms are governed by the laws of the jurisdiction in which Yume operates,
+              These Terms are governed by the laws of the jurisdiction in which Kyujin operates,
               without regard to conflict-of-law principles. Disputes will be resolved exclusively
               in the courts of that jurisdiction, unless mandatory consumer-protection law in
               your country of residence requires otherwise.
@@ -260,7 +260,7 @@ export default function TermsPage() {
               Questions about these Terms? Email{' '}
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
-                style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}
+                style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}
               >
                 {CONTACT_EMAIL}
               </a>
@@ -285,7 +285,7 @@ function Section({
   return (
     <article
       className="pillow rounded-[28px] bg-white"
-      style={{ padding: '24px 26px', border: '1px solid var(--yume-line-soft)' }}
+      style={{ padding: '24px 26px', border: '1px solid var(--kyujin-line-soft)' }}
     >
       <div
         className="mono"
@@ -293,20 +293,20 @@ function Section({
           fontSize: 10.5,
           letterSpacing: '0.14em',
           fontWeight: 600,
-          color: 'var(--yume-ink-muted)',
+          color: 'var(--kyujin-ink-muted)',
         }}
       >
         {eyebrow}
       </div>
       <h2
         className="serif mt-2 text-[24px]"
-        style={{ letterSpacing: '-0.022em', color: 'var(--yume-ink)', lineHeight: 1.15 }}
+        style={{ letterSpacing: '-0.022em', color: 'var(--kyujin-ink)', lineHeight: 1.15 }}
       >
         {title}
       </h2>
       <div
         className="mt-3 text-[14.5px] leading-[1.6]"
-        style={{ color: 'var(--yume-ink-soft)' }}
+        style={{ color: 'var(--kyujin-ink-soft)' }}
       >
         {children}
       </div>

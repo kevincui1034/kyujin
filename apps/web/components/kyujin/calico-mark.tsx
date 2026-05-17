@@ -10,7 +10,7 @@ export function CalicoMark({ size = 32 }: { size?: number }) {
         width: size,
         height: size,
         borderRadius: radius,
-        border: '1px solid var(--yume-line)',
+        border: '1px solid var(--kyujin-line)',
         boxShadow:
           'inset 0 1px 0 rgba(255,255,255,0.7), 0 4px 12px -6px rgba(232,90,122,0.35)',
       }}

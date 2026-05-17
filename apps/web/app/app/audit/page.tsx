@@ -3,8 +3,8 @@ import { desc, eq } from 'drizzle-orm';
 import { auth } from '@/auth';
 import { db } from '@kyujin/db/client';
 import { applicationAudit } from '@kyujin/db/schema';
-import { Eyebrow } from '@/components/yume/eyebrow';
-import { PillowCard } from '@/components/yume/pillow-card';
+import { Eyebrow } from '@/components/kyujin/eyebrow';
+import { PillowCard } from '@/components/kyujin/pillow-card';
 import { UndoButton } from './undo-button';
 import { formatRelative } from '@/lib/utils';
 
@@ -112,26 +112,26 @@ export default async function AuditPage() {
       <div>
         <Link
           href="/app/applications"
-          className="text-[12px] font-medium text-yume-ink-muted transition-colors hover:text-yume-pink-700"
+          className="text-[12px] font-medium text-kyujin-ink-muted transition-colors hover:text-kyujin-pink-700"
         >
           ← All applications
         </Link>
       </div>
 
       <div>
-        <Eyebrow color="var(--yume-pink-600)">AUDIT LOG</Eyebrow>
+        <Eyebrow color="var(--kyujin-pink-600)">AUDIT LOG</Eyebrow>
         <h1
           className="serif mt-1"
           style={{
             fontSize: 36,
             lineHeight: 1.05,
             letterSpacing: '-0.024em',
-            color: 'var(--yume-ink)',
+            color: 'var(--kyujin-ink)',
           }}
         >
           Recent actions
         </h1>
-        <p className="mt-1 text-[13px]" style={{ color: 'var(--yume-ink-soft)' }}>
+        <p className="mt-1 text-[13px]" style={{ color: 'var(--kyujin-ink-soft)' }}>
           Manual merges, moves, and detaches. Each entry can be undone once. Recent changes elsewhere
           may produce surprising state after an undo — older entries are riskier to revert.
         </p>
@@ -141,7 +141,7 @@ export default async function AuditPage() {
         <PillowCard>
           <div
             className="py-6 text-center text-[13px]"
-            style={{ color: 'var(--yume-ink-soft)' }}
+            style={{ color: 'var(--kyujin-ink-soft)' }}
           >
             No recorded actions yet. Manual merges or email moves will show up here.
           </div>
@@ -152,10 +152,10 @@ export default async function AuditPage() {
             {entries.map((e) => (
               <li key={e.id} className="flex items-start justify-between gap-3 py-3">
                 <div className="min-w-0 flex-1">
-                  <div className="text-[13px] font-medium" style={{ color: 'var(--yume-ink)' }}>
+                  <div className="text-[13px] font-medium" style={{ color: 'var(--kyujin-ink)' }}>
                     {describe(e.action, e.payload)}
                   </div>
-                  <div className="mt-0.5 text-[11px]" style={{ color: 'var(--yume-ink-muted)' }}>
+                  <div className="mt-0.5 text-[11px]" style={{ color: 'var(--kyujin-ink-muted)' }}>
                     {formatRelative(e.createdAt)}
                     {e.revertedAt && (
                       <>
@@ -166,7 +166,7 @@ export default async function AuditPage() {
                   </div>
                 </div>
                 {e.revertedAt ? (
-                  <span className="text-[11px]" style={{ color: 'var(--yume-ink-muted)' }}>
+                  <span className="text-[11px]" style={{ color: 'var(--kyujin-ink-muted)' }}>
                     Undone
                   </span>
                 ) : (

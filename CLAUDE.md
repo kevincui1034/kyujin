@@ -11,7 +11,7 @@ pnpm + Turborepo monorepo. Two apps share a Postgres backend:
 - `packages/db` — Drizzle schema + Postgres client (`@kyujin/db`). Single source of truth for the data model.
 - `packages/shared` — Gmail SDK wrapper, email classifier, prompts, sender-domain lists, ATS extractor, types (`@kyujin/shared`). Imported by `apps/web` server code; not used by iOS.
 
-**Brand note:** the web app is mid-rebrand from "Kyujin" → "Yume" (production domain `yumeai.app`). The repo, npm package names (`@kyujin/*`), and iOS app/bundle stay Kyujin. iOS App Store display name is "Kyujin: Job Tracker". When editing UI copy, prefer Yume; when editing package names, schema, or iOS code, prefer Kyujin.
+**Brand:** the product is **Kyujin** across the board — web app, iOS app, repo, npm packages (`@kyujin/*`). Production domain is `kyujin.dev`. iOS App Store display name is "Kyujin: Job Tracker" (plain "Kyujin" was taken).
 
 ## Commands
 

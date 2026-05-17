@@ -4,37 +4,37 @@
 
 @layer base {
   :root {
-    /* Yume Pillow palette (canonical hex) */
-    --yume-bg: #fffaf9;
-    --yume-bg-alt: #fbf3f4;
-    --yume-paper: #ffffff;
-    --yume-pink-50: #fff5f7;
-    --yume-pink-100: #fde7ec;
-    --yume-pink-200: #fbd0d9;
-    --yume-pink-300: #f6a8b8;
-    --yume-pink-400: #ee7d95;
-    --yume-pink-500: #e85a7a;
-    --yume-pink-600: #c64162;
-    --yume-pink-700: #8e2c44;
-    --yume-peach: #ffd8b8;
-    --yume-peach-deep: #c97a3a;
-    --yume-cream: #fff0d6;
-    --yume-coral: #ff8c7a;
-    --yume-coral-deep: #c25448;
-    --yume-mint: #cce8d6;
-    --yume-mint-deep: #5a9d7a;
-    --yume-lilac: #e0d2f0;
-    --yume-lilac-deep: #8a6db2;
-    --yume-butter: #fde9b8;
-    --yume-butter-deep: #a87a2a;
-    --yume-sand: #e8dccb;
-    --yume-ink: #1f1418;
-    --yume-ink-soft: #5b4b50;
-    --yume-ink-muted: #9a868c;
-    --yume-ink-faint: #cdbabf;
-    --yume-line: rgba(31, 20, 24, 0.08);
-    --yume-line-soft: rgba(31, 20, 24, 0.05);
-    --yume-line-faint: rgba(31, 20, 24, 0.025);
+    /* Kyujin Pillow palette (canonical hex) */
+    --kyujin-bg: #fffaf9;
+    --kyujin-bg-alt: #fbf3f4;
+    --kyujin-paper: #ffffff;
+    --kyujin-pink-50: #fff5f7;
+    --kyujin-pink-100: #fde7ec;
+    --kyujin-pink-200: #fbd0d9;
+    --kyujin-pink-300: #f6a8b8;
+    --kyujin-pink-400: #ee7d95;
+    --kyujin-pink-500: #e85a7a;
+    --kyujin-pink-600: #c64162;
+    --kyujin-pink-700: #8e2c44;
+    --kyujin-peach: #ffd8b8;
+    --kyujin-peach-deep: #c97a3a;
+    --kyujin-cream: #fff0d6;
+    --kyujin-coral: #ff8c7a;
+    --kyujin-coral-deep: #c25448;
+    --kyujin-mint: #cce8d6;
+    --kyujin-mint-deep: #5a9d7a;
+    --kyujin-lilac: #e0d2f0;
+    --kyujin-lilac-deep: #8a6db2;
+    --kyujin-butter: #fde9b8;
+    --kyujin-butter-deep: #a87a2a;
+    --kyujin-sand: #e8dccb;
+    --kyujin-ink: #1f1418;
+    --kyujin-ink-soft: #5b4b50;
+    --kyujin-ink-muted: #9a868c;
+    --kyujin-ink-faint: #cdbabf;
+    --kyujin-line: rgba(31, 20, 24, 0.08);
+    --kyujin-line-soft: rgba(31, 20, 24, 0.05);
+    --kyujin-line-faint: rgba(31, 20, 24, 0.025);
 
     /* shadcn semantic tokens, pillow-flavored (hsl triples) */
     --background: 354 41% 97%; /* bg-alt */
@@ -53,7 +53,7 @@
     --accent-foreground: 339 16% 10%;
     --destructive: 9 49% 53%; /* coral-deep */
     --destructive-foreground: 0 0% 100%;
-    --border: 339 16% 10%; /* used with opacity; consumers should prefer var(--yume-line) for tone */
+    --border: 339 16% 10%; /* used with opacity; consumers should prefer var(--kyujin-line) for tone */
     --input: 339 16% 90%;
     --ring: 346 76% 63%;
     --radius: 0.75rem;
@@ -83,7 +83,7 @@
 
   ::selection {
     background: rgba(232, 90, 122, 0.3);
-    color: var(--yume-ink);
+    color: var(--kyujin-ink);
   }
 }
 
@@ -94,7 +94,7 @@
     font-size: 10.5px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--yume-ink-muted);
+    color: var(--kyujin-ink-muted);
   }
 
   .pillow {
@@ -138,7 +138,7 @@
   }
 }
 
-@keyframes yume-dot {
+@keyframes kyujin-dot {
   0%, 80%, 100% {
     transform: translateY(0);
     opacity: 0.4;
@@ -149,7 +149,7 @@
   }
 }
 
-@keyframes yume-bubble-in {
+@keyframes kyujin-bubble-in {
   from {
     opacity: 0;
   }

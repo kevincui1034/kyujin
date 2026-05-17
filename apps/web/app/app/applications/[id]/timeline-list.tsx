@@ -61,8 +61,8 @@ export function TimelineList({ applicationId, emails, otherApps, threadCounts }:
       clone.style.width = `${rect.width}px`;
       clone.style.boxSizing = 'border-box';
       clone.style.padding = '14px 18px';
-      clone.style.background = 'var(--yume-paper, #fffaf5)';
-      clone.style.border = '1px solid var(--yume-line-soft, rgba(0,0,0,0.08))';
+      clone.style.background = 'var(--kyujin-paper, #fffaf5)';
+      clone.style.border = '1px solid var(--kyujin-line-soft, rgba(0,0,0,0.08))';
       clone.style.borderRadius = '18px';
       clone.style.boxShadow = '0 18px 40px -12px rgba(0,0,0,0.18), 0 4px 12px -6px rgba(232,90,122,0.25)';
       clone.style.opacity = '1';
@@ -141,7 +141,7 @@ export function TimelineList({ applicationId, emails, otherApps, threadCounts }:
 
   if (order.length === 0) {
     return (
-      <p className="text-[13px]" style={{ color: 'var(--yume-ink-soft)' }}>
+      <p className="text-[13px]" style={{ color: 'var(--kyujin-ink-soft)' }}>
         No emails linked yet.
       </p>
     );
@@ -158,7 +158,7 @@ export function TimelineList({ applicationId, emails, otherApps, threadCounts }:
         <span
           aria-hidden
           className="absolute left-[7px] top-2 bottom-2 w-px"
-          style={{ background: 'var(--yume-line-soft)' }}
+          style={{ background: 'var(--kyujin-line-soft)' }}
         />
         {order.map((m, i) => {
           const isDragging = draggingId === m.id;
@@ -177,7 +177,7 @@ export function TimelineList({ applicationId, emails, otherApps, threadCounts }:
               className="relative flex items-stretch gap-2 pl-8 pb-6 last:pb-0"
               style={{
                 opacity: isDragging ? 0.4 : 1,
-                borderTop: isOver ? '2px solid var(--yume-pink-500)' : '2px solid transparent',
+                borderTop: isOver ? '2px solid var(--kyujin-pink-500)' : '2px solid transparent',
                 transition: 'border-color 80ms, opacity 80ms',
               }}
             >
@@ -186,16 +186,16 @@ export function TimelineList({ applicationId, emails, otherApps, threadCounts }:
                 className="absolute left-0 top-[6px] h-[15px] w-[15px] rounded-full border-2"
                 style={{
                   background:
-                    i === order.length - 1 ? 'var(--yume-pink-500)' : 'var(--yume-paper)',
-                  borderColor: 'var(--yume-pink-500)',
-                  boxShadow: '0 0 0 3px var(--yume-paper)',
+                    i === order.length - 1 ? 'var(--kyujin-pink-500)' : 'var(--kyujin-paper)',
+                  borderColor: 'var(--kyujin-pink-500)',
+                  boxShadow: '0 0 0 3px var(--kyujin-paper)',
                 }}
               />
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-3">
                   <div
                     className="font-semibold"
-                    style={{ fontSize: 13, color: 'var(--yume-ink)' }}
+                    style={{ fontSize: 13, color: 'var(--kyujin-ink)' }}
                   >
                     {m.fromAddress}
                   </div>
@@ -203,7 +203,7 @@ export function TimelineList({ applicationId, emails, otherApps, threadCounts }:
                     className="shrink-0"
                     style={{
                       fontSize: 11,
-                      color: 'var(--yume-ink-muted)',
+                      color: 'var(--kyujin-ink-muted)',
                       marginRight: 12,
                     }}
                     title={new Date(m.receivedAt).toLocaleString()}
@@ -211,13 +211,13 @@ export function TimelineList({ applicationId, emails, otherApps, threadCounts }:
                     {formatRelative(new Date(m.receivedAt))}
                   </div>
                 </div>
-                <div className="mt-1" style={{ fontSize: 14, color: 'var(--yume-ink)' }}>
+                <div className="mt-1" style={{ fontSize: 14, color: 'var(--kyujin-ink)' }}>
                   {m.subject}
                 </div>
                 {m.snippet && (
                   <div
                     className="mt-1.5 whitespace-pre-wrap"
-                    style={{ fontSize: 12.5, color: 'var(--yume-ink-soft)', lineHeight: 1.5 }}
+                    style={{ fontSize: 12.5, color: 'var(--kyujin-ink-soft)', lineHeight: 1.5 }}
                   >
                     {m.snippet}
                   </div>
@@ -263,7 +263,7 @@ export function TimelineList({ applicationId, emails, otherApps, threadCounts }:
                 onDragStart={(e) => onDragStart(e, m.id)}
                 aria-label="Drag to reorder"
                 title="Drag to reorder"
-                className="flex shrink-0 select-none items-center justify-center rounded-md text-yume-ink-muted transition-colors hover:bg-yume-pink-50 hover:text-yume-pink-700"
+                className="flex shrink-0 select-none items-center justify-center rounded-md text-kyujin-ink-muted transition-colors hover:bg-kyujin-pink-50 hover:text-kyujin-pink-700"
                 style={{
                   cursor: isDragging ? 'grabbing' : 'grab',
                   fontSize: 22,

@@ -42,17 +42,17 @@ export function PreviewCard({
   const [error, setError] = useState<string | null>(null);
 
   const shellStyle: React.CSSProperties = {
-    background: 'var(--yume-bg-alt)',
-    border: '1px solid var(--yume-line)',
+    background: 'var(--kyujin-bg-alt)',
+    border: '1px solid var(--kyujin-line)',
     borderRadius: 14,
     padding: 11,
     fontSize: 12,
-    color: 'var(--yume-ink)',
+    color: 'var(--kyujin-ink)',
   };
 
   const confirmBtnStyle: React.CSSProperties = {
-    background: 'linear-gradient(135deg, var(--yume-pink-500), var(--yume-coral))',
-    boxShadow: '0 3px 8px -4px var(--yume-pink-300)',
+    background: 'linear-gradient(135deg, var(--kyujin-pink-500), var(--kyujin-coral))',
+    boxShadow: '0 3px 8px -4px var(--kyujin-pink-300)',
   };
 
   const submitUpdate = async (
@@ -119,7 +119,7 @@ export function PreviewCard({
     const { applicationId, field, value } = action.args;
     return (
       <div style={shellStyle}>
-        <div className="mb-2 text-[12px]" style={{ color: 'var(--yume-ink)' }}>
+        <div className="mb-2 text-[12px]" style={{ color: 'var(--kyujin-ink)' }}>
           I&apos;ll change <strong>{fieldLabel(field)}</strong> to{' '}
           <strong>&ldquo;{value ?? '—'}&rdquo;</strong>.
         </div>
@@ -144,8 +144,8 @@ export function PreviewCard({
             onClick={onDismiss}
             className="rounded-md px-3 py-1 text-[11.5px] font-medium disabled:opacity-40"
             style={{
-              border: '1px solid var(--yume-line-soft)',
-              color: 'var(--yume-ink-soft)',
+              border: '1px solid var(--kyujin-line-soft)',
+              color: 'var(--kyujin-ink-soft)',
             }}
           >
             Cancel
@@ -161,7 +161,7 @@ export function PreviewCard({
     if (rows.length === 0) {
       return (
         <div style={shellStyle}>
-          <div className="text-[12px]" style={{ color: 'var(--yume-ink-soft)' }}>
+          <div className="text-[12px]" style={{ color: 'var(--kyujin-ink-soft)' }}>
             No applications match {describeFilter(action.args.filter)} — nothing to do.
           </div>
         </div>
@@ -180,14 +180,14 @@ export function PreviewCard({
         <details className="mb-2">
           <summary
             className="cursor-pointer text-[11px]"
-            style={{ color: 'var(--yume-ink-muted)' }}
+            style={{ color: 'var(--kyujin-ink-muted)' }}
           >
             Show targets
           </summary>
           <ul className="mt-1 max-h-32 overflow-y-auto text-[11.5px]">
             {rows.map((r) => (
               <li key={r.id} className="flex items-center justify-between py-0.5">
-                <span className="truncate" style={{ color: 'var(--yume-ink)' }}>
+                <span className="truncate" style={{ color: 'var(--kyujin-ink)' }}>
                   {r.company}
                   {r.role ? ` — ${r.role}` : ''}
                 </span>
@@ -223,8 +223,8 @@ export function PreviewCard({
             onClick={onDismiss}
             className="rounded-md px-3 py-1 text-[11.5px] font-medium disabled:opacity-40"
             style={{
-              border: '1px solid var(--yume-line-soft)',
-              color: 'var(--yume-ink-soft)',
+              border: '1px solid var(--kyujin-line-soft)',
+              color: 'var(--kyujin-ink-soft)',
             }}
           >
             Cancel
@@ -238,12 +238,12 @@ export function PreviewCard({
     const rows = resolvedRows ?? [];
     return (
       <div style={shellStyle}>
-        <div className="mb-2 text-[11px]" style={{ color: 'var(--yume-ink-muted)' }}>
+        <div className="mb-2 text-[11px]" style={{ color: 'var(--kyujin-ink-muted)' }}>
           {describeFilter(action.args.filter)} · {rows.length} result
           {rows.length === 1 ? '' : 's'}
         </div>
         {rows.length === 0 ? (
-          <div className="text-[12px]" style={{ color: 'var(--yume-ink-soft)' }}>
+          <div className="text-[12px]" style={{ color: 'var(--kyujin-ink-soft)' }}>
             No matches.
           </div>
         ) : (
@@ -253,7 +253,7 @@ export function PreviewCard({
                 <Link
                   href={`/app/applications/${r.id}`}
                   className="truncate hover:underline"
-                  style={{ color: 'var(--yume-ink)' }}
+                  style={{ color: 'var(--kyujin-ink)' }}
                 >
                   {r.company}
                   {r.role ? ` — ${r.role}` : ''}
@@ -271,7 +271,7 @@ export function PreviewCard({
     const rows = candidates ?? [];
     return (
       <div style={shellStyle}>
-        <div className="mb-2 text-[12px]" style={{ color: 'var(--yume-ink)' }}>
+        <div className="mb-2 text-[12px]" style={{ color: 'var(--kyujin-ink)' }}>
           {action.args.question}
         </div>
         {rows.length > 0 && (
@@ -281,15 +281,15 @@ export function PreviewCard({
                 <button
                   type="button"
                   onClick={() => onPickCandidate(r)}
-                  className="w-full rounded-md px-2 py-1 text-left text-[11.5px] transition-colors hover:bg-yume-pink-50"
+                  className="w-full rounded-md px-2 py-1 text-left text-[11.5px] transition-colors hover:bg-kyujin-pink-50"
                   style={{
-                    border: '1px solid var(--yume-line-soft)',
-                    color: 'var(--yume-ink)',
+                    border: '1px solid var(--kyujin-line-soft)',
+                    color: 'var(--kyujin-ink)',
                   }}
                 >
                   {r.company}
                   {r.role ? ` — ${r.role}` : ''}{' '}
-                  <span style={{ color: 'var(--yume-ink-muted)' }}>({r.status})</span>
+                  <span style={{ color: 'var(--kyujin-ink-muted)' }}>({r.status})</span>
                 </button>
               </li>
             ))}

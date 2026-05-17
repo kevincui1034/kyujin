@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       {
         error: 'apple_subscription_active',
         message:
-          'You already subscribe to Yume through the App Store. Open Settings › Apple ID › Subscriptions on your iPhone to cancel, then re-subscribe here.',
+          'You already subscribe to Kyujin through the App Store. Open Settings › Apple ID › Subscriptions on your iPhone to cancel, then re-subscribe here.',
       },
       { status: 409 },
     );

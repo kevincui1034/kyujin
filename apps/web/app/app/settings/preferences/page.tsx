@@ -17,7 +17,7 @@ export default async function PreferencesPage() {
         <CardHeader>
           <CardTitle>Dashboard</CardTitle>
           <CardDescription>
-            What you see first when you open Yume, and your weekly application target.
+            What you see first when you open Kyujin, and your weekly application target.
           </CardDescription>
         </CardHeader>
         <CardContent>

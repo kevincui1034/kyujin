@@ -5,7 +5,7 @@ import { MarketingShell } from '@/components/marketing/marketing-shell';
 import { PLANS, type PlanId } from '@/lib/plans';
 
 export const metadata: Metadata = {
-  title: 'Pricing — Yume',
+  title: 'Pricing — Kyujin',
   description:
     'Two plans — Standard and Premium. Monthly or annual. Cancel anytime, effective at the end of your current billing period.',
 };
@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 const ORDER: PlanId[] = ['standard', 'premium'];
 
 const TONE: Record<PlanId, { accent: string; halo: string }> = {
-  standard: { accent: 'var(--yume-pink-600)', halo: 'rgba(232,90,122,0.12)' },
-  premium: { accent: 'var(--yume-lilac-deep)', halo: 'rgba(138,109,178,0.14)' },
+  standard: { accent: 'var(--kyujin-pink-600)', halo: 'rgba(232,90,122,0.12)' },
+  premium: { accent: 'var(--kyujin-lilac-deep)', halo: 'rgba(138,109,178,0.14)' },
 };
 
 export default async function PricingPage() {
@@ -28,12 +28,12 @@ export default async function PricingPage() {
           <div
             className="mono inline-block rounded-full bg-white/85 px-3 py-1.5 backdrop-blur-md"
             style={{
-              border: '1px solid var(--yume-line-soft)',
+              border: '1px solid var(--kyujin-line-soft)',
               boxShadow: '0 6px 16px -10px rgba(31,20,24,0.18)',
               fontSize: 10.5,
               letterSpacing: '0.14em',
               fontWeight: 600,
-              color: 'var(--yume-ink-soft)',
+              color: 'var(--kyujin-ink-soft)',
             }}
           >
             PRICING · CANCEL ANYTIME
@@ -41,7 +41,7 @@ export default async function PricingPage() {
 
           <h1
             className="serif mx-auto mt-6 max-w-3xl text-[clamp(40px,6vw,72px)]"
-            style={{ letterSpacing: '-0.028em', lineHeight: 1.02, color: 'var(--yume-ink)' }}
+            style={{ letterSpacing: '-0.028em', lineHeight: 1.02, color: 'var(--kyujin-ink)' }}
           >
             One job hunt,
             <br />
@@ -60,7 +60,7 @@ export default async function PricingPage() {
 
           <p
             className="mx-auto mt-6 max-w-[560px] text-[15.5px] leading-[1.6]"
-            style={{ color: 'var(--yume-ink-soft)' }}
+            style={{ color: 'var(--kyujin-ink-soft)' }}
           >
             Start with a 7-day free trial of Standard — card on file, cancel anytime before the
             trial ends to avoid being charged. Pick monthly or annual (roughly two months off on
@@ -79,7 +79,7 @@ export default async function PricingPage() {
                 className="pillow relative flex flex-col rounded-[28px] bg-white"
                 style={{
                   padding: '28px 26px',
-                  border: `1px solid ${isFeatured ? 'rgba(138,109,178,0.3)' : 'var(--yume-line-soft)'}`,
+                  border: `1px solid ${isFeatured ? 'rgba(138,109,178,0.3)' : 'var(--kyujin-line-soft)'}`,
                   transform: isFeatured ? 'translateY(-6px)' : undefined,
                 }}
               >
@@ -87,7 +87,7 @@ export default async function PricingPage() {
                   <span
                     className="mono absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-white"
                     style={{
-                      background: 'var(--yume-lilac-deep)',
+                      background: 'var(--kyujin-lilac-deep)',
                       fontSize: 9.5,
                       letterSpacing: '0.14em',
                       fontWeight: 700,
@@ -118,7 +118,7 @@ export default async function PricingPage() {
                     fontSize: 10.5,
                     letterSpacing: '0.14em',
                     fontWeight: 600,
-                    color: 'var(--yume-ink-muted)',
+                    color: 'var(--kyujin-ink-muted)',
                   }}
                 >
                   {plan.name.toUpperCase()}
@@ -138,7 +138,7 @@ export default async function PricingPage() {
                   </span>
                   <span
                     className="text-[13px]"
-                    style={{ color: 'var(--yume-ink-muted)', fontWeight: 500 }}
+                    style={{ color: 'var(--kyujin-ink-muted)', fontWeight: 500 }}
                   >
                     / month
                   </span>
@@ -150,7 +150,7 @@ export default async function PricingPage() {
                     fontSize: 10.5,
                     letterSpacing: '0.06em',
                     fontWeight: 600,
-                    color: 'var(--yume-ink-muted)',
+                    color: 'var(--kyujin-ink-muted)',
                   }}
                 >
                   OR {plan.priceLabelAnnual}/YR · ~{Math.round((plan.priceCentsMonthly * 12 - plan.priceCentsAnnual) / plan.priceCentsMonthly)} MONTHS FREE
@@ -161,7 +161,7 @@ export default async function PricingPage() {
                     <li
                       key={feat}
                       className="flex items-start gap-2.5 text-[13.5px] leading-[1.45]"
-                      style={{ color: 'var(--yume-ink-soft)' }}
+                      style={{ color: 'var(--kyujin-ink-soft)' }}
                     >
                       <span
                         aria-hidden
@@ -186,14 +186,14 @@ export default async function PricingPage() {
                   style={
                     isFeatured
                       ? {
-                          background: 'var(--yume-ink)',
+                          background: 'var(--kyujin-ink)',
                           color: '#fff',
                           boxShadow: '0 12px 24px -10px rgba(31,20,24,0.5)',
                         }
                       : {
                           background: '#fff',
-                          color: 'var(--yume-ink)',
-                          border: '1px solid var(--yume-line-soft)',
+                          color: 'var(--kyujin-ink)',
+                          border: '1px solid var(--kyujin-line-soft)',
                           boxShadow: '0 8px 18px -10px rgba(31,20,24,0.18)',
                         }
                   }
@@ -210,7 +210,7 @@ export default async function PricingPage() {
 
         <div
           className="pillow mx-auto mt-12 max-w-2xl rounded-[28px] bg-white"
-          style={{ padding: '22px 26px', border: '1px solid var(--yume-line-soft)' }}
+          style={{ padding: '22px 26px', border: '1px solid var(--kyujin-line-soft)' }}
         >
           <div
             className="mono"
@@ -218,25 +218,25 @@ export default async function PricingPage() {
               fontSize: 10.5,
               letterSpacing: '0.14em',
               fontWeight: 600,
-              color: 'var(--yume-ink-muted)',
+              color: 'var(--kyujin-ink-muted)',
             }}
           >
             CANCELLATION &amp; REFUNDS
           </div>
           <p
             className="mt-2 text-[14px] leading-[1.6]"
-            style={{ color: 'var(--yume-ink-soft)' }}
+            style={{ color: 'var(--kyujin-ink-soft)' }}
           >
             You can cancel from the Stripe customer portal at any time. If you cancel during your
             7-day Standard trial, you won&apos;t be charged at all. After the trial, cancellation
             takes effect at the end of your current billing period — you keep access until then,
             and your subscription simply doesn&apos;t renew. We don&apos;t issue refunds for
             partial months or unused time. Full details are in our{' '}
-            <Link href="/refunds" style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}>
+            <Link href="/refunds" style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}>
               Refund Policy
             </Link>{' '}
             and{' '}
-            <Link href="/terms" style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}>
+            <Link href="/terms" style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}>
               Terms of Service
             </Link>
             .
@@ -245,10 +245,10 @@ export default async function PricingPage() {
 
         <p
           className="mx-auto mt-8 max-w-[600px] text-center text-[13px] leading-[1.55]"
-          style={{ color: 'var(--yume-ink-muted)' }}
+          style={{ color: 'var(--kyujin-ink-muted)' }}
         >
-          Billed securely through Stripe. Yume is read-only and never sells your data — see our{' '}
-          <Link href="/privacy" style={{ color: 'var(--yume-pink-600)', textDecoration: 'underline' }}>
+          Billed securely through Stripe. Kyujin is read-only and never sells your data — see our{' '}
+          <Link href="/privacy" style={{ color: 'var(--kyujin-pink-600)', textDecoration: 'underline' }}>
             Privacy Policy
           </Link>
           .

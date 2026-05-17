@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { PillowCard } from '@/components/yume/pillow-card';
+import { PillowCard } from '@/components/kyujin/pillow-card';
 import { Button } from '@/components/ui/button';
 
 // Specific 404 copy when the requested applicationId either doesn't exist
@@ -10,8 +10,8 @@ export default function ApplicationNotFound() {
     <div className="mx-auto flex max-w-xl flex-col gap-6 pt-12">
       <PillowCard tone="cream">
         <div className="flex flex-col gap-4 p-2">
-          <h1 className="font-serif text-2xl text-yume-ink">Application not found</h1>
-          <p className="text-sm" style={{ color: 'var(--yume-ink-muted)' }}>
+          <h1 className="font-serif text-2xl text-kyujin-ink">Application not found</h1>
+          <p className="text-sm" style={{ color: 'var(--kyujin-ink-muted)' }}>
             That application either doesn't exist or isn't yours. It may have been merged
             into another, or deleted.
           </p>

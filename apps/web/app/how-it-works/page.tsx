@@ -5,7 +5,7 @@ import { auth } from '@/auth';
 import { MarketingShell } from '@/components/marketing/marketing-shell';
 
 export const metadata: Metadata = {
-  title: 'How it works — Yume',
+  title: 'How it works — Kyujin',
   description:
     'Connect Gmail, watch new threads land in real time, let AI classify each one, and read the funnel. Four steps, end to end.',
 };
@@ -27,7 +27,7 @@ const STEPS: Step[] = [
     eyebrow: 'CONNECT',
     title: 'Sign in with Google.',
     glyph: '✦',
-    accent: 'var(--yume-pink-600)',
+    accent: 'var(--kyujin-pink-600)',
     halo: 'rgba(232,90,122,0.14)',
     body: 'Read-only Gmail scope. Disconnect anytime.',
     demo: <ConnectDemo />,
@@ -37,7 +37,7 @@ const STEPS: Step[] = [
     eyebrow: 'WATCH',
     title: 'Pings in real time.',
     glyph: '◐',
-    accent: 'var(--yume-mint-deep)',
+    accent: 'var(--kyujin-mint-deep)',
     halo: 'rgba(90,157,122,0.16)',
     body: 'Gmail Pub/Sub pushes each new thread the moment it lands. No polling.',
     demo: <WatchDemo />,
@@ -47,7 +47,7 @@ const STEPS: Step[] = [
     eyebrow: 'CLASSIFY',
     title: 'AI tags the status.',
     glyph: '◆',
-    accent: 'var(--yume-lilac-deep)',
+    accent: 'var(--kyujin-lilac-deep)',
     halo: 'rgba(138,109,178,0.16)',
     body: 'Applied · interview · rejected · offer · accepted. Non-recruiting mail is ignored.',
     demo: <ClassifyDemo />,
@@ -57,7 +57,7 @@ const STEPS: Step[] = [
     eyebrow: 'SEE',
     title: 'Read the funnel.',
     glyph: '★',
-    accent: 'var(--yume-peach-deep)',
+    accent: 'var(--kyujin-peach-deep)',
     halo: 'rgba(201,122,58,0.16)',
     body: 'Every application laid out as a flow — from sent to outcome.',
     demo: <FunnelDemo />,
@@ -76,12 +76,12 @@ export default async function HowItWorksPage() {
           <div
             className="mono inline-block rounded-full bg-white/85 px-3 py-1.5 backdrop-blur-md"
             style={{
-              border: '1px solid var(--yume-line-soft)',
+              border: '1px solid var(--kyujin-line-soft)',
               boxShadow: '0 6px 16px -10px rgba(31,20,24,0.18)',
               fontSize: 10.5,
               letterSpacing: '0.14em',
               fontWeight: 600,
-              color: 'var(--yume-ink-soft)',
+              color: 'var(--kyujin-ink-soft)',
             }}
           >
             HOW IT WORKS · FOUR STEPS
@@ -89,7 +89,7 @@ export default async function HowItWorksPage() {
 
           <h1
             className="serif mx-auto mt-6 max-w-3xl text-[clamp(40px,6vw,72px)]"
-            style={{ letterSpacing: '-0.028em', lineHeight: 1.02, color: 'var(--yume-ink)' }}
+            style={{ letterSpacing: '-0.028em', lineHeight: 1.02, color: 'var(--kyujin-ink)' }}
           >
             From inbox to funnel,
             <br />
@@ -112,7 +112,7 @@ export default async function HowItWorksPage() {
             <li key={step.n}>
               <article
                 className="pillow rounded-[28px] bg-white"
-                style={{ padding: '28px 28px', border: '1px solid var(--yume-line-soft)' }}
+                style={{ padding: '28px 28px', border: '1px solid var(--kyujin-line-soft)' }}
               >
                 <div
                   className={`grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-center ${
@@ -138,7 +138,7 @@ export default async function HowItWorksPage() {
                           fontSize: 10.5,
                           letterSpacing: '0.14em',
                           fontWeight: 700,
-                          color: 'var(--yume-ink-muted)',
+                          color: 'var(--kyujin-ink-muted)',
                         }}
                       >
                         STEP {step.n}
@@ -160,7 +160,7 @@ export default async function HowItWorksPage() {
                       className="serif mt-3 text-[28px]"
                       style={{
                         letterSpacing: '-0.022em',
-                        color: 'var(--yume-ink)',
+                        color: 'var(--kyujin-ink)',
                         lineHeight: 1.15,
                       }}
                     >
@@ -169,7 +169,7 @@ export default async function HowItWorksPage() {
 
                     <p
                       className="mt-4 text-[14.5px] leading-[1.6]"
-                      style={{ color: 'var(--yume-ink-soft)' }}
+                      style={{ color: 'var(--kyujin-ink-soft)' }}
                     >
                       {step.body}
                     </p>
@@ -188,7 +188,7 @@ export default async function HowItWorksPage() {
           className="pillow mx-auto mt-14 max-w-2xl rounded-[28px]"
           style={{
             padding: '28px 28px',
-            background: 'linear-gradient(155deg,var(--yume-pink-500) 0%,var(--yume-coral) 100%)',
+            background: 'linear-gradient(155deg,var(--kyujin-pink-500) 0%,var(--kyujin-coral) 100%)',
             color: '#fff',
             border: '1px solid rgba(255,255,255,0.2)',
           }}
@@ -216,7 +216,7 @@ export default async function HowItWorksPage() {
               href={ctaHref}
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-[14px] font-semibold transition-transform duration-200 hover:-translate-y-[2px]"
               style={{
-                color: 'var(--yume-ink)',
+                color: 'var(--kyujin-ink)',
                 boxShadow:
                   '0 12px 24px -10px rgba(31,20,24,0.35), inset 0 1px 0 rgba(255,255,255,0.7)',
               }}
@@ -251,7 +251,7 @@ function VideoDemoCard() {
     <div className="mt-14">
       <div
         className="pillow relative overflow-hidden rounded-[28px] bg-white"
-        style={{ border: '1px solid var(--yume-line-soft)' }}
+        style={{ border: '1px solid var(--kyujin-line-soft)' }}
       >
         <div
           className="relative w-full"
@@ -280,7 +280,7 @@ function VideoDemoCard() {
                 height="32"
                 patternUnits="userSpaceOnUse"
               >
-                <circle cx="4" cy="4" r="1.4" fill="var(--yume-pink-200)" />
+                <circle cx="4" cy="4" r="1.4" fill="var(--kyujin-pink-200)" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#video-dots)" />
@@ -295,14 +295,14 @@ function VideoDemoCard() {
               <span
                 className="absolute inline-block h-[8px] w-[8px] rounded-full"
                 style={{
-                  background: 'var(--yume-pink-500)',
+                  background: 'var(--kyujin-pink-500)',
                   opacity: 0.4,
-                  animation: 'yume-dot 1.4s ease-in-out infinite',
+                  animation: 'kyujin-dot 1.4s ease-in-out infinite',
                 }}
               />
               <span
                 className="inline-block h-[8px] w-[8px] rounded-full"
-                style={{ background: 'var(--yume-pink-500)' }}
+                style={{ background: 'var(--kyujin-pink-500)' }}
               />
             </span>
             <span
@@ -311,7 +311,7 @@ function VideoDemoCard() {
                 fontSize: 10.5,
                 letterSpacing: '0.14em',
                 fontWeight: 700,
-                color: 'var(--yume-pink-700)',
+                color: 'var(--kyujin-pink-700)',
               }}
             >
               60-SECOND DEMO · COMING SOON
@@ -328,7 +328,7 @@ function VideoDemoCard() {
                 height: 96,
                 borderRadius: '50%',
                 background:
-                  'linear-gradient(155deg, var(--yume-pink-500) 0%, var(--yume-coral) 100%)',
+                  'linear-gradient(155deg, var(--kyujin-pink-500) 0%, var(--kyujin-coral) 100%)',
                 boxShadow:
                   '0 28px 56px -16px rgba(232,90,122,0.55), 0 6px 14px -6px rgba(232,90,122,0.35), inset 0 1px 0 rgba(255,255,255,0.4)',
               }}
@@ -341,7 +341,7 @@ function VideoDemoCard() {
               className="serif mt-6 text-[clamp(24px,3vw,36px)]"
               style={{
                 letterSpacing: '-0.022em',
-                color: 'var(--yume-ink)',
+                color: 'var(--kyujin-ink)',
                 lineHeight: 1.1,
                 textAlign: 'center',
               }}
@@ -350,7 +350,7 @@ function VideoDemoCard() {
             </div>
             <div
               className="mt-2 text-[13.5px]"
-              style={{ color: 'var(--yume-ink-soft)', textAlign: 'center' }}
+              style={{ color: 'var(--kyujin-ink-soft)', textAlign: 'center' }}
             >
               Walkthrough video drops next week.
             </div>
@@ -361,8 +361,8 @@ function VideoDemoCard() {
             className="mono absolute right-6 top-6 rounded-full px-2.5 py-1"
             style={{
               background: 'rgba(255,255,255,0.85)',
-              border: '1px solid var(--yume-line-soft)',
-              color: 'var(--yume-ink-soft)',
+              border: '1px solid var(--kyujin-line-soft)',
+              color: 'var(--kyujin-ink-soft)',
               fontSize: 9.5,
               letterSpacing: '0.14em',
               fontWeight: 700,
@@ -387,7 +387,7 @@ function DemoCard({ children, tilt = 0 }: { children: ReactNode; tilt?: number }
         width: '100%',
         maxWidth: 360,
         padding: '18px 20px',
-        border: '1px solid var(--yume-line-soft)',
+        border: '1px solid var(--kyujin-line-soft)',
         transform: tilt ? `rotate(${tilt}deg)` : undefined,
       }}
     >
@@ -405,14 +405,14 @@ function ConnectDemo() {
           fontSize: 10,
           letterSpacing: '0.14em',
           fontWeight: 700,
-          color: 'var(--yume-ink-muted)',
+          color: 'var(--kyujin-ink-muted)',
         }}
       >
         CONNECT GMAIL
       </div>
       <h4
         className="serif mt-1 text-[18px]"
-        style={{ letterSpacing: '-0.018em', color: 'var(--yume-ink)', lineHeight: 1.2 }}
+        style={{ letterSpacing: '-0.018em', color: 'var(--kyujin-ink)', lineHeight: 1.2 }}
       >
         Sign in to start syncing.
       </h4>
@@ -421,8 +421,8 @@ function ConnectDemo() {
         type="button"
         className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-white px-4 py-2.5 text-[13px] font-semibold"
         style={{
-          color: 'var(--yume-ink)',
-          border: '1px solid var(--yume-line)',
+          color: 'var(--kyujin-ink)',
+          border: '1px solid var(--kyujin-line)',
           boxShadow: '0 4px 10px -6px rgba(31,20,24,0.18)',
         }}
         tabIndex={-1}
@@ -436,14 +436,14 @@ function ConnectDemo() {
           <li
             key={label}
             className="flex items-center gap-2 text-[12.5px]"
-            style={{ color: 'var(--yume-ink-soft)' }}
+            style={{ color: 'var(--kyujin-ink-soft)' }}
           >
             <span
               aria-hidden
               className="flex h-[14px] w-[14px] items-center justify-center rounded-full"
               style={{
                 background: 'rgba(90,157,122,0.18)',
-                color: 'var(--yume-mint-deep)',
+                color: 'var(--kyujin-mint-deep)',
                 fontSize: 9,
                 fontWeight: 700,
               }}
@@ -485,7 +485,7 @@ function WatchDemo() {
   const rows: Array<{ time: string; dot: string; label: ReactNode; mute?: boolean }> = [
     {
       time: '12:42',
-      dot: 'var(--yume-pink-500)',
+      dot: 'var(--kyujin-pink-500)',
       label: (
         <>
           New thread · <strong>linear-hr@careers.linear.app</strong>
@@ -494,7 +494,7 @@ function WatchDemo() {
     },
     {
       time: '12:38',
-      dot: 'var(--yume-mint-deep)',
+      dot: 'var(--kyujin-mint-deep)',
       label: (
         <>
           New thread · <strong>talent@figma.com</strong>
@@ -503,13 +503,13 @@ function WatchDemo() {
     },
     {
       time: '12:31',
-      dot: 'var(--yume-lilac-deep)',
+      dot: 'var(--kyujin-lilac-deep)',
       label: <>Pub/Sub watch refreshed (7d)</>,
       mute: true,
     },
     {
       time: '12:24',
-      dot: 'var(--yume-pink-500)',
+      dot: 'var(--kyujin-pink-500)',
       label: (
         <>
           New thread · <strong>noreply@stripe.com</strong>
@@ -525,14 +525,14 @@ function WatchDemo() {
             <span
               className="absolute inline-block h-[8px] w-[8px] rounded-full"
               style={{
-                background: 'var(--yume-mint-deep)',
+                background: 'var(--kyujin-mint-deep)',
                 opacity: 0.4,
-                animation: 'yume-dot 1.4s ease-in-out infinite',
+                animation: 'kyujin-dot 1.4s ease-in-out infinite',
               }}
             />
             <span
               className="inline-block h-[8px] w-[8px] rounded-full"
-              style={{ background: 'var(--yume-mint-deep)' }}
+              style={{ background: 'var(--kyujin-mint-deep)' }}
             />
           </span>
           <span
@@ -541,7 +541,7 @@ function WatchDemo() {
               fontSize: 10,
               letterSpacing: '0.14em',
               fontWeight: 700,
-              color: 'var(--yume-mint-deep)',
+              color: 'var(--kyujin-mint-deep)',
             }}
           >
             LIVE
@@ -552,7 +552,7 @@ function WatchDemo() {
           style={{
             fontSize: 9.5,
             letterSpacing: '0.12em',
-            color: 'var(--yume-ink-muted)',
+            color: 'var(--kyujin-ink-muted)',
             fontWeight: 600,
           }}
         >
@@ -566,7 +566,7 @@ function WatchDemo() {
             key={i}
             className="flex items-center gap-3 py-2"
             style={{
-              borderTop: i === 0 ? 'none' : '1px solid var(--yume-line-faint)',
+              borderTop: i === 0 ? 'none' : '1px solid var(--kyujin-line-faint)',
             }}
           >
             <span
@@ -574,7 +574,7 @@ function WatchDemo() {
               style={{
                 fontSize: 10.5,
                 fontWeight: 600,
-                color: 'var(--yume-ink-muted)',
+                color: 'var(--kyujin-ink-muted)',
                 letterSpacing: '0.04em',
               }}
             >
@@ -588,7 +588,7 @@ function WatchDemo() {
             <span
               className="text-[12px] leading-[1.35]"
               style={{
-                color: r.mute ? 'var(--yume-ink-muted)' : 'var(--yume-ink-soft)',
+                color: r.mute ? 'var(--kyujin-ink-muted)' : 'var(--kyujin-ink-soft)',
                 fontWeight: r.mute ? 500 : 500,
                 fontStyle: r.mute ? 'italic' : undefined,
               }}
@@ -611,7 +611,7 @@ function ClassifyDemo() {
           fontSize: 10,
           letterSpacing: '0.14em',
           fontWeight: 700,
-          color: 'var(--yume-ink-muted)',
+          color: 'var(--kyujin-ink-muted)',
         }}
       >
         INCOMING THREAD
@@ -619,23 +619,23 @@ function ClassifyDemo() {
 
       <div
         className="mt-2 rounded-lg p-3"
-        style={{ background: 'var(--yume-pink-50)', border: '1px solid var(--yume-line-soft)' }}
+        style={{ background: 'var(--kyujin-pink-50)', border: '1px solid var(--kyujin-line-soft)' }}
       >
         <div
           className="text-[11px]"
-          style={{ color: 'var(--yume-ink-muted)', fontWeight: 600 }}
+          style={{ color: 'var(--kyujin-ink-muted)', fontWeight: 600 }}
         >
-          from <strong style={{ color: 'var(--yume-ink-soft)' }}>recruiting@stripe.com</strong>
+          from <strong style={{ color: 'var(--kyujin-ink-soft)' }}>recruiting@stripe.com</strong>
         </div>
         <div
           className="mt-1 text-[13px]"
-          style={{ color: 'var(--yume-ink)', fontWeight: 600, lineHeight: 1.3 }}
+          style={{ color: 'var(--kyujin-ink)', fontWeight: 600, lineHeight: 1.3 }}
         >
           Re: Sr. Designer, Brand — phone screen
         </div>
         <div
           className="mt-1 text-[11.5px] leading-[1.4]"
-          style={{ color: 'var(--yume-ink-soft)' }}
+          style={{ color: 'var(--kyujin-ink-soft)' }}
         >
           Hi — thanks for chatting last week. We&rsquo;d like to move forward and set up a 30-min
           intro call with Anya…
@@ -643,19 +643,19 @@ function ClassifyDemo() {
       </div>
 
       <div className="my-3 flex items-center gap-2">
-        <div className="h-px flex-1" style={{ background: 'var(--yume-line-faint)' }} />
+        <div className="h-px flex-1" style={{ background: 'var(--kyujin-line-faint)' }} />
         <span
           className="mono px-2"
           style={{
             fontSize: 9.5,
             letterSpacing: '0.14em',
             fontWeight: 700,
-            color: 'var(--yume-lilac-deep)',
+            color: 'var(--kyujin-lilac-deep)',
           }}
         >
           AI · CLASSIFY ↓
         </span>
-        <div className="h-px flex-1" style={{ background: 'var(--yume-line-faint)' }} />
+        <div className="h-px flex-1" style={{ background: 'var(--kyujin-line-faint)' }} />
       </div>
 
       <div className="flex items-center gap-3">
@@ -676,13 +676,13 @@ function ClassifyDemo() {
         <div className="flex min-w-0 flex-1 flex-col">
           <span
             className="text-[12.5px]"
-            style={{ color: 'var(--yume-ink)', fontWeight: 600, lineHeight: 1.2 }}
+            style={{ color: 'var(--kyujin-ink)', fontWeight: 600, lineHeight: 1.2 }}
           >
             Stripe
           </span>
           <span
             className="text-[11.5px]"
-            style={{ color: 'var(--yume-ink-muted)', lineHeight: 1.3 }}
+            style={{ color: 'var(--kyujin-ink-muted)', lineHeight: 1.3 }}
           >
             Sr. Designer · Brand
           </span>
@@ -711,10 +711,10 @@ function ClassifyDemo() {
 
 function FunnelDemo() {
   const rows: Array<{ label: string; value: number; pct: number; color: string }> = [
-    { label: 'Sent', value: 43, pct: 100, color: 'var(--yume-pink-300)' },
-    { label: 'Replied', value: 15, pct: 35, color: 'var(--yume-peach-deep)' },
-    { label: 'Interview', value: 5, pct: 12, color: 'var(--yume-mint-deep)' },
-    { label: 'Offer', value: 1, pct: 3, color: 'var(--yume-pink-600)' },
+    { label: 'Sent', value: 43, pct: 100, color: 'var(--kyujin-pink-300)' },
+    { label: 'Replied', value: 15, pct: 35, color: 'var(--kyujin-peach-deep)' },
+    { label: 'Interview', value: 5, pct: 12, color: 'var(--kyujin-mint-deep)' },
+    { label: 'Offer', value: 1, pct: 3, color: 'var(--kyujin-pink-600)' },
   ];
   return (
     <DemoCard tilt={1.2}>
@@ -725,7 +725,7 @@ function FunnelDemo() {
             fontSize: 10,
             letterSpacing: '0.14em',
             fontWeight: 700,
-            color: 'var(--yume-ink-muted)',
+            color: 'var(--kyujin-ink-muted)',
           }}
         >
           FUNNEL
@@ -736,7 +736,7 @@ function FunnelDemo() {
             fontSize: 9.5,
             letterSpacing: '0.12em',
             fontWeight: 600,
-            color: 'var(--yume-ink-muted)',
+            color: 'var(--kyujin-ink-muted)',
           }}
         >
           ALL TIME
@@ -745,10 +745,10 @@ function FunnelDemo() {
 
       <h4
         className="serif mt-1 text-[18px]"
-        style={{ letterSpacing: '-0.018em', color: 'var(--yume-ink)', lineHeight: 1.2 }}
+        style={{ letterSpacing: '-0.018em', color: 'var(--kyujin-ink)', lineHeight: 1.2 }}
       >
         How <span className="serif-italic">43</span> became{' '}
-        <span className="serif-italic" style={{ color: 'var(--yume-pink-600)' }}>
+        <span className="serif-italic" style={{ color: 'var(--kyujin-pink-600)' }}>
           1
         </span>
         .
@@ -760,7 +760,7 @@ function FunnelDemo() {
             <div className="flex items-center justify-between">
               <span
                 className="text-[12px]"
-                style={{ color: 'var(--yume-ink-soft)', fontWeight: 600 }}
+                style={{ color: 'var(--kyujin-ink-soft)', fontWeight: 600 }}
               >
                 {r.label}
               </span>
@@ -769,7 +769,7 @@ function FunnelDemo() {
                 style={{
                   fontSize: 10.5,
                   fontWeight: 700,
-                  color: 'var(--yume-ink)',
+                  color: 'var(--kyujin-ink)',
                   letterSpacing: '0.02em',
                 }}
               >
@@ -778,7 +778,7 @@ function FunnelDemo() {
             </div>
             <div
               className="mt-1 h-[6px] w-full overflow-hidden rounded-full"
-              style={{ background: 'var(--yume-line-faint)' }}
+              style={{ background: 'var(--kyujin-line-faint)' }}
             >
               <div
                 className="h-full rounded-full"
@@ -797,7 +797,7 @@ function FunnelDemo() {
         className="mono mt-4 inline-flex items-center gap-1.5 rounded-full px-2 py-1"
         style={{
           background: 'rgba(90,157,122,0.15)',
-          color: 'var(--yume-mint-deep)',
+          color: 'var(--kyujin-mint-deep)',
           fontSize: 9.5,
           letterSpacing: '0.12em',
           fontWeight: 700,

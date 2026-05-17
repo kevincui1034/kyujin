@@ -105,7 +105,7 @@ export function RulesEditor({ initialAllow, initialBlock }: Props) {
       </Tabs>
 
       <p className="text-[11px] text-muted-foreground">
-        Allow rules force the LLM to classify mail from that sender even if Yume would otherwise
+        Allow rules force the LLM to classify mail from that sender even if Kyujin would otherwise
         skip it. Block rules drop mail from that sender silently. Block wins ties.
       </p>
     </div>

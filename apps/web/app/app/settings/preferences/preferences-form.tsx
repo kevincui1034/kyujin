@@ -115,11 +115,11 @@ export function PreferencesForm({ section, initial }: Props) {
                     onClick={() => save({ dashboardView: v.key }, 'dashboardView')}
                     className="rounded-full px-3 py-1 text-xs font-semibold transition-colors"
                     style={{
-                      color: active ? 'var(--yume-pink-700)' : 'var(--yume-ink-soft)',
+                      color: active ? 'var(--kyujin-pink-700)' : 'var(--kyujin-ink-soft)',
                       background: active ? 'rgba(232,90,122,0.10)' : 'transparent',
                       border: active
                         ? '1px solid rgba(232,90,122,0.22)'
-                        : '1px solid var(--yume-line)',
+                        : '1px solid var(--kyujin-line)',
                       opacity: pending ? 0.6 : 1,
                     }}
                   >
@@ -249,10 +249,10 @@ export function PreferencesForm({ section, initial }: Props) {
                     }}
                     className="rounded-full px-3 py-1 text-xs font-semibold transition-colors"
                     style={{
-                      color: hidden ? 'var(--yume-ink-muted)' : 'var(--yume-pink-700)',
+                      color: hidden ? 'var(--kyujin-ink-muted)' : 'var(--kyujin-pink-700)',
                       background: hidden ? 'transparent' : 'rgba(232,90,122,0.10)',
                       border: hidden
-                        ? '1px solid var(--yume-line)'
+                        ? '1px solid var(--kyujin-line)'
                         : '1px solid rgba(232,90,122,0.22)',
                       textDecoration: hidden ? 'line-through' : 'none',
                     }}

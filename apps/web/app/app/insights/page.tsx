@@ -7,10 +7,10 @@ import {
   getTimeToRejectionHistogram,
   type InsightsRangeKey,
 } from '@/lib/data';
-import { Eyebrow } from '@/components/yume/eyebrow';
-import { PillowCard } from '@/components/yume/pillow-card';
-import { Sankey } from '@/components/yume/sankey';
-import { BarChart } from '@/components/yume/bar-chart';
+import { Eyebrow } from '@/components/kyujin/eyebrow';
+import { PillowCard } from '@/components/kyujin/pillow-card';
+import { Sankey } from '@/components/kyujin/sankey';
+import { BarChart } from '@/components/kyujin/bar-chart';
 
 const RANGES = ['Week', 'Month', 'All'] as const;
 type RangeLabel = (typeof RANGES)[number];
@@ -79,14 +79,14 @@ export default async function InsightsPage({
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <Eyebrow color="var(--yume-pink-600)">
+          <Eyebrow color="var(--kyujin-pink-600)">
             {RANGE_EYEBROW[range]} · {stats.total} APPLICATION{stats.total === 1 ? '' : 'S'}
           </Eyebrow>
           <h1
             className="serif mt-1"
-            style={{ fontSize: 56, lineHeight: 1, letterSpacing: '-0.028em', color: 'var(--yume-ink)' }}
+            style={{ fontSize: 56, lineHeight: 1, letterSpacing: '-0.028em', color: 'var(--kyujin-ink)' }}
           >
-            Your <span className="serif-italic" style={{ color: 'var(--yume-pink-500)' }}>insights.</span>
+            Your <span className="serif-italic" style={{ color: 'var(--kyujin-pink-500)' }}>insights.</span>
           </h1>
         </div>
         <RangeControl active={range} view={view} />
@@ -126,8 +126,8 @@ export default async function InsightsPage({
                 data={rejectHist}
                 width={1080}
                 height={400}
-                barColor="var(--yume-peach)"
-                hoverColor="var(--yume-peach-deep)"
+                barColor="var(--kyujin-peach)"
+                hoverColor="var(--kyujin-peach-deep)"
                 emptyLabel="No rejections in this window yet."
               />
             )}
@@ -135,52 +135,52 @@ export default async function InsightsPage({
         </PillowCard>
 
         <PillowCard span={3} tone="pink" padding="22px 24px 22px" className="flex flex-col gap-1.5">
-          <Eyebrow color="var(--yume-pink-600)">BIG NUMBERS</Eyebrow>
+          <Eyebrow color="var(--kyujin-pink-600)">BIG NUMBERS</Eyebrow>
           <div className="mt-1">
             <div
               className="serif"
-              style={{ fontSize: 60, color: 'var(--yume-ink)', lineHeight: 1, letterSpacing: '-0.028em' }}
+              style={{ fontSize: 60, color: 'var(--kyujin-ink)', lineHeight: 1, letterSpacing: '-0.028em' }}
             >
               {stats.total}
             </div>
-            <div style={{ fontSize: 12.5, color: 'var(--yume-ink-soft)' }}>applications sent</div>
+            <div style={{ fontSize: 12.5, color: 'var(--kyujin-ink-soft)' }}>applications sent</div>
           </div>
           <div className="my-3 h-px" style={{ background: 'rgba(232,90,122,0.15)' }} />
           <div className="grid grid-cols-2 gap-2.5">
-            <BigStat value={interviewCount} suffix="" color="var(--yume-lilac-deep)" label="interviews" />
-            <BigStat value={offerCount} suffix="" color="var(--yume-mint-deep)" label={offerCount === 1 ? 'offer' : 'offers'} />
+            <BigStat value={interviewCount} suffix="" color="var(--kyujin-lilac-deep)" label="interviews" />
+            <BigStat value={offerCount} suffix="" color="var(--kyujin-mint-deep)" label={offerCount === 1 ? 'offer' : 'offers'} />
             <BigStat
               value={interviewRate.toFixed(1)}
               suffix="%"
-              color="var(--yume-peach-deep)"
+              color="var(--kyujin-peach-deep)"
               label="interview rate"
             />
             <BigStat
               value={medianRejectDays ?? '—'}
               suffix={medianRejectDays != null ? 'd' : ''}
-              color="var(--yume-pink-600)"
+              color="var(--kyujin-pink-600)"
               label="median rejection"
             />
           </div>
         </PillowCard>
 
         <PillowCard span={4} padding="14px 18px">
-          <Eyebrow color="var(--yume-mint-deep)">WIN OF THE MOMENT</Eyebrow>
-          <div className="mt-1.5 text-[14px] leading-[1.5]" style={{ color: 'var(--yume-ink)' }}>
+          <Eyebrow color="var(--kyujin-mint-deep)">WIN OF THE MOMENT</Eyebrow>
+          <div className="mt-1.5 text-[14px] leading-[1.5]" style={{ color: 'var(--kyujin-ink)' }}>
             {winNarrative(stats, offerCount, interviewCount)}
           </div>
         </PillowCard>
 
         <PillowCard span={4} padding="14px 18px" tone="cream">
-          <Eyebrow color="var(--yume-peach-deep)">WATCH OUT</Eyebrow>
-          <div className="mt-1.5 text-[14px] leading-[1.5]" style={{ color: 'var(--yume-ink)' }}>
+          <Eyebrow color="var(--kyujin-peach-deep)">WATCH OUT</Eyebrow>
+          <div className="mt-1.5 text-[14px] leading-[1.5]" style={{ color: 'var(--kyujin-ink)' }}>
             {watchOutNarrative(stats)}
           </div>
         </PillowCard>
 
         <PillowCard span={4} padding="14px 18px">
-          <Eyebrow color="var(--yume-lilac-deep)">PATTERN</Eyebrow>
-          <div className="mt-1.5 text-[14px] leading-[1.5]" style={{ color: 'var(--yume-ink)' }}>
+          <Eyebrow color="var(--kyujin-lilac-deep)">PATTERN</Eyebrow>
+          <div className="mt-1.5 text-[14px] leading-[1.5]" style={{ color: 'var(--kyujin-ink)' }}>
             {patternNarrative(stats, medianRejectDays)}
           </div>
         </PillowCard>
@@ -202,13 +202,13 @@ function ChartHeader({
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <Eyebrow color="var(--yume-pink-600)">{meta.eyebrow}</Eyebrow>
+        <Eyebrow color="var(--kyujin-pink-600)">{meta.eyebrow}</Eyebrow>
         <div
           className="serif mt-1"
-          style={{ fontSize: 28, color: 'var(--yume-ink)', lineHeight: 1.05, letterSpacing: '-0.024em' }}
+          style={{ fontSize: 28, color: 'var(--kyujin-ink)', lineHeight: 1.05, letterSpacing: '-0.024em' }}
         >
           {meta.titleStart}{' '}
-          <span className="serif-italic" style={{ color: 'var(--yume-pink-500)' }}>
+          <span className="serif-italic" style={{ color: 'var(--kyujin-pink-500)' }}>
             {meta.titleAccent}
           </span>{' '}
           {meta.titleEnd}
@@ -248,7 +248,7 @@ function EmptyState() {
   return (
     <div
       className="flex h-full w-full items-center justify-center text-[13px]"
-      style={{ color: 'var(--yume-ink-muted)' }}
+      style={{ color: 'var(--kyujin-ink-muted)' }}
     >
       Not enough data yet.
     </div>
@@ -272,7 +272,7 @@ function BigStat({
         {value}
         {suffix && <span style={{ fontSize: 18 }}>{suffix}</span>}
       </div>
-      <div style={{ fontSize: 11.5, color: 'var(--yume-ink-soft)' }}>{label}</div>
+      <div style={{ fontSize: 11.5, color: 'var(--kyujin-ink-soft)' }}>{label}</div>
     </div>
   );
 }
@@ -280,9 +280,9 @@ function BigStat({
 function RangeControl({ active, view }: { active: RangeLabel; view: ViewKey }) {
   return (
     <div
-      className="flex gap-0.5 rounded-full border bg-yume-paper p-1"
+      className="flex gap-0.5 rounded-full border bg-kyujin-paper p-1"
       style={{
-        borderColor: 'var(--yume-line-soft)',
+        borderColor: 'var(--kyujin-line-soft)',
         boxShadow: 'inset 0 1px 0 #fff',
       }}
     >
@@ -300,9 +300,9 @@ function RangeControl({ active, view }: { active: RangeLabel; view: ViewKey }) {
               fontSize: 12.5,
               fontWeight: 600,
               background: isActive
-                ? 'linear-gradient(180deg, var(--yume-pink-50), var(--yume-pink-100))'
+                ? 'linear-gradient(180deg, var(--kyujin-pink-50), var(--kyujin-pink-100))'
                 : 'transparent',
-              color: isActive ? 'var(--yume-pink-700)' : 'var(--yume-ink-soft)',
+              color: isActive ? 'var(--kyujin-pink-700)' : 'var(--kyujin-ink-soft)',
               border: isActive ? '1px solid rgba(232,90,122,0.2)' : '1px solid transparent',
             }}
           >
@@ -329,7 +329,7 @@ function ViewTabs({ active, rangeQuery }: { active: ViewKey; rangeQuery: string 
             className="rounded-full px-3 py-1 transition-colors"
             style={{
               fontWeight: 600,
-              color: isActive ? 'var(--yume-pink-700)' : 'var(--yume-ink-soft)',
+              color: isActive ? 'var(--kyujin-pink-700)' : 'var(--kyujin-ink-soft)',
               background: isActive ? 'rgba(232,90,122,0.10)' : 'transparent',
               border: isActive ? '1px solid rgba(232,90,122,0.22)' : '1px solid transparent',
             }}

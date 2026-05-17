@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CalicoMark } from '@/components/yume/calico-mark';
+import { CalicoMark } from '@/components/kyujin/calico-mark';
 import type { AgentAction, AgentAppRow } from '@/lib/agent/tools';
 import { PreviewCard } from './preview-card';
 
@@ -180,17 +180,17 @@ export function ChatPanel({
         top: panelPos.top,
         width: PANEL_W,
         height: PANEL_H,
-        background: 'var(--yume-paper)',
+        background: 'var(--kyujin-paper)',
         borderRadius: 22,
-        border: '1.5px solid var(--yume-line)',
+        border: '1.5px solid var(--kyujin-line)',
       }}
     >
       {/* Header */}
       <div
         className="flex items-center gap-3 px-4 py-3"
         style={{
-          borderBottom: '1px solid var(--yume-line-soft)',
-          background: 'var(--yume-bg-alt)',
+          borderBottom: '1px solid var(--kyujin-line-soft)',
+          background: 'var(--kyujin-bg-alt)',
         }}
       >
         <CalicoMark size={36} />
@@ -201,14 +201,14 @@ export function ChatPanel({
               fontSize: 18,
               lineHeight: 1.05,
               letterSpacing: '-0.012em',
-              color: 'var(--yume-ink)',
+              color: 'var(--kyujin-ink)',
             }}
           >
             Kitty
           </div>
           <div
             className="serif-italic"
-            style={{ fontSize: 11.5, color: 'var(--yume-ink-muted)' }}
+            style={{ fontSize: 11.5, color: 'var(--kyujin-ink-muted)' }}
           >
             here to help with your applications
           </div>
@@ -217,8 +217,8 @@ export function ChatPanel({
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="rounded-full p-1.5 transition-colors hover:bg-yume-pink-50"
-          style={{ color: 'var(--yume-ink-muted)' }}
+          className="rounded-full p-1.5 transition-colors hover:bg-kyujin-pink-50"
+          style={{ color: 'var(--kyujin-ink-muted)' }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path
@@ -239,7 +239,7 @@ export function ChatPanel({
           display: 'flex',
           flexDirection: 'column',
           gap: 12,
-          background: 'var(--yume-bg)',
+          background: 'var(--kyujin-bg)',
         }}
       >
         {messages.length === 0 && <EmptyState />}
@@ -262,10 +262,10 @@ export function ChatPanel({
             <div
               className="text-[12px]"
               style={{
-                color: 'var(--yume-ink-muted)',
+                color: 'var(--kyujin-ink-muted)',
                 padding: '6px 11px',
-                background: 'var(--yume-paper)',
-                border: '1px solid var(--yume-line-soft)',
+                background: 'var(--kyujin-paper)',
+                border: '1px solid var(--kyujin-line-soft)',
                 borderRadius: 14,
                 borderBottomLeftRadius: 4,
               }}
@@ -284,8 +284,8 @@ export function ChatPanel({
       <div
         className="flex items-end gap-2 px-3 py-3"
         style={{
-          borderTop: '1px solid var(--yume-line-soft)',
-          background: 'var(--yume-paper)',
+          borderTop: '1px solid var(--kyujin-line-soft)',
+          background: 'var(--kyujin-paper)',
         }}
       >
         <textarea
@@ -300,12 +300,12 @@ export function ChatPanel({
           }}
           placeholder="Ask Kitty to fix or find something…"
           rows={1}
-          className="flex-1 resize-none rounded-lg bg-transparent px-3 py-2 text-[12.5px] outline-none focus:ring-2 focus:ring-yume-pink-200"
+          className="flex-1 resize-none rounded-lg bg-transparent px-3 py-2 text-[12.5px] outline-none focus:ring-2 focus:ring-kyujin-pink-200"
           style={{
-            border: '1px solid var(--yume-line)',
-            color: 'var(--yume-ink)',
+            border: '1px solid var(--kyujin-line)',
+            color: 'var(--kyujin-ink)',
             maxHeight: 100,
-            background: 'var(--yume-bg)',
+            background: 'var(--kyujin-bg)',
           }}
         />
         <button
@@ -314,8 +314,8 @@ export function ChatPanel({
           disabled={!draft.trim() || sending}
           className="rounded-lg px-3 py-2 text-[12px] font-semibold text-white transition-opacity disabled:opacity-40"
           style={{
-            background: 'linear-gradient(135deg, var(--yume-pink-500), var(--yume-coral))',
-            boxShadow: '0 4px 10px -6px var(--yume-pink-300)',
+            background: 'linear-gradient(135deg, var(--kyujin-pink-500), var(--kyujin-coral))',
+            boxShadow: '0 4px 10px -6px var(--kyujin-pink-300)',
           }}
         >
           Send
@@ -342,9 +342,9 @@ function MessageRow({
         <div
           className="max-w-[80%] text-[12.5px] leading-relaxed"
           style={{
-            background: 'var(--yume-pink-100)',
-            border: '1px solid var(--yume-pink-200)',
-            color: 'var(--yume-ink)',
+            background: 'var(--kyujin-pink-100)',
+            border: '1px solid var(--kyujin-pink-200)',
+            color: 'var(--kyujin-ink)',
             padding: '7px 12px',
             borderRadius: 14,
             borderBottomRightRadius: 4,
@@ -364,9 +364,9 @@ function MessageRow({
         <div
           className="text-[12.5px] leading-relaxed"
           style={{
-            background: 'var(--yume-paper)',
-            border: '1px solid var(--yume-line-soft)',
-            color: 'var(--yume-ink)',
+            background: 'var(--kyujin-paper)',
+            border: '1px solid var(--kyujin-line-soft)',
+            color: 'var(--kyujin-ink)',
             padding: '7px 12px',
             borderRadius: 14,
             borderBottomLeftRadius: 4,
@@ -398,16 +398,16 @@ function EmptyState() {
       <div
         className="text-[12.5px] leading-relaxed"
         style={{
-          background: 'var(--yume-paper)',
-          border: '1px solid var(--yume-line-soft)',
-          color: 'var(--yume-ink-soft)',
+          background: 'var(--kyujin-paper)',
+          border: '1px solid var(--kyujin-line-soft)',
+          color: 'var(--kyujin-ink-soft)',
           padding: '9px 12px',
           borderRadius: 14,
           borderBottomLeftRadius: 4,
         }}
       >
-        <span style={{ color: 'var(--yume-ink)' }}>Hi! Tell me what to fix.</span>
-        <ul className="mt-2 list-none space-y-1" style={{ color: 'var(--yume-ink-muted)' }}>
+        <span style={{ color: 'var(--kyujin-ink)' }}>Hi! Tell me what to fix.</span>
+        <ul className="mt-2 list-none space-y-1" style={{ color: 'var(--kyujin-ink-muted)' }}>
           <li>&ldquo;The role on Stripe is blank, it&apos;s Senior SWE&rdquo;</li>
           <li>&ldquo;Mark all my Acme applications as rejected&rdquo;</li>
           <li>&ldquo;Show me everything ghosted past 30 days&rdquo;</li>
@@ -424,8 +424,8 @@ function Dot({ delay }: { delay: number }) {
         width: 5,
         height: 5,
         borderRadius: '50%',
-        background: 'var(--yume-pink-300)',
-        animation: `yume-dot 1s ${delay}ms infinite ease-in-out`,
+        background: 'var(--kyujin-pink-300)',
+        animation: `kyujin-dot 1s ${delay}ms infinite ease-in-out`,
         display: 'inline-block',
       }}
     />
