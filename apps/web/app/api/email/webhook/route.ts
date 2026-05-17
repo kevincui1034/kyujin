@@ -58,8 +58,12 @@ export async function POST(request: NextRequest) {
     return new NextResponse('invalid json', { status: 400 });
   }
 
-  const grantId = event.data?.object?.grantId;
+  // Read both snake_case (Nylas's v3 webhook wire format) and camelCase
+  // (the Node SDK's normalized shape) — first observed event delivery in
+  // dev confirmed payloads ship as snake_case.
+  const grantId = event.data?.object?.grant_id ?? event.data?.object?.grantId;
   if (!grantId) {
+    console.warn('[email/webhook] no grant_id in payload', { type: event.type });
     // Nylas pings other event shapes occasionally (e.g. account-level events
     // without a grant). 200 so Nylas doesn't retry; nothing to do.
     return NextResponse.json({ skipped: 'no grant_id' });
@@ -71,6 +75,7 @@ export async function POST(request: NextRequest) {
     .where(eq(nylasConnections.grantId, grantId))
     .limit(1);
   if (!connection) {
+    console.warn('[email/webhook] unknown grant', { grantId, type: event.type });
     return NextResponse.json({ skipped: 'unknown grant' });
   }
 

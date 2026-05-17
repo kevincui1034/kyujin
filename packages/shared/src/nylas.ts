@@ -48,10 +48,11 @@ export function buildAuthUrl(state: string): string {
     provider: 'google',
     scope: ['https://www.googleapis.com/auth/gmail.readonly'],
     accessType: 'offline',
-    // `select_account consent` forces the account chooser (so the user can
-    // pick a different Google than the one they're signed in with) AND
-    // re-prompts consent (so Nylas reissues a fresh grant for multi-inbox).
-    prompt: 'select_account consent',
+    // No `prompt` param: Nylas v3's prompt enum is narrow (we tried
+    // `select_account consent`, then `login`, both rejected with 400/703).
+    // Omitting it falls back to Nylas's default, which forwards the user
+    // to Google's standard OAuth screen — Google itself surfaces the
+    // account picker / consent UI, which is what we wanted anyway.
     includeGrantScopes: true,
     state,
   });
@@ -242,12 +243,17 @@ export const BACKFILL_QUERY = buildBackfillQuery(90);
 // `message.created`. Verification is HMAC-SHA256 over the raw body using
 // NYLAS_WEBHOOK_SECRET. The signature arrives in `X-Nylas-Signature`.
 
+// Nylas v3 webhook payloads use snake_case on the wire (`grant_id`, `thread_id`),
+// not the camelCase the Node SDK exposes in its own typed surfaces. Accept both
+// shapes so we're resilient if Nylas ever normalizes its delivery format.
 export interface NylasWebhookEvent {
   type: 'message.created' | 'message.updated' | 'grant.expired' | 'grant.deleted' | string;
   data: {
     object: {
       id: string;
-      grantId: string;
+      grant_id?: string;
+      grantId?: string;
+      thread_id?: string;
       threadId?: string;
     };
   };
