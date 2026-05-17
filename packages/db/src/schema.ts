@@ -184,37 +184,6 @@ export const gmailConnections = pgTable(
   ],
 );
 
-// Nylas-backed mailbox connections. Coexists with gmailConnections during the
-// EMAIL_PROVIDER=gmail → nylas migration; once Gmail-direct is retired, this
-// becomes the only mailbox table. Nylas refreshes underlying provider tokens
-// server-side, so we only persist grantId — no access/refresh/expiry/scope.
-export const nylasConnections = pgTable(
-  'nylas_connections',
-  {
-    id: uuid('id').defaultRandom().primaryKey(),
-    userId: text('user_id')
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    emailAddress: text('email_address').notNull(),
-    grantId: text('grant_id').notNull(),
-    // 'google' | 'microsoft' | 'icloud' | 'imap'. Stored so multi-provider
-    // query syntax (Gmail's `from:` vs Outlook's KQL) can branch off the row.
-    provider: text('provider').notNull().default('google'),
-    // Flipped true when Nylas fires grant.expired or grant.deleted. UI uses
-    // this to surface "Reconnect needed" without hitting Nylas on every page.
-    needsReauth: boolean('needs_reauth').notNull().default(false),
-    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
-  },
-  (t) => [
-    uniqueIndex('nylas_user_email_unique').on(t.userId, t.emailAddress),
-    // grantId is the lookup key in the webhook handler (payload arrives with
-    // grant_id, not user_id) — must be unique + indexed for O(1) resolution.
-    uniqueIndex('nylas_grant_unique').on(t.grantId),
-    index('nylas_email_idx').on(t.emailAddress),
-  ],
-);
-
 // ── Domain tables ─────────────────────────────────────────────────────────
 
 export const applications = pgTable(
@@ -472,7 +441,6 @@ export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
   gmailConnections: many(gmailConnections),
-  nylasConnections: many(nylasConnections),
   applications: many(applications),
   emailMessages: many(emailMessages),
 }));
@@ -513,10 +481,6 @@ export const gmailConnectionsRelations = relations(gmailConnections, ({ one }) =
   user: one(users, { fields: [gmailConnections.userId], references: [users.id] }),
 }));
 
-export const nylasConnectionsRelations = relations(nylasConnections, ({ one }) => ({
-  user: one(users, { fields: [nylasConnections.userId], references: [users.id] }),
-}));
-
 export type User = typeof users.$inferSelect;
 export type Application = typeof applications.$inferSelect;
 export type NewApplication = typeof applications.$inferInsert;
@@ -525,8 +489,6 @@ export type NewEmailMessage = typeof emailMessages.$inferInsert;
 export type Classification = typeof classifications.$inferSelect;
 export type NewClassification = typeof classifications.$inferInsert;
 export type GmailConnection = typeof gmailConnections.$inferSelect;
-export type NylasConnection = typeof nylasConnections.$inferSelect;
-export type NewNylasConnection = typeof nylasConnections.$inferInsert;
 export type UserSenderRule = typeof userSenderRules.$inferSelect;
 export type NewUserSenderRule = typeof userSenderRules.$inferInsert;
 export type SenderRuleType = (typeof senderRuleType.enumValues)[number];

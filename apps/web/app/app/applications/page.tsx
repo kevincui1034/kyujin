@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ChevronDown, Search, X } from 'lucide-react';
 import { auth } from '@/auth';
-import { EMAIL_API_PREFIX, EMAIL_PROVIDER } from '@/lib/email-provider';
 import {
   listApplications,
   countApplications,
@@ -147,7 +146,7 @@ export default async function ApplicationsListPage({
 
   const [total, connections] = await Promise.all([
     countApplications(userId, { status, source, range, q, excludeStatuses }),
-    listInboxConnections(userId, EMAIL_PROVIDER),
+    listInboxConnections(userId),
   ]);
   const connection = connections[0] ?? null;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
@@ -185,7 +184,7 @@ export default async function ApplicationsListPage({
           </h1>
           <div className="mt-5">
             <Link
-              href={`${EMAIL_API_PREFIX}/connect`}
+              href="/api/gmail/connect"
               className="inline-flex items-center rounded-full px-5 py-2.5 text-[13px] font-semibold text-white"
               style={{
                 background: 'var(--yume-pink-500)',

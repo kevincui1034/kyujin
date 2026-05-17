@@ -148,6 +148,13 @@
       "when": 1778995256565,
       "tag": "0021_nylas_connections",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1779041661488,
+      "tag": "0022_drop_nylas",
+      "breakpoints": true
     }
   ]
 }

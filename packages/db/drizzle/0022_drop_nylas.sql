@@ -1,0 +1,1 @@
+DROP TABLE "nylas_connections" CASCADE;

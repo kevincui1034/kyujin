@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getUserProfile, listInboxConnections } from '@/lib/data';
 import { NON_PREMIUM_INBOX_LIMIT, PREMIUM_INBOX_LIMIT, inboxLimitForPlan } from '@/lib/plan';
-import { EMAIL_API_PREFIX, EMAIL_PROVIDER, isNylasProvider } from '@/lib/email-provider';
 import { DisconnectGmailButton } from './disconnect-button';
 import { BackfillButton } from './backfill-button';
 import { StartWatchButton } from './start-watch-button';
@@ -20,18 +19,12 @@ export default async function SettingsPage({
   const userId = session!.user.id;
   const params = await searchParams;
   const [connections, profile] = await Promise.all([
-    listInboxConnections(userId, EMAIL_PROVIDER),
+    listInboxConnections(userId),
     getUserProfile(userId),
   ]);
   const isPremium = profile?.plan === 'premium';
   const inboxLimit = inboxLimitForPlan(profile?.plan);
   const canAddInbox = connections.length < inboxLimit;
-
-  // Nylas onboards through a CASA-verified shared Google app, so the consent
-  // screen says "Nylas" rather than "Yume". Surface that in copy so users
-  // aren't confused when the OAuth screen appears.
-  const connectLabel = isNylasProvider ? 'Connect Gmail via Nylas' : 'Connect Gmail';
-  const addInboxLabel = '+ Add another inbox';
 
   return (
     <div className="space-y-6">
@@ -79,7 +72,7 @@ export default async function SettingsPage({
         <CardContent className="space-y-4">
           {connections.length === 0 ? (
             <Button asChild>
-              <Link href={`${EMAIL_API_PREFIX}/connect`}>{connectLabel}</Link>
+              <Link href="/api/gmail/connect">Connect Gmail</Link>
             </Button>
           ) : (
             <>
@@ -92,27 +85,19 @@ export default async function SettingsPage({
                     <div>
                       <div className="font-medium">{c.emailAddress}</div>
                       <div className="text-xs text-muted-foreground">
-                        {c.provider === 'nylas'
-                          ? c.needsReauth
-                            ? 'Reconnect needed — Nylas grant expired'
-                            : 'Live sync via Nylas'
-                          : c.watchExpiration
-                            ? `Push active until ${new Date(c.watchExpiration).toLocaleString()}`
-                            : 'Push not enabled'}
+                        {c.watchExpiration
+                          ? `Push active until ${new Date(c.watchExpiration).toLocaleString()}`
+                          : 'Push not enabled'}
                       </div>
                     </div>
-                    <DisconnectGmailButton
-                      connectionId={c.id}
-                      label="Remove"
-                      apiPrefix={EMAIL_API_PREFIX}
-                    />
+                    <DisconnectGmailButton connectionId={c.id} label="Remove" />
                   </li>
                 ))}
               </ul>
               <div className="flex flex-wrap gap-3 pt-1">
                 {canAddInbox ? (
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`${EMAIL_API_PREFIX}/connect`}>{addInboxLabel}</Link>
+                    <Link href="/api/gmail/connect">+ Add another inbox</Link>
                   </Button>
                 ) : isPremium ? (
                   <div className="text-xs text-muted-foreground">
@@ -127,15 +112,10 @@ export default async function SettingsPage({
                   </div>
                 )}
               </div>
-              <BackfillButton isPremium={isPremium} apiPrefix={EMAIL_API_PREFIX} />
-              {/* Gmail-only: Nylas configures push at the app level via the
-                  webhook endpoint, so there's nothing for the user to enable
-                  per-inbox. */}
-              {!isNylasProvider && (
-                <div className="flex flex-wrap gap-3 pt-2">
-                  <StartWatchButton />
-                </div>
-              )}
+              <BackfillButton isPremium={isPremium} />
+              <div className="flex flex-wrap gap-3 pt-2">
+                <StartWatchButton />
+              </div>
             </>
           )}
         </CardContent>

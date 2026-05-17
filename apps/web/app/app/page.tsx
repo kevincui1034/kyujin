@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { auth } from '@/auth';
-import { EMAIL_API_PREFIX, EMAIL_PROVIDER } from '@/lib/email-provider';
 import {
   getActiveThreads,
   getActivityOverTime,
@@ -103,7 +102,7 @@ export default async function DashboardPage() {
   const userId = session!.user.id;
 
   const [connections, profile] = await Promise.all([
-    listInboxConnections(userId, EMAIL_PROVIDER),
+    listInboxConnections(userId),
     getUserProfile(userId),
   ]);
   const connection = connections[0] ?? null;
@@ -124,7 +123,7 @@ export default async function DashboardPage() {
           </p>
           <div className="mt-5">
             <Link
-              href={`${EMAIL_API_PREFIX}/connect`}
+              href="/api/gmail/connect"
               className="inline-flex items-center rounded-full px-5 py-2.5 text-[13px] font-semibold text-white"
               style={{
                 background: 'var(--yume-pink-500)',

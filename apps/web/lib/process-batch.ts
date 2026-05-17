@@ -20,11 +20,6 @@ import {
   type UserSenderRuleSet,
   type NormalizedEmail,
 } from '@kyujin/shared';
-import {
-  getMessage as getNylasMessage,
-  listNylasClients,
-  normalizeNylasMessage,
-} from '@kyujin/shared/nylas';
 import { revalidateTag } from 'next/cache';
 import { classifierCapForPlan } from '@/lib/plan';
 import { log } from '@/lib/log';
@@ -80,89 +75,58 @@ export async function runProcessBatch() {
   let processed = 0;
   let failed = 0;
 
-  // Provider selector. Gated per-user so the cron is forward-compatible
-  // with a mixed cohort (e.g. legacy Gmail users + newly-onboarded Nylas
-  // users) — though in practice every user is on the same provider during
-  // any given migration phase, set by EMAIL_PROVIDER.
-  const provider = process.env.EMAIL_PROVIDER === 'nylas' ? 'nylas' : 'gmail';
-
   for (const [userId, items] of byUser) {
     try {
-      // Build a provider-specific fetcher. Both produce NormalizedEmail; the
-      // rest of the loop is provider-agnostic.
-      let fetchEmail: EmailFetcher;
-      if (provider === 'nylas') {
-        const handles = await listNylasClients(userId);
-        if (handles.length === 0) throw new Error(`No Nylas connection for user ${userId}`);
-        fetchEmail = async (item) => {
-          // backfill_queue.connectionId references gmail_connections; for
-          // Nylas-enqueued items it's null. Try every grant the user owns
-          // until one returns the message (covers Premium multi-inbox).
-          let lastError: unknown = null;
-          for (const handle of handles) {
-            try {
-              const msg = await getNylasMessage(handle, item.gmailMessageId);
-              return normalizeNylasMessage(msg);
-            } catch (err) {
-              lastError = err;
-            }
+      // Multi-inbox Gmail: per-connection client cache. Pre-multi-inbox
+      // rows have a null `connectionId` — fall back to all of the user's
+      // connections and try each in order until one succeeds.
+      const clientById = new Map<string, GmailClientHandle>();
+      const fallbackClients: GmailClientHandle[] = [];
+      const ensureClient = async (connectionId: string | null) => {
+        if (connectionId) {
+          let c = clientById.get(connectionId);
+          if (!c) {
+            c = await getGmailClientById(userId, connectionId);
+            clientById.set(connectionId, c);
           }
+          return [c];
+        }
+        if (fallbackClients.length === 0) {
+          const all = await listGmailClients(userId);
+          if (all.length === 0) {
+            // No multi-inbox connections — fall back to the single getter so
+            // the error message stays consistent.
+            fallbackClients.push(await getGmailClient(userId));
+          } else {
+            fallbackClients.push(...all);
+          }
+        }
+        return fallbackClients;
+      };
+      const fetchEmail: EmailFetcher = async (item) => {
+        const candidateClients = await ensureClient(item.connectionId);
+        let raw: Parameters<typeof normalizeGmailMessage>[0] | null = null;
+        let lastError: unknown = null;
+        for (const client of candidateClients) {
+          try {
+            const fetched = await client.gmail.users.messages.get({
+              userId: 'me',
+              id: item.gmailMessageId,
+              format: 'full',
+            });
+            raw = fetched.data;
+            break;
+          } catch (err) {
+            lastError = err;
+          }
+        }
+        if (!raw) {
           throw lastError instanceof Error
             ? lastError
-            : new Error('failed to fetch message from any nylas grant');
-        };
-      } else {
-        // Multi-inbox Gmail: per-connection client cache. Pre-multi-inbox
-        // rows have a null `connectionId` — fall back to all of the user's
-        // connections and try each in order until one succeeds.
-        const clientById = new Map<string, GmailClientHandle>();
-        const fallbackClients: GmailClientHandle[] = [];
-        const ensureClient = async (connectionId: string | null) => {
-          if (connectionId) {
-            let c = clientById.get(connectionId);
-            if (!c) {
-              c = await getGmailClientById(userId, connectionId);
-              clientById.set(connectionId, c);
-            }
-            return [c];
-          }
-          if (fallbackClients.length === 0) {
-            const all = await listGmailClients(userId);
-            if (all.length === 0) {
-              // No multi-inbox connections — fall back to the single getter so
-              // the error message stays consistent.
-              fallbackClients.push(await getGmailClient(userId));
-            } else {
-              fallbackClients.push(...all);
-            }
-          }
-          return fallbackClients;
-        };
-        fetchEmail = async (item) => {
-          const candidateClients = await ensureClient(item.connectionId);
-          let raw: Parameters<typeof normalizeGmailMessage>[0] | null = null;
-          let lastError: unknown = null;
-          for (const client of candidateClients) {
-            try {
-              const fetched = await client.gmail.users.messages.get({
-                userId: 'me',
-                id: item.gmailMessageId,
-                format: 'full',
-              });
-              raw = fetched.data;
-              break;
-            } catch (err) {
-              lastError = err;
-            }
-          }
-          if (!raw) {
-            throw lastError instanceof Error
-              ? lastError
-              : new Error('failed to fetch message from any inbox');
-          }
-          return normalizeGmailMessage(raw);
-        };
-      }
+            : new Error('failed to fetch message from any inbox');
+        }
+        return normalizeGmailMessage(raw);
+      };
 
       const ruleRows = await db
         .select({ domain: userSenderRules.domain, type: userSenderRules.type })

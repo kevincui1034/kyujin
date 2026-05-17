@@ -7,7 +7,6 @@
     ".": "./src/index.ts",
     "./classifier": "./src/classifier.ts",
     "./gmail": "./src/gmail.ts",
-    "./nylas": "./src/nylas.ts",
     "./prompts": "./src/prompts.ts",
     "./sender-domains": "./src/sender-domains.ts",
     "./types": "./src/types.ts"
@@ -21,7 +20,6 @@
     "ai": "^6.0.0",
     "drizzle-orm": "^0.38.3",
     "googleapis": "^144.0.0",
-    "nylas": "^8.1.1",
     "papaparse": "^5.5.3",
     "xlsx": "^0.18.5",
     "zod": "^3.24.1"

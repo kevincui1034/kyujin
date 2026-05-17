@@ -19,7 +19,6 @@ import {
   applications,
   emailMessages,
   gmailConnections,
-  nylasConnections,
   users,
 } from '@kyujin/db/schema';
 import type { ApplicationSource, ApplicationStatus } from '@kyujin/shared';
@@ -331,47 +330,15 @@ export async function listGmailConnections(userId: string) {
     .orderBy(asc(gmailConnections.createdAt));
 }
 
-// Unified shape so the settings UI doesn't have to branch on provider for
-// the basic "list connected inboxes" render. Provider-specific fields are
-// kept (watchExpiration for Gmail's push subscription; needsReauth for Nylas
-// grants that Nylas reported as expired/deleted) so the page can show
-// inbox health without a second roundtrip.
 export type InboxConnection = {
   id: string;
   emailAddress: string;
-  provider: 'gmail' | 'nylas';
   watchExpiration: Date | null;
-  needsReauth: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export async function listInboxConnections(
-  userId: string,
-  provider: 'gmail' | 'nylas',
-): Promise<InboxConnection[]> {
-  if (provider === 'nylas') {
-    const rows = await db
-      .select({
-        id: nylasConnections.id,
-        emailAddress: nylasConnections.emailAddress,
-        needsReauth: nylasConnections.needsReauth,
-        createdAt: nylasConnections.createdAt,
-        updatedAt: nylasConnections.updatedAt,
-      })
-      .from(nylasConnections)
-      .where(eq(nylasConnections.userId, userId))
-      .orderBy(asc(nylasConnections.createdAt));
-    return rows.map((r) => ({
-      id: r.id,
-      emailAddress: r.emailAddress,
-      provider: 'nylas' as const,
-      watchExpiration: null,
-      needsReauth: r.needsReauth,
-      createdAt: r.createdAt,
-      updatedAt: r.updatedAt,
-    }));
-  }
+export async function listInboxConnections(userId: string): Promise<InboxConnection[]> {
   const rows = await db
     .select({
       id: gmailConnections.id,
@@ -386,9 +353,7 @@ export async function listInboxConnections(
   return rows.map((r) => ({
     id: r.id,
     emailAddress: r.emailAddress,
-    provider: 'gmail' as const,
     watchExpiration: r.watchExpiration,
-    needsReauth: false,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
   }));
