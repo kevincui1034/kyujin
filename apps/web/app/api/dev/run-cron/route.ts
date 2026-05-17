@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { auth } from '@/auth';
-import { runProcessBatch } from '@/app/api/cron/process-batch/route';
-import { runRefreshWatches } from '@/app/api/cron/refresh-watches/route';
+import { runProcessBatch } from '@/lib/process-batch';
+import { runRefreshWatches } from '@/lib/refresh-watches';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 300;

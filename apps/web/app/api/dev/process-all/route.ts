@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { auth } from '@/auth';
-import { runProcessBatch } from '@/app/api/cron/process-batch/route';
+import { runProcessBatch } from '@/lib/process-batch';
 
 export const dynamic = 'force-dynamic';
 // Vercel hard-caps serverless at 300s. Each runProcessBatch tick burns the

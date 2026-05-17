@@ -11,7 +11,7 @@ import {
   listJobMessageIds,
   type BackfillWindow,
 } from '@kyujin/shared/gmail';
-import { runProcessBatch } from '@/app/api/cron/process-batch/route';
+import { runProcessBatch } from '@/lib/process-batch';
 import { classifierCapForPlan } from '@/lib/plan';
 
 // Bumped from 60 → 300 so first-backfill users can drain their full queue in
