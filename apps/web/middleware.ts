@@ -33,6 +33,7 @@ export const config = {
     '/api/gmail/backfill',
     '/api/gmail/connect',
     '/api/gmail/disconnect',
+    '/api/gmail/process',
     '/api/gmail/watch',
   ],
 };

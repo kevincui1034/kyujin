@@ -39,6 +39,17 @@ function isValidWindow(n: number): n is BackfillWindow {
   return (BACKFILL_WINDOWS as readonly number[]).includes(n);
 }
 
+// Gmail refresh tokens die after 7 days while our OAuth app is unverified
+// ("Testing" status, pending the CASA Tier-2 audit). When that happens the SDK
+// throws `invalid_grant` from refreshAccessToken(). Detect it so we can tell the
+// user to reconnect instead of returning an opaque empty 500.
+function isGmailReauthError(err: unknown): boolean {
+  const e = err as { response?: { data?: { error?: string } }; message?: string };
+  const code = e?.response?.data?.error;
+  if (code === 'invalid_grant' || code === 'unauthorized_client') return true;
+  return typeof e?.message === 'string' && e.message.includes('invalid_grant');
+}
+
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
@@ -97,7 +108,29 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const clients = await listGmailClients(session.user.id);
+  // Build the Gmail clients up front. This is where token refresh happens, so
+  // an expired/revoked refresh token surfaces here as `invalid_grant`. Catch it
+  // and return a structured error — this runs *before* the cool-down stamp, so
+  // a reauth failure doesn't burn the user's 5h window.
+  let clients: Awaited<ReturnType<typeof listGmailClients>>;
+  try {
+    clients = await listGmailClients(session.user.id);
+  } catch (err) {
+    if (isGmailReauthError(err)) {
+      return NextResponse.json(
+        {
+          error: 'gmail_reauth_required',
+          message: 'Your Gmail connection expired. Reconnect Gmail in settings and try again.',
+        },
+        { status: 401 },
+      );
+    }
+    console.error('[backfill] failed to build Gmail clients', err);
+    return NextResponse.json(
+      { error: 'gmail_error', message: 'Could not reach Gmail. Try again in a moment.' },
+      { status: 502 },
+    );
+  }
   if (clients.length === 0) {
     return NextResponse.json({ error: 'no_gmail_connection' }, { status: 400 });
   }
@@ -143,29 +176,46 @@ export async function POST(req: NextRequest) {
   let enqueued = 0;
   const perInbox: { emailAddress: string; found: number; enqueued: number }[] = [];
 
-  for (const client of clients) {
-    const ids = await listJobMessageIds(client.gmail, query, cap);
-    totalFound += ids.length;
-    let inboxEnqueued = 0;
-    if (ids.length > 0) {
-      const rows = ids.map((gmailMessageId) => ({
-        userId: session.user!.id,
-        gmailMessageId,
-        connectionId: client.connectionId,
-      }));
-      const CHUNK = 100;
-      for (let i = 0; i < rows.length; i += CHUNK) {
-        const slice = rows.slice(i, i + CHUNK);
-        const inserted = await db
-          .insert(backfillQueue)
-          .values(slice)
-          .onConflictDoNothing()
-          .returning({ id: backfillQueue.id });
-        inboxEnqueued += inserted.length;
+  try {
+    for (const client of clients) {
+      const ids = await listJobMessageIds(client.gmail, query, cap);
+      totalFound += ids.length;
+      let inboxEnqueued = 0;
+      if (ids.length > 0) {
+        const rows = ids.map((gmailMessageId) => ({
+          userId: session.user!.id,
+          gmailMessageId,
+          connectionId: client.connectionId,
+        }));
+        const CHUNK = 100;
+        for (let i = 0; i < rows.length; i += CHUNK) {
+          const slice = rows.slice(i, i + CHUNK);
+          const inserted = await db
+            .insert(backfillQueue)
+            .values(slice)
+            .onConflictDoNothing()
+            .returning({ id: backfillQueue.id });
+          inboxEnqueued += inserted.length;
+        }
       }
+      enqueued += inboxEnqueued;
+      perInbox.push({ emailAddress: client.emailAddress, found: ids.length, enqueued: inboxEnqueued });
     }
-    enqueued += inboxEnqueued;
-    perInbox.push({ emailAddress: client.emailAddress, found: ids.length, enqueued: inboxEnqueued });
+  } catch (err) {
+    if (isGmailReauthError(err)) {
+      return NextResponse.json(
+        {
+          error: 'gmail_reauth_required',
+          message: 'Your Gmail connection expired. Reconnect Gmail in settings and try again.',
+        },
+        { status: 401 },
+      );
+    }
+    console.error('[backfill] failed while listing/enqueueing messages', err);
+    return NextResponse.json(
+      { error: 'gmail_error', message: 'Could not reach Gmail. Try again in a moment.' },
+      { status: 502 },
+    );
   }
 
   // First backfill = user has never had an email_messages row before. On the
