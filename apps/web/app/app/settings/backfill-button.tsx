@@ -34,8 +34,9 @@ export function BackfillButton({ isPremium }: Props) {
         enqueued?: number;
         firstBackfill?: boolean;
         error?: string;
+        message?: string;
       };
-      if (!res.ok) throw new Error(json.error ?? 'failed');
+      if (!res.ok) throw new Error(json.message ?? json.error ?? 'failed');
       const count = json.enqueued ?? 0;
       setMessage(
         json.firstBackfill

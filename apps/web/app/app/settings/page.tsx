@@ -8,6 +8,7 @@ import { NON_PREMIUM_INBOX_LIMIT, PREMIUM_INBOX_LIMIT, inboxLimitForPlan } from 
 import { DisconnectGmailButton } from './disconnect-button';
 import { BackfillButton } from './backfill-button';
 import { StartWatchButton } from './start-watch-button';
+import { ProcessNowButton } from './process-now-button';
 import { DevCronCard } from './dev-cron-card';
 
 export default async function SettingsPage({
@@ -113,8 +114,9 @@ export default async function SettingsPage({
                 )}
               </div>
               <BackfillButton isPremium={isPremium} />
-              <div className="flex flex-wrap gap-3 pt-2">
+              <div className="flex flex-wrap items-center gap-3 pt-2">
                 <StartWatchButton />
+                <ProcessNowButton />
               </div>
             </>
           )}
